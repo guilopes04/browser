@@ -32,7 +32,8 @@ export function runSuspensionTick(ctx: MainContext, now = Date.now()): number {
     if (!view) continue
     const wc = getLiveContents(view)
     if (!wc) {
-      // view de uma página que já morreu e cujo evento se perdeu: sai da sidebar, sem exceção
+      // view de uma página que já morreu e cujo evento se perdeu: o mesmo tratamento de uma página
+      // que se fecha (sai da sidebar se foi aberta por script, senão volta dormente), sem exceção
       closeDeadTab(ctx, tab.id, view)
       continue
     }
