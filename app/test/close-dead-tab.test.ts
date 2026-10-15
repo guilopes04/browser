@@ -138,3 +138,31 @@ test('aba dormente fecha na hora, sem webContents', () => {
   assert.equal(store.getTab(a.id), undefined)
   assert.equal(store.closed.length, 1)
 })
+
+test('encerrando o app, a view que morre não é recriada nem a aba removida (SIGTRAP ao sair)', () => {
+  const { ctx, store, a, b, c, makeLive } = setup()
+  const front = makeLive(a)
+  const popup = makeLive(b)
+  makeLive(c)
+  // b veio de window.open e sai da sidebar se fechar; a é a da frente e seria recarregada
+  ctx.guard.scriptOpened.add(b.id)
+  store.setActiveTab('personal', a.id)
+  ctx.attached.tabId = a.id
+  ctx.attached.view = as<WebContentsView>(front.view)
+  attachCloseEvents(ctx, a.id, as<WebContentsView>(front.view))
+  attachCloseEvents(ctx, b.id, as<WebContentsView>(popup.view))
+
+  // before-quit
+  ctx.quitting = true
+  front.view.destroy()
+  popup.view.destroy()
+
+  // nada mudou no registro nem na sidebar: o desmonte não ativa, não cria e não remove
+  assert.equal(ctx.views.get(a.id), as(front.view))
+  assert.equal(store.getTab(a.id)?.dormant, false)
+  assert.equal(ctx.attached.tabId, a.id)
+  assert.ok(store.getTab(b.id))
+  assert.equal(store.getTabsOfSpace('personal').length, 3)
+  assert.equal(store.closed.length, 0)
+  assert.equal(ctx.guard.scriptCloseUndoneAt.has(a.id), false)
+})
