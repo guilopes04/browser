@@ -1,4 +1,6 @@
 // Ações (comandos), "Abrir ... em nova aba" (⌘↵) e "Buscar ... na web" (⌥↵)
+import { isInsecureUrl } from '@shared/address-display'
+import { InsecureMark } from '../guard/insecure-mark'
 import { Kbd } from './kbd'
 import { getCommandIcon, RowIcon } from './row-icon'
 import type { PaletteRowProps } from './types'
@@ -20,6 +22,7 @@ export function ActionRow({ item, compact }: PaletteRowProps) {
       <>
         <RowIcon name="plus" />
         <span class="pal-title">Abrir {item.label} em nova aba</span>
+        {isInsecureUrl(item.url) && <InsecureMark small />}
         <Kbd keys="⌘↵" />
       </>
     )

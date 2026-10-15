@@ -136,7 +136,7 @@
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: 1px;
+  gap: 6px;
   height: 28px;
   padding: 0 6px;
   border: 0;
@@ -145,13 +145,30 @@
   text-align: left;
 }
 
-.address-domain {
-  flex: none;
+/* o host tem prioridade sobre o caminho: se não cabe, perde o começo (os subdomínios), com "…" */
+.address-host {
+  flex: 0 1 auto;
+  min-width: 0;
   font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  direction: rtl;
+  text-align: left;
+}
+
+.address-sub {
+  color: var(--sec);
+  font-weight: 400;
+}
+
+/* o domínio registrável é o que identifica o site */
+.address-domain {
   font-weight: 600;
 }
 
 .address-path {
+  flex: 1 1 0;
   min-width: 0;
   font-size: 13px;
   color: var(--sec);
