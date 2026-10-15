@@ -10,7 +10,11 @@ import {
   isActivationPointer,
   markGesture
 } from '../src/main/functions/user-gesture'
-import { createWebGuard, resetViewState } from '../src/main/web-guard'
+import {
+  createWebGuard,
+  resetDocumentState,
+  resetViewState
+} from '../src/main/web-guard'
 import { fakeContext } from './fake-main'
 
 const key = (over: Partial<Parameters<typeof isActivationKey>[0]> = {}) => ({
@@ -109,4 +113,53 @@ test('os eventos da aba registram gesto: tecla que chegou à página e clique', 
   }
   wc.emit('before-input-event', event(), input())
   assert.equal(getLastGesture(env.ctx.guard, tab.id), undefined)
+})
+
+test('o documento novo não herda o gesto nem o saldo de pop-ups do anterior', () => {
+  const env = fakeContext(['https://a.com'])
+  const [tab] = env.store.getTabsOfSpace('personal')
+  const live = env.makeLive(tab)
+  const wc = Object.assign(live.wc, {
+    session: {},
+    navigationHistory: { canGoBack: () => false, canGoForward: () => false },
+    getTitle: () => '',
+    getURL: () => 'https://b.com/'
+  })
+  attachTabEvents(env.ctx, tab.id, wc as unknown as WebContents)
+  const { guard } = env.ctx
+  const arm = () => {
+    markGesture(guard, tab.id)
+    guard.popupBudget.set(tab.id, { gestureAt: Date.now(), used: 1 })
+  }
+
+  // clique num link: o gesto foi marcado e a navegação confirma outro documento
+  arm()
+  assert.equal(hasRecentGesture(guard, tab.id), true)
+  wc.emit('did-navigate', {}, 'https://b.com/')
+  assert.equal(hasRecentGesture(guard, tab.id), false)
+  assert.equal(getLastGesture(guard, tab.id), undefined)
+  assert.equal(guard.popupBudget.has(tab.id), false)
+
+  // o gesto do usuário na página nova volta a valer
+  markGesture(guard, tab.id)
+  assert.equal(hasRecentGesture(guard, tab.id), true)
+
+  // #fragmento e pushState são o mesmo documento: o gesto continua dele
+  arm()
+  wc.emit('did-navigate-in-page', {}, 'https://b.com/#x', true)
+  assert.equal(hasRecentGesture(guard, tab.id), true)
+  assert.equal(guard.popupBudget.has(tab.id), true)
+})
+
+test('resetDocumentState zera só o gesto e o saldo, não a identidade da aba', () => {
+  const guard = createWebGuard()
+  markGesture(guard, 'a', 10)
+  guard.popupBudget.set('a', { gestureAt: 10, used: 2 })
+  guard.scriptOpened.add('a')
+  guard.blockedPopups.set('a', ['https://x.com'])
+  resetDocumentState(guard, 'a')
+  assert.equal(getLastGesture(guard, 'a'), undefined)
+  assert.equal(guard.popupBudget.has('a'), false)
+  assert.equal(guard.scriptOpened.has('a'), true)
+  assert.deepEqual(guard.blockedPopups.get('a'), ['https://x.com'])
 })

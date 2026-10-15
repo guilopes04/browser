@@ -67,11 +67,19 @@ export function createWebGuard(): WebGuard {
   }
 }
 
+// a aba carregou outro documento (navegação entre documentos do quadro principal): o gesto do
+// usuário e o saldo de pop-ups eram da página anterior. Sem isto, o clique num link valia para
+// o que a página de destino fizesse ao carregar (pop-up, download), e o mesmo para um endereço
+// digitado logo depois de um clique
+export function resetDocumentState(guard: WebGuard, tabId: TabId): void {
+  guard.gestures.delete(tabId)
+  guard.popupBudget.delete(tabId)
+}
+
 // a view da aba morreu (suspensão, fechamento): o que era dela some; a identidade da aba
 // (aberta por script, quem a abriu) continua até a aba sair da sidebar
 export function resetViewState(guard: WebGuard, tabId: TabId): void {
-  guard.gestures.delete(tabId)
-  guard.popupBudget.delete(tabId)
+  resetDocumentState(guard, tabId)
   guard.blockedPopups.delete(tabId)
   guard.navIntents.delete(tabId)
   guard.unloadAnswers.delete(tabId)

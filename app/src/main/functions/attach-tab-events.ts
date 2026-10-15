@@ -2,6 +2,7 @@
 import type { WebContents } from 'electron'
 import type { Tab, TabId } from '@shared/types'
 import type { MainContext } from '../context'
+import { resetDocumentState } from '../web-guard'
 import { attachFindEvents } from './attach-find-events'
 import { takeBlockedPopups } from './blocked-popups'
 import { closeFindOnEscape } from './close-find-on-escape'
@@ -114,6 +115,9 @@ export function attachTabEvents(
 
   wc.on('did-navigate', () => {
     ctx.httpFallbacks.delete(tabId)
+    // documento novo: o clique que levou até ele (ou que veio antes de um endereço digitado) não
+    // vale para o que a página nova faz ao carregar. Só um gesto dela conta
+    resetDocumentState(ctx.guard, tabId)
     // página nova: o aviso de pop-up bloqueado, a contagem de diálogos e o "bloquear mais" eram
     // da anterior (o bloqueio de diálogos vale "até recarregar")
     if (ctx.guard.blockedPopups.has(tabId)) takeBlockedPopups(ctx, tabId)
