@@ -4,6 +4,7 @@ import type { Tab, TabId } from '@shared/types'
 import { getHostname } from '@shared/url-parts'
 import type { MainContext } from '../context'
 import { applyLayout } from './apply-layout'
+import { takeBlockedPopups } from './blocked-popups'
 import { destroyTabView } from './destroy-tab-view'
 import { faviconToDataUrl } from './favicon-to-data-url'
 import { forwardEarlyKey } from './forward-early-key'
@@ -113,6 +114,8 @@ export function attachTabEvents(
 
   wc.on('did-navigate', () => {
     ctx.httpFallbacks.delete(tabId)
+    // página nova: o aviso de pop-up bloqueado era da anterior
+    if (ctx.guard.blockedPopups.has(tabId)) takeBlockedPopups(ctx, tabId)
     syncNavigation()
     recordVisit()
     if (store.getTab(tabId)?.error) setError(null)

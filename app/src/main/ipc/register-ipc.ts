@@ -10,11 +10,13 @@ import {
   closePalette,
   closeTab,
   createTab,
+  dismissBlockedPopups,
   goBack,
   goForward,
   moveTab,
   moveTabToSpace,
   navigateTab,
+  openBlockedPopups,
   openDownloads,
   openNetworkSettings,
   openPalette,
@@ -152,6 +154,14 @@ const handlers: { [K in keyof Commands]: Handler } = {
   },
   'system:open-network-settings': () => openNetworkSettings(),
   'downloads:open': ctx => openDownloads(ctx),
+  'popup:open-blocked': (ctx, payload) => {
+    const tabId = readTabId(ctx, payload)
+    if (tabId) openBlockedPopups(ctx, tabId)
+  },
+  'popup:dismiss-blocked': (ctx, payload) => {
+    const tabId = readTabId(ctx, payload)
+    if (tabId) dismissBlockedPopups(ctx, tabId)
+  },
   'command:run': (ctx, payload) => {
     const command = isRecord(payload) ? readCommand(payload.command) : null
     if (command) runCommand(ctx, command)

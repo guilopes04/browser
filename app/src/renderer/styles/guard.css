@@ -1,0 +1,81 @@
+/* Avisos de segurança: "Não seguro", pop-up bloqueado, diálogo descartado. Tudo em cor secundária,
+   sem alarme: informam, não interrompem. */
+.insecure {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--sec);
+  font-size: 11.5px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.insecure[data-small='true'] {
+  font-size: 11px;
+  gap: 3px;
+}
+
+/* aviso de pop-up bloqueado, logo abaixo do campo de endereço */
+.popup-notice {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  margin-top: -4px;
+  padding: 0 4px 0 10px;
+  border-radius: 8px;
+  background: var(--fill);
+  color: var(--sec);
+  font-size: 12px;
+  flex: none;
+}
+
+.popup-notice-text {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.popup-notice-open,
+.popup-notice-close {
+  flex: none;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+}
+
+.popup-notice-open {
+  padding: 0 8px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.popup-notice-close {
+  width: 22px;
+  padding: 0;
+  color: var(--sec);
+}
+
+.popup-notice-open:hover,
+.popup-notice-close:hover {
+  background: var(--hover-bg);
+}
+
+/* marcador na aba: um diálogo dela foi descartado enquanto ela estava em segundo plano */
+.slot-dialog {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sec);
+}

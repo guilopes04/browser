@@ -8,6 +8,7 @@ import './styles/peek.css'
 import './styles/error-page.css'
 import './styles/new-tab.css'
 import './styles/palette.css'
+import './styles/guard.css'
 
 startSync()
 render(<App />, document.getElementById('app') as HTMLElement)

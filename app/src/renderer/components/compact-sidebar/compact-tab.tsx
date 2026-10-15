@@ -24,7 +24,9 @@ export function CompactTab({
   const keys = getTabShortcutLabel(index, total)
   const state = [
     tab.dormant ? 'suspensa' : null,
-    tab.muted ? 'silenciada' : tab.audible ? 'tocando' : null
+    tab.muted ? 'silenciada' : tab.audible ? 'tocando' : null,
+    tab.dialogBlocked ? 'diálogo descartado' : null,
+    tab.blockedPopups > 0 ? 'pop-up bloqueado' : null
   ].filter(Boolean)
   const description =
     state.length > 0 ? `${label} (${state.join(', ')})` : label

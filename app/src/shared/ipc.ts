@@ -48,6 +48,9 @@ export interface Commands {
   'system:open-network-settings': Record<string, never>
   // ícone de Downloads do rodapé: abre o último arquivo baixado no Finder, ou a pasta Downloads
   'downloads:open': Record<string, never>
+  // aviso "Pop-up bloqueado": abre o que a página tentou abrir, ou dispensa o aviso
+  'popup:open-blocked': { tabId: TabId }
+  'popup:dismiss-blocked': { tabId: TabId }
 }
 
 // shell -> main com resposta: invoke / handle
@@ -102,7 +105,9 @@ export const COMMAND_CHANNELS = [
   'keys:ready',
   'command:run',
   'system:open-network-settings',
-  'downloads:open'
+  'downloads:open',
+  'popup:open-blocked',
+  'popup:dismiss-blocked'
 ] as const satisfies readonly (keyof Commands)[]
 
 export const REQUEST_CHANNELS = [
