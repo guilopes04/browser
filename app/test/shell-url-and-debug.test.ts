@@ -103,3 +103,75 @@ test('o app empacotado recusa depuração sem --dev; em desenvolvimento ou com -
   ])
   assert.deepEqual(findRefusedDebugFlags(['app', '--abas=x.json'], true), [])
 })
+
+test('o Chromium também lê a opção com um hífen só: "-remote-debugging-port" não escapa', () => {
+  const argv = ['Gilas Browser', '-remote-debugging-port=9412']
+  assert.deepEqual(findRefusedDebugFlags(argv, true), [
+    '--remote-debugging-port'
+  ])
+  assert.deepEqual(
+    findDebugFlags([
+      'app',
+      '-remote-debugging-pipe',
+      '-remote-allow-origins=*',
+      '-inspect=9229',
+      '-inspect-brk',
+      '-debug-port=5858'
+    ]).sort(),
+    [
+      '--debug-port',
+      '--inspect',
+      '--inspect-brk',
+      '--remote-allow-origins',
+      '--remote-debugging-pipe'
+    ]
+  )
+  assert.deepEqual(findDebugFlags(['app'], '-inspect=0.0.0.0:9229'), [
+    '--inspect'
+  ])
+  // seguem sem valer: nome que só começa igual, argumento que não é opção
+  assert.deepEqual(
+    findDebugFlags([
+      '-inspector-theme=dark',
+      '-remote-debugging-ports',
+      'inspect'
+    ]),
+    []
+  )
+  // o --dev é só o de dois hífens (o mesmo do flags.ts): "-dev" não libera a depuração
+  assert.deepEqual(findRefusedDebugFlags([...argv, '-dev'], true), [
+    '--remote-debugging-port'
+  ])
+  assert.deepEqual(findRefusedDebugFlags([...argv, '--dev'], true), [])
+})
+
+test('a opção que o Chromium reconhece e a linha de comando não mostra também é recusada', () => {
+  // hasSwitch é a fonte da verdade do Chromium (app.commandLine.hasSwitch)
+  const has = (present: string[]) => (name: string) => present.includes(name)
+  assert.deepEqual(
+    findRefusedDebugFlags(
+      ['Gilas Browser'],
+      true,
+      '',
+      has(['remote-debugging-port', 'user-data-dir'])
+    ),
+    ['--remote-debugging-port']
+  )
+  assert.deepEqual(
+    findRefusedDebugFlags(
+      ['Gilas Browser', '--dev'],
+      true,
+      '',
+      has(['remote-debugging-port'])
+    ),
+    []
+  )
+  assert.deepEqual(
+    findRefusedDebugFlags(['Gilas Browser'], false, '', has(['inspect'])),
+    []
+  )
+  assert.deepEqual(
+    findRefusedDebugFlags(['Gilas Browser'], true, '', has(['user-data-dir'])),
+    []
+  )
+})

@@ -52,10 +52,12 @@ import { createWebGuard } from './web-guard'
 installErrorLog()
 
 // depuração remota e inspetor abrem uma porta com controle total do app: empacotado, só com --dev
+// (o Chromium também lê "-opção" com um hífen só: a conferência pergunta a ele)
 const refusedDebugFlags = findRefusedDebugFlags(
   process.argv,
   app.isPackaged,
-  process.env['NODE_OPTIONS']
+  process.env['NODE_OPTIONS'],
+  name => app.commandLine.hasSwitch(name)
 )
 const startupRefused = refusedDebugFlags.length > 0
 if (startupRefused) {
