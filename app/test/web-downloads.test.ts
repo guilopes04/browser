@@ -240,8 +240,10 @@ function setupDownloads() {
   const live = env.makeLive(tab)
   const session = new EventEmitter()
   const dir = mkdtempSync(join(tmpdir(), 'gilas-svc-'))
+  // a pasta temporária do app é outra: o que espera permissão nunca passa por Downloads
+  const temp = mkdtempSync(join(tmpdir(), 'gilas-tmp-'))
   const stub = app as unknown as { getPath: (name: string) => string }
-  stub.getPath = () => dir
+  stub.getPath = name => (name === 'temp' ? temp : dir)
   watchDownloads(env.ctx, session as never)
   const start = (item: FakeItem) => {
     const event = {
@@ -256,8 +258,11 @@ function setupDownloads() {
   const finish = (item: FakeItem, state = 'completed') =>
     item.emit('done', {}, state)
   const tick = () => new Promise(done => setTimeout(done, 20))
-  const clean = () => rmSync(dir, { recursive: true, force: true })
-  return { ...env, tab, dir, start, finish, tick, clean }
+  const clean = () => {
+    rmSync(dir, { recursive: true, force: true })
+    rmSync(temp, { recursive: true, force: true })
+  }
+  return { ...env, tab, dir, temp, start, finish, tick, clean }
 }
 
 function answerDialog(response: number) {
@@ -321,6 +326,37 @@ test('sem gesto: pausa, pergunta com Cancelar como padrão e só segue se permit
   }
 })
 
+test('sem gesto: nenhum byte vai para Downloads antes de o usuário permitir; permitido, o arquivo vai quando conclui', async () => {
+  const env = setupDownloads()
+  try {
+    let release: (value: unknown) => void = () => {}
+    ;(
+      dialog as unknown as { showMessageBox: () => Promise<unknown> }
+    ).showMessageBox = () =>
+      new Promise(done => {
+        release = done
+      })
+    const item = new FakeItem('https://site.test/x.bin', 'x.bin', 5)
+    env.start(item)
+    // o Chromium grava onde o app mandou: numa pasta temporária, fora de Downloads
+    assert.ok(item.savePath.startsWith(env.temp), item.savePath)
+    writeFileSync(item.savePath, 'ola!!')
+    assert.deepEqual(readdirSync(env.dir), [])
+    // termina antes de o usuário responder: nada aparece em Downloads ainda
+    env.finish(item)
+    await env.tick()
+    assert.deepEqual(readdirSync(env.dir), [])
+    release({ response: 1, checkboxChecked: false })
+    await new Promise(done => setTimeout(done, 400))
+    assert.deepEqual(readdirSync(env.dir), ['x.bin'])
+    assert.equal(env.store.state.downloads.lastPath, join(env.dir, 'x.bin'))
+    // a pasta temporária foi embora
+    assert.deepEqual(readdirSync(env.temp), [])
+  } finally {
+    env.clean()
+  }
+})
+
 test('sem gesto e recusado: cancela, apaga o arquivo reservado e cala a aba por um tempo', async () => {
   const env = setupDownloads()
   try {
@@ -331,6 +367,7 @@ test('sem gesto e recusado: cancela, apaga o arquivo reservado e cala a aba por 
     assert.equal(item.cancelled, true)
     await env.tick()
     assert.deepEqual(readdirSync(env.dir), [])
+    assert.deepEqual(readdirSync(env.temp), [])
     assert.equal(env.ctx.guard.downloadsRunning.has(env.tab.id), false)
     assert.equal(env.store.state.downloads.lastFailed, false)
 

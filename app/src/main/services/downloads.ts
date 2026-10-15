@@ -2,7 +2,8 @@
 // mostra o progresso. "Salvar imagem como" (ctx.saveAs) deixa o diálogo do sistema aparecer.
 // Contra página hostil:
 // - sem gesto recente do usuário na aba, o usuário permite ou não num diálogo (o download fica
-//   pausado até lá) e uma aba não segura mais de 20 downloads ao mesmo tempo;
+//   pausado, gravando numa pasta temporária, e só vai para Downloads se ele permitir) e uma aba
+//   não segura mais de 20 downloads ao mesmo tempo;
 // - o nome do arquivo é reservado com abertura exclusiva, então downloads simultâneos do mesmo
 //   nome nunca se sobrescrevem;
 // - o arquivo concluído recebe a quarentena do macOS, que o Gatekeeper usa antes de abrir.
@@ -21,6 +22,12 @@ import { findTabByContents } from '../functions/find-tab-by-contents'
 import { sanitizeFileName } from '../functions/pick-file-name'
 import { quarantineFile } from '../functions/quarantine-file'
 import { reserveDownloadPath } from '../functions/reserve-download-path'
+import {
+  commitStaging,
+  createStaging,
+  dropStaging,
+  type Staging
+} from '../functions/stage-download'
 import {
   summarizeDownloads,
   type DownloadProgress
@@ -118,30 +125,32 @@ export function watchDownloads(ctx: MainContext, ses: Session): void {
     }
 
     const downloads = app.getPath('downloads')
-    // o diálogo de "Salvar imagem como" escolhe o caminho; nos demais, o nome é reservado já
+    // o diálogo de "Salvar imagem como" escolhe o caminho. Sem gesto, o arquivo fica numa pasta
+    // temporária até o usuário permitir. Nos demais, o nome é reservado em Downloads já
     let reserved: string | null = null
-    if (saveAs) {
-      item.setSaveDialogOptions({
-        defaultPath: join(downloads, sanitizeFileName(item.getFilename()))
-      })
-    } else {
-      try {
-        reserved = reserveDownloadPath(downloads, item.getFilename())
-      } catch (error) {
-        console.error(
-          '[Downloads][will-download] sem como reservar o nome',
-          error
-        )
-        event.preventDefault()
-        ctx.store.setDownloads({
-          ...ctx.store.state.downloads,
-          lastPath: null,
-          lastName: null,
-          lastFailed: true
+    let staging: Staging | null = null
+    try {
+      if (saveAs) {
+        item.setSaveDialogOptions({
+          defaultPath: join(downloads, sanitizeFileName(item.getFilename()))
         })
-        return
+      } else if (decision === 'ask') {
+        staging = createStaging(app.getPath('temp'), item.getFilename())
+        item.setSavePath(staging.path)
+      } else {
+        reserved = reserveDownloadPath(downloads, item.getFilename())
+        item.setSavePath(reserved)
       }
-      item.setSavePath(reserved)
+    } catch (error) {
+      console.error('[Downloads][will-download] sem como começar', error)
+      event.preventDefault()
+      ctx.store.setDownloads({
+        ...ctx.store.state.downloads,
+        lastPath: null,
+        lastName: null,
+        lastFailed: true
+      })
+      return
     }
 
     guard.downloadsRunning.set(
@@ -197,23 +206,40 @@ export function watchDownloads(ctx: MainContext, ses: Session): void {
         const allowed = await consent
         release(item, owner)
         if (!allowed) {
-          // recusado: nem o arquivo reservado, nem o que já tenha chegado
-          if (savePath) dropFile(savePath)
+          // recusado: nada do que chegou fica
+          if (staging) dropStaging(staging)
+          else if (savePath) dropFile(savePath)
           publishDone(false, false, { path: '', name })
           return
         }
         if (state !== 'completed') {
-          dropPlaceholder(reserved)
+          if (staging) dropStaging(staging)
+          else dropPlaceholder(reserved)
           publishDone(false, state === 'interrupted', { path: '', name })
           return
         }
-        if (savePath && !(await quarantineFile(savePath))) {
+        let finalPath = savePath
+        if (staging) {
+          // permitido e concluído: do temporário para o nome reservado em Downloads
+          try {
+            finalPath = commitStaging(staging, downloads, name)
+          } catch (error) {
+            console.error(
+              '[Downloads][commit] falha ao mover para Downloads',
+              error
+            )
+            dropStaging(staging)
+            publishDone(false, true, { path: '', name })
+            return
+          }
+        }
+        if (finalPath && !(await quarantineFile(finalPath))) {
           // sem quarentena o Gatekeeper não protegeria o arquivo: ele não fica
-          dropFile(savePath)
+          dropFile(finalPath)
           publishDone(false, true, { path: '', name })
           return
         }
-        publishDone(true, false, { path: savePath ?? '', name })
+        publishDone(true, false, { path: finalPath ?? '', name })
       })()
     })
   })
