@@ -3,6 +3,7 @@
 import { ipcMain, type IpcMainEvent, type IpcMainInvokeEvent } from 'electron'
 import { isKnownCommand } from '@shared/commands'
 import type { KeyGateTarget } from '@shared/early-key'
+import { readFindPointer } from '@shared/find-pointer'
 import { COMMAND_CHANNELS, type Commands } from '@shared/ipc'
 import { resolveTyped } from '@shared/resolve-input'
 import type { CommandId, SpaceId, TabId } from '@shared/types'
@@ -21,6 +22,7 @@ import {
   openDownloads,
   openNetworkSettings,
   openPalette,
+  passFindPointer,
   reloadTab,
   reopenTab,
   runCommand,
@@ -172,6 +174,10 @@ const handlers: { [K in keyof Commands]: Handler } = {
       setFindCase(ctx, payload.matchCase)
   },
   'find:close': ctx => closeFind(ctx),
+  'find:pointer': (ctx, payload) => {
+    const pointer = readFindPointer(payload)
+    if (pointer) passFindPointer(ctx, pointer)
+  },
   'command:run': (ctx, payload) => {
     const command = isRecord(payload) ? readCommand(payload.command) : null
     if (command) runCommand(ctx, command)
@@ -184,7 +190,8 @@ const FIND_CHANNELS: readonly string[] = [
   'find:text',
   'find:step',
   'find:case',
-  'find:close'
+  'find:close',
+  'find:pointer'
 ]
 
 export function registerIpc(ctx: MainContext, onStateServed: () => void): void {

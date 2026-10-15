@@ -1,6 +1,7 @@
 // Estado da barra de busca na shell dela: o que o main manda (find:state). Sem lógica: o texto, o
 // contador e o "Aa" são do main; aqui só o espelho e o que vai de volta.
 import { signal } from '@preact/signals'
+import type { FindPointer } from '@shared/find-pointer'
 import type { FindViewState } from '@shared/find-state'
 import { api } from './api'
 
@@ -32,4 +33,9 @@ export function setFindCase(matchCase: boolean): void {
 
 export function closeFind(): void {
   api.send('find:close', {})
+}
+
+// o mouse na margem da view (fora da barra): é da página
+export function sendFindPointer(pointer: FindPointer): void {
+  api.send('find:pointer', pointer)
 }

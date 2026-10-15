@@ -17,6 +17,7 @@ import {
   stepFind
 } from '../../find-state'
 import { CloseSearchIcon, NextIcon, PreviousIcon } from './icons'
+import { usePassThrough } from './use-pass-through'
 
 // clicar nos botões não tira o foco da caixa: só o próprio campo recebe o clique de verdade
 function keepFocus(event: MouseEvent): void {
@@ -42,6 +43,7 @@ function handleKey(event: KeyboardEvent): void {
 export function FindBar() {
   const view = findView.value
   const inputRef = useRef<HTMLInputElement>(null)
+  const barRef = useRef<HTMLDivElement>(null)
   // as revisões já aplicadas: o texto trocado pelo main só entra na caixa uma vez, e a caixa
   // seleciona o texto quando o main pede foco
   const applied = useRef({ text: -1, focus: 0 })
@@ -57,6 +59,8 @@ export function FindBar() {
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
   }, [])
+
+  usePassThrough(barRef)
 
   useLayoutEffect(() => {
     const input = inputRef.current
@@ -91,6 +95,7 @@ export function FindBar() {
     <div class="root" data-theme={theme} style={vars}>
       {/* invisível até o primeiro estado (o tema ainda não chegou), mas já com o foco */}
       <div
+        ref={barRef}
         class="find-bar"
         role="search"
         aria-label="Buscar na página"

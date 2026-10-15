@@ -1,5 +1,6 @@
 // Contrato IPC: único ponto de contato entre a shell (renderer) e o main.
 import type { EarlyKey, KeyGateTarget } from './early-key'
+import type { FindPointer } from './find-pointer'
 import type { FindViewState } from './find-state'
 import type {
   AppSnapshot,
@@ -59,6 +60,8 @@ export interface Commands {
   // "Aa"
   'find:case': { matchCase: boolean }
   'find:close': Record<string, never>
+  // o mouse na margem transparente da view da barra (a da sombra): é da página
+  'find:pointer': FindPointer
 }
 
 // shell -> main com resposta: invoke / handle
@@ -120,7 +123,8 @@ export const COMMAND_CHANNELS = [
   'find:text',
   'find:step',
   'find:case',
-  'find:close'
+  'find:close',
+  'find:pointer'
 ] as const satisfies readonly (keyof Commands)[]
 
 export const REQUEST_CHANNELS = [
