@@ -1,25 +1,31 @@
 // ⌘W: fecha a aba; se era a última do espaço, abre uma Nova aba. Nunca fecha a janela.
+// Aba viva fecha pelo webContents, esperando o beforeunload da página (se ela quiser perguntar
+// "Sair desta página?", a aba só some quando o usuário confirma). Dormente e Nova aba fecham já.
 import type { TabId } from '@shared/types'
 import type { MainContext } from '../context'
-import { destroyTabView } from '../functions/destroy-tab-view'
-import { pickNextTab } from './pick-next-tab'
+import { getLiveContents } from '../functions/get-live-contents'
+import { removeTab } from './remove-tab'
+
+// se a página não responde ao fechamento (renderer travado, sem diálogo na tela), a aba é
+// removida à força depois deste tempo, para o ⌘W nunca ficar mudo
+const FORCE_CLOSE_MS = 3000
 
 export function closeTab(ctx: MainContext, tabId: TabId): void {
-  const { store } = ctx
-  const tab = store.getTab(tabId)
-  if (!tab) return
+  if (!ctx.store.getTab(tabId) || ctx.closing.has(tabId)) return
 
-  if (tab.url)
-    store.pushClosed({ spaceId: tab.spaceId, url: tab.url, title: tab.title })
+  const view = ctx.views.get(tabId)
+  const wc = getLiveContents(view)
+  if (!view || !wc) {
+    removeTab(ctx, tabId, true)
+    return
+  }
 
-  const index = store
-    .getTabsOfSpace(tab.spaceId)
-    .findIndex(other => other.id === tabId)
-  const wasActive = store.getActiveTabId(tab.spaceId) === tabId
-
-  destroyTabView(ctx, tabId)
-  ctx.stash.delete(tabId)
-  store.removeTab(tabId)
-
-  if (wasActive) pickNextTab(ctx, tab.spaceId, index)
+  ctx.closing.add(tabId)
+  wc.close({ waitForBeforeUnload: true })
+  const timer = setTimeout(() => {
+    // o diálogo "Ficar" tira a aba de closing; destruída, o evento já a removeu
+    if (!ctx.closing.has(tabId) || ctx.views.get(tabId) !== view) return
+    removeTab(ctx, tabId, true)
+  }, FORCE_CLOSE_MS)
+  timer.unref()
 }

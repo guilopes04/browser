@@ -5,6 +5,7 @@
 // acontece antes da primeira gravação: um append em arquivo ainda não lido o criaria por cima do
 // formato antigo, que então nunca seria migrado.
 import { appendFileSync } from 'node:fs'
+import { limitTitle, limitUrl } from '@shared/limit-stored-text'
 import type { HistoryEntry, SpaceId } from '@shared/types'
 import { isHistoryUrl } from './is-history-url'
 import { loadHistory } from './load-history'
@@ -116,7 +117,12 @@ export class HistoryStore {
 
   record(spaceId: SpaceId, url: string, title: string, now = Date.now()): void {
     if (!isHistoryUrl(url)) return
-    const visit = { url, title, visitedAt: now }
+    // uma URL de megabytes não entra inteira na memória nem no arquivo
+    const visit = {
+      url: limitUrl(url),
+      title: limitTitle(title),
+      visitedAt: now
+    }
     if (this.loaded) {
       addHistoryEntry(this.space(spaceId), visit)
       trimHistory(this.histories)
@@ -126,6 +132,8 @@ export class HistoryStore {
 
   setTitle(spaceId: SpaceId, url: string, title: string): void {
     if (!title) return
+    url = limitUrl(url)
+    title = limitTitle(title)
     if (this.loaded) {
       if (!setHistoryTitle(this.space(spaceId), url, title)) return
     } else this.early.push({ kind: 'title', spaceId, url, title })

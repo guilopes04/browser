@@ -1,3 +1,4 @@
+import { displayUrl } from '@shared/display-url'
 import { stripScheme } from '@shared/url-key'
 import { getTileColor } from '@shared/tile-appearance'
 import { getFavoriteLetter } from '../../favorite-letter'
@@ -20,7 +21,9 @@ export function FavoriteRow({ item }: PaletteRowProps) {
       />
       <span class="pal-title">{item.title}</span>
       <SpaceChip spaceId={item.spaceId} />
-      <span class="pal-right">{stripScheme(item.url).replace(/\/$/, '')}</span>
+      <span class="pal-right">
+        {displayUrl(stripScheme(item.url)).replace(/\/$/, '')}
+      </span>
     </>
   )
 }

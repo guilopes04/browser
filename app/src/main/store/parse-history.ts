@@ -1,5 +1,6 @@
 // history.jsonl -> históricos por espaço. Linha corrompida (ou a última, cortada por uma queda)
 // é ignorada. Linhas repetidas da mesma página se fundem na visita mais nova.
+import { limitTitle, limitUrl } from '@shared/limit-stored-text'
 import type { SpaceId } from '@shared/types'
 import { toUrlKey } from '@shared/url-key'
 import {
@@ -18,9 +19,13 @@ function applyLine(
   histories: Map<SpaceId, SpaceHistory>,
   data: Record<string, unknown>
 ): boolean {
-  const { spaceId, url, title, visitedAt } = data
+  const { spaceId, visitedAt } = data
   if (typeof spaceId !== 'string' || spaceId === '') return false
-  if (typeof url !== 'string' || typeof title !== 'string') return false
+  if (typeof data.url !== 'string' || typeof data.title !== 'string')
+    return false
+  // arquivos de versões antigas podem ter URLs gigantes
+  const url = limitUrl(data.url)
+  const title = limitTitle(data.title)
 
   let history = histories.get(spaceId)
   if (!history) {

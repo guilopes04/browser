@@ -1,3 +1,4 @@
+import { displayUrl } from '@shared/display-url'
 import { stripScheme } from '@shared/url-key'
 import {
   getFavoriteTileColor,
@@ -52,7 +53,9 @@ export function TabRow({ item, compact, selected }: PaletteRowProps) {
       />
       <div class="pal-two-lines">
         <span class="pal-title pal-title-strong">{item.title}</span>
-        <span class="pal-sub">{stripScheme(item.url).replace(/\/$/, '')}</span>
+        <span class="pal-sub">
+          {displayUrl(stripScheme(item.url)).replace(/\/$/, '')}
+        </span>
       </div>
       <SpaceChip spaceId={item.spaceId} />
       {selected && <span class="pal-hint">Ir para a aba</span>}

@@ -1,10 +1,14 @@
 // Ranking da paleta (⌘K): todas as palavras precisam aparecer no título ou no endereço. Puro.
 import { normalizeText } from './normalize-text'
+import { displayUrl } from './display-url'
 import { stripScheme } from './url-key'
 import type { NormalizedText } from './types'
 
 export function normalizeForMatch(title: string, url: string): NormalizedText {
-  return { title: normalizeText(title), url: normalizeText(stripScheme(url)) }
+  return {
+    title: normalizeText(title),
+    url: normalizeText(displayUrl(stripScheme(url)))
+  }
 }
 
 const LETTER_OR_DIGIT = /[\p{L}\p{N}]/u

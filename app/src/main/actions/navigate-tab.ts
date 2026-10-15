@@ -2,6 +2,7 @@
 import type { TabId } from '@shared/types'
 import { resolveTyped } from '@shared/resolve-input'
 import type { MainContext } from '../context'
+import { getLiveContents } from '../functions/get-live-contents'
 import { activateTab } from './activate-tab'
 
 export function navigateTab(
@@ -22,9 +23,9 @@ export function navigateTab(
     ctx.httpFallbacks.set(tabId, { from: url, to: httpFallback })
   else ctx.httpFallbacks.delete(tabId)
 
-  const view = ctx.views.get(tabId)
-  if (view) {
-    void view.webContents.loadURL(url).catch(() => {})
+  const wc = getLiveContents(ctx.views.get(tabId))
+  if (wc) {
+    void wc.loadURL(url).catch(() => {})
     store.patchTab(tabId, { url })
     return
   }

@@ -1,6 +1,7 @@
 // Ativa uma aba: troca de espaço se preciso, acorda se dormente e a põe na janela.
 import type { TabId } from '@shared/types'
 import type { MainContext } from '../context'
+import { getLiveContents } from '../functions/get-live-contents'
 import { closeKeyGate, openKeyGate } from '../functions/key-gate'
 import { hideTabView, showTabView } from '../functions/show-tab-view'
 import { applyWindowBackground } from '../functions/window-background'
@@ -28,7 +29,7 @@ export function activateTab(ctx: MainContext, tabId: TabId): void {
   const view = wakeTab(ctx, tabId)
   if (view) {
     showTabView(ctx, tabId, view)
-    view.webContents.focus()
+    getLiveContents(view)?.focus()
   } else {
     // Nova aba: a shell desenha a página e recebe o foco. O campo de busca só existe depois do
     // primeiro quadro dela; até lá, as teclas passam pelo main e a shell as recebe em ordem

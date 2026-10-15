@@ -1,4 +1,5 @@
 // Partes de uma URL: hostname, domínio e caminho, nome do site. Puro; usado por main e renderer.
+import { displayUrl } from './display-url'
 
 export function parseUrl(url: string): URL | null {
   try {
@@ -20,12 +21,13 @@ export function splitUrl(url: string): { domain: string; path: string } {
   if (!parsed) return { domain: '', path: '' }
   if (parsed.protocol === 'about:') return { domain: parsed.href, path: '' }
   if (parsed.protocol === 'file:')
-    return { domain: 'arquivo local', path: parsed.pathname }
+    return { domain: 'arquivo local', path: displayUrl(parsed.pathname) }
   const domain =
     parsed.hostname.replace(/^www\./, '') +
     (parsed.port ? `:${parsed.port}` : '')
   const rest = parsed.pathname + parsed.search + parsed.hash
-  return { domain, path: rest === '/' ? '' : rest }
+  // o caminho é para ler: acentos aparecem decodificados
+  return { domain, path: rest === '/' ? '' : displayUrl(rest) }
 }
 
 const COMPOUND_SECOND_LEVEL = new Set([

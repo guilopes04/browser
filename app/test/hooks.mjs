@@ -14,7 +14,14 @@ function tryFile(base) {
   return null
 }
 
+const ELECTRON_STUB = pathToFileURL(
+  resolvePath(dirname(fileURLToPath(import.meta.url)), 'electron-stub.mjs')
+).href
+
 export async function resolve(specifier, context, nextResolve) {
+  // só os testes do main importam o Electron de verdade, e rodam sem ele
+  if (specifier === 'electron')
+    return { url: ELECTRON_STUB, shortCircuit: true }
   if (specifier.startsWith('@shared/')) {
     const url = tryFile(resolvePath(SHARED, specifier.slice('@shared/'.length)))
     if (url) return nextResolve(url, context)

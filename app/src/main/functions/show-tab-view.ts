@@ -4,13 +4,21 @@ import type { TabId } from '@shared/types'
 import type { MainContext } from '../context'
 import { applyLayout } from './apply-layout'
 import { exitVideoFullscreen } from './exit-video-fullscreen'
+import { getLiveContents } from './get-live-contents'
 import { notifyTabShown } from './restore-scroll'
 
 // as outras abas vivas saem da árvore e continuam rodando; nada de setVisible(false)
 export function hideTabView(ctx: MainContext): void {
   exitVideoFullscreen(ctx)
   const { view } = ctx.attached
-  if (view && !ctx.win.isDestroyed()) ctx.win.contentView.removeChildView(view)
+  if (view && !ctx.win.isDestroyed()) {
+    try {
+      ctx.win.contentView.removeChildView(view)
+    } catch (error) {
+      // view de uma página que já se fechou: não há o que tirar da árvore
+      console.error('[Tab][hideTabView] falha ao tirar a view', error)
+    }
+  }
   ctx.attached.tabId = null
   ctx.attached.view = null
 }
@@ -29,5 +37,6 @@ export function showTabView(
     ctx.shellRaised = false
   }
   applyLayout(ctx)
-  notifyTabShown(ctx, tabId, view.webContents)
+  const wc = getLiveContents(view)
+  if (wc) notifyTabShown(ctx, tabId, wc)
 }

@@ -46,6 +46,8 @@ export interface Commands {
   'command:run': { command: CommandId }
   // botão "Abrir ajustes de rede do Mac" da página de erro
   'system:open-network-settings': Record<string, never>
+  // ícone de Downloads do rodapé: abre o último arquivo baixado no Finder, ou a pasta Downloads
+  'downloads:open': Record<string, never>
 }
 
 // shell -> main com resposta: invoke / handle
@@ -99,7 +101,8 @@ export const COMMAND_CHANNELS = [
   'palette:close',
   'keys:ready',
   'command:run',
-  'system:open-network-settings'
+  'system:open-network-settings',
+  'downloads:open'
 ] as const satisfies readonly (keyof Commands)[]
 
 export const REQUEST_CHANNELS = [

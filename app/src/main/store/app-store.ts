@@ -2,6 +2,7 @@
 // quem precisa reagir (shell, sessão) assina com subscribe.
 import type {
   AppSnapshot,
+  DownloadStatus,
   OverlayReason,
   Rect,
   SidebarMode,
@@ -229,6 +230,15 @@ export class AppStore {
   setFullscreen(on: boolean): void {
     if (this.state.fullscreen === on) return
     this.state.fullscreen = on
+    this.emit({ kind: 'view' })
+  }
+
+  // só avisa a shell quando algo mudou (o progresso chega várias vezes por segundo)
+  setDownloads(next: DownloadStatus): void {
+    const current = this.state.downloads
+    const keys = Object.keys(next) as (keyof DownloadStatus)[]
+    if (keys.every(key => current[key] === next[key])) return
+    this.state.downloads = next
     this.emit({ kind: 'view' })
   }
 

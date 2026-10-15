@@ -79,6 +79,18 @@ export interface Settings {
   searchUrl: string
 }
 
+// downloads em andamento e o último que terminou (o ícone de Downloads da sidebar mostra isto)
+export interface DownloadStatus {
+  // quantos baixam agora
+  active: number
+  // progresso somado dos que baixam, de 0 a 100; null = nenhum tamanho conhecido
+  percent: number | null
+  // o último que terminou: um clique no ícone abre a pasta dele no Finder
+  lastPath: string | null
+  lastName: string | null
+  lastFailed: boolean
+}
+
 export interface AppSnapshot {
   theme: Theme
   spaces: Space[]
@@ -91,6 +103,7 @@ export interface AppSnapshot {
   settings: Settings
   overlay: OverlayReason[]
   fullscreen: boolean
+  downloads: DownloadStatus
 }
 
 export type PersistedTab = Pick<

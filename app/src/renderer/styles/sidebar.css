@@ -426,3 +426,59 @@
   color: var(--sec);
   white-space: nowrap;
 }
+
+/* download: o percentual (ou "Concluído") ao lado do ícone, em destaque (Sidebar.dc.html) */
+.footer-downloads-text {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.footer-downloads[data-tone='failed'] .footer-downloads-text {
+  color: var(--sec);
+}
+
+/* popover do botão Extensões: sai do rodapé e fica dentro da sidebar */
+.popover {
+  position: absolute;
+  left: 10px;
+  bottom: 54px;
+  width: 240px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--pal-bg);
+  color: var(--text);
+  box-shadow: var(--pal-shadow);
+}
+
+.popover-caret {
+  position: absolute;
+  left: 46px;
+  bottom: -6px;
+  width: 12px;
+  height: 12px;
+  background: var(--pal-bg);
+  transform: rotate(45deg);
+  box-shadow: 0.5px 0.5px 0 0 var(--pal-hair);
+}
+
+.popover-title {
+  position: relative;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.popover-body {
+  position: relative;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--sec);
+}
+
+/* favicon de glifo escuro no tema escuro: um fundo claro para o ícone não sumir */
+.root[data-theme='dark'] .tile-dark-glyph {
+  background: #e8e9f0;
+}
+
+.root[data-theme='dark'] .tile-dark-glyph .tile-img {
+  padding: 1px;
+}

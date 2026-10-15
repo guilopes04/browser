@@ -2,6 +2,7 @@
 import type { TabId } from '@shared/types'
 import type { MainContext } from '../context'
 import { destroyTabView } from '../functions/destroy-tab-view'
+import { getLiveContents } from '../functions/get-live-contents'
 import { readScroll } from '../functions/restore-scroll'
 import { readNavigation } from '../functions/stash-navigation'
 
@@ -10,7 +11,8 @@ export async function suspendTab(
   tabId: TabId
 ): Promise<boolean> {
   const view = ctx.views.get(tabId)
-  if (!view || view.webContents.isDestroyed()) return false
+  const wc = getLiveContents(view)
+  if (!view || !wc) return false
   // a aba exibida nunca é suspensa
   if (ctx.attached.tabId === tabId) return false
   if (ctx.suspending.has(tabId)) return false
@@ -19,17 +21,16 @@ export async function suspendTab(
   try {
     // acordou há pouco e a rolagem ainda não voltou: vale a de antes, não a de agora (topo)
     const scroll =
-      ctx.pendingScroll.get(tabId)?.scroll ??
-      (await readScroll(view.webContents))
+      ctx.pendingScroll.get(tabId)?.scroll ?? (await readScroll(wc))
     // enquanto a página respondia, a aba pode ter sido exibida, fechada ou ter morrido
     if (
       ctx.views.get(tabId) !== view ||
-      view.webContents.isDestroyed() ||
+      wc.isDestroyed() ||
       ctx.attached.tabId === tabId
     )
       return false
 
-    ctx.stash.set(tabId, { ...readNavigation(view.webContents), scroll })
+    ctx.stash.set(tabId, { ...readNavigation(wc), scroll })
     destroyTabView(ctx, tabId)
     ctx.store.patchTab(tabId, {
       dormant: true,

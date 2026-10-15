@@ -2,7 +2,7 @@
 import { app, BaseWindow, nativeTheme, WebContentsView } from 'electron'
 import { join } from 'node:path'
 import { getSpaceBackground } from '@shared/tokens'
-import { activateTab, wakeTab } from './actions'
+import { activateTab, hideWindow, showWindow, wakeTab } from './actions'
 import type { MainContext } from './context'
 import { parseFlags } from './flags'
 import {
@@ -21,6 +21,7 @@ import {
   buildAppMenu,
   getShellUrl,
   handleAppProtocol,
+  installErrorLog,
   readTheme,
   registerAppScheme,
   scheduleCapture,
@@ -35,6 +36,9 @@ import { HistoryStore } from './store/history-store'
 import { readSessionFile } from './store/read-session-file'
 import { getSessionPath } from './store/session-path'
 import { startSessionWriter } from './store/session-writer'
+
+// o primeiro de tudo: erro sem tratamento vai para o log, nunca para um diálogo modal
+installErrorLog()
 
 const flags = parseFlags(process.argv)
 // com --abas a sessão é de uso único: não lê nem grava o session.json (o do usuário fica intacto)
@@ -127,6 +131,8 @@ async function bootstrap(): Promise<void> {
     pendingScroll: new Map(),
     suspending: new Set(),
     httpFallbacks: new Map(),
+    closing: new Set(),
+    saveAs: new Set(),
     attached: { tabId: null, view: null },
     shellRaised: false,
     shellReady: false,
@@ -147,8 +153,12 @@ async function bootstrap(): Promise<void> {
   // a janela aparece quando a shell carregou e recebeu o primeiro estado
   let shellLoaded = false
   let stateServed = false
+  let everShown = false
   const showWhenReady = () => {
-    if (shellLoaded && stateServed && !win.isVisible()) win.show()
+    if (shellLoaded && stateServed && !win.isVisible()) {
+      win.show()
+      everShown = true
+    }
   }
   shell.webContents.once('did-finish-load', () => {
     shellLoaded = true
@@ -185,23 +195,37 @@ async function bootstrap(): Promise<void> {
     exitVideoFullscreen(ctx)
     applyLayout(ctx)
   })
-  win.on('closed', () => app.quit())
+  // macOS: o botão vermelho esconde a janela e o app continua no Dock (⌘Q encerra). O Dock
+  // (activate) traz a janela de volta com a sessão. A sessão é gravada ao esconder
+  win.on('close', event => {
+    if (ctx.quitting || process.platform !== 'darwin') return
+    event.preventDefault()
+    hideWindow(ctx)
+    writer?.saveNow()
+    ctx.history.saveNow()
+  })
+  win.on('closed', () => {
+    if (process.platform !== 'darwin') app.quit()
+  })
 
   app.on('before-quit', () => {
     ctx.quitting = true
     writer?.saveNow()
     ctx.history.saveNow()
   })
-  app.on('second-instance', () => {
-    if (win.isMinimized()) win.restore()
-    win.focus()
+  app.on('second-instance', () => showWindow(ctx))
+  // o clique no Dock também chega no primeiro lançamento, antes de a janela existir na tela
+  app.on('activate', () => {
+    if (everShown) showWindow(ctx)
   })
 
   buildAppMenu(ctx)
   watchTheme(ctx)
 
   // shell e aba ativa carregam em paralelo
-  void shell.webContents.loadURL(shellUrl)
+  shell.webContents.loadURL(shellUrl).catch(error => {
+    console.error('[Shell][loadURL] falha ao carregar a interface', error)
+  })
   const activeId = store.getActiveTabId()
   if (activeId) activateTab(ctx, activeId)
 
@@ -217,5 +241,7 @@ async function bootstrap(): Promise<void> {
 
 if (hasLock) {
   void app.whenReady().then(bootstrap)
-  app.on('window-all-closed', () => app.quit())
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') app.quit()
+  })
 }

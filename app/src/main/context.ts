@@ -49,6 +49,11 @@ export interface MainContext {
   suspending: Set<TabId>
   // endereço digitado sem esquema: se o https falhar do jeito de quem só fala http, tenta http
   httpFallbacks: Map<TabId, HttpFallback>
+  // endereços de imagem que "Salvar imagem como" pediu: o download deles mostra o diálogo
+  saveAs: Set<string>
+  // abas que o usuário mandou fechar e que esperam o webContents terminar (o beforeunload da
+  // página pode pedir confirmação); o fechamento só vale quando ele é destruído
+  closing: Set<TabId>
   // view da aba que está na árvore da janela agora
   attached: { tabId: TabId | null; view: WebContentsView | null }
   // a shell está acima da página na árvore (há motivo de overlay: peek, dica)

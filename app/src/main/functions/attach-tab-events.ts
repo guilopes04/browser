@@ -1,18 +1,18 @@
 // Liga os eventos do webContents de uma aba ao store (título, favicon, áudio, navegação).
 import type { WebContents } from 'electron'
 import type { Tab, TabId } from '@shared/types'
+import { getHostname } from '@shared/url-parts'
 import type { MainContext } from '../context'
 import { applyLayout } from './apply-layout'
 import { destroyTabView } from './destroy-tab-view'
 import { faviconToDataUrl } from './favicon-to-data-url'
 import { forwardEarlyKey } from './forward-early-key'
 import { handleEarlyShortcut } from './handle-early-shortcut'
+import { shouldFallbackToHttp } from './http-fallback-errors'
 import { readNavigation } from './stash-navigation'
 
 // códigos de rede do Chromium
 const ERR_ABORTED = -3
-// o servidor existe mas não fala TLS (ou fecha a conexão): vale tentar http
-const HTTP_FALLBACK_ERRORS = new Set([-100, -101, -102, -107, -113])
 
 function sameUrl(a: string, b: string): boolean {
   try {
@@ -56,6 +56,8 @@ export function attachTabEvents(
   })
 
   wc.on('page-title-updated', (_event, title) => {
+    // a página de erro é da shell: o título da aba segue sendo o host que falhou
+    if (store.getTab(tabId)?.error) return
     store.patchTab(tabId, { title })
     const tab = store.getTab(tabId)
     if (tab) ctx.history.setTitle(tab.spaceId, wc.getURL(), title)
@@ -81,8 +83,15 @@ export function attachTabEvents(
   // a página de erro é da shell (como a Nova aba): o main só guarda o erro na aba e esconde a
   // view da página enquanto ele existir. A página de erro do Chromium não dispara did-navigate,
   // então um did-navigate é sempre uma página que carregou de verdade
-  const setError = (error: Tab['error']) => {
-    store.patchTab(tabId, { error })
+  // na página de erro a aba deixa de se parecer com o site que falhou: o título vira o host e o
+  // favicon volta ao padrão (letra e cor)
+  const setError = (error: Tab['error'], failedUrl = '') => {
+    store.patchTab(tabId, {
+      error,
+      ...(error
+        ? { title: getHostname(failedUrl) || failedUrl, favicon: null }
+        : {})
+    })
     if (ctx.attached.tabId !== tabId) return
     applyLayout(ctx)
     if (error) ctx.shell.webContents.focus()
@@ -105,7 +114,7 @@ export function attachTabEvents(
       ctx.httpFallbacks.delete(tabId)
       if (
         fallback &&
-        HTTP_FALLBACK_ERRORS.has(errorCode) &&
+        shouldFallbackToHttp(errorCode) &&
         sameUrl(fallback.from, validatedURL)
       ) {
         store.patchTab(tabId, { url: fallback.to })
@@ -115,10 +124,13 @@ export function attachTabEvents(
 
       if (!store.getTab(tabId)) return
       if (validatedURL) store.patchTab(tabId, { url: validatedURL })
-      setError({
-        code: errorCode,
-        description: errorDescription || `ERR_${Math.abs(errorCode)}`
-      })
+      setError(
+        {
+          code: errorCode,
+          description: errorDescription || `ERR_${Math.abs(errorCode)}`
+        },
+        validatedURL || store.getTab(tabId)?.url
+      )
     }
   )
 

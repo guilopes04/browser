@@ -15,6 +15,7 @@ import {
   moveTab,
   moveTabToSpace,
   navigateTab,
+  openDownloads,
   openNetworkSettings,
   openPalette,
   reloadTab,
@@ -150,6 +151,7 @@ const handlers: { [K in keyof Commands]: Handler } = {
     if (target) markKeyGateReady(ctx, target)
   },
   'system:open-network-settings': () => openNetworkSettings(),
+  'downloads:open': ctx => openDownloads(ctx),
   'command:run': (ctx, payload) => {
     const command = isRecord(payload) ? readCommand(payload.command) : null
     if (command) runCommand(ctx, command)

@@ -1,6 +1,7 @@
 // ⌘K e ⌘L: a shell sobe por cima da janela e desenha a paleta (docs/arquitetura.md, seção 1). O
 // foco vai para a shell; ao fechar, volta para a página. A shell já recebe as seções do texto,
 // então o primeiro quadro com a caixa não espera uma ida e volta de consulta.
+import { displayUrl } from '@shared/display-url'
 import type { PaletteMode } from '@shared/types'
 import type { MainContext } from '../context'
 import { applyLayout } from '../functions/apply-layout'
@@ -25,7 +26,7 @@ export function openPalette(
   ctx.shell.webContents.focus()
   openKeyGate(ctx, { kind: 'palette' })
   const shown =
-    mode === 'address' ? (ctx.store.getActiveTab()?.url ?? '') : text
+    mode === 'address' ? displayUrl(ctx.store.getActiveTab()?.url ?? '') : text
   ctx.broadcaster.send('palette:show', {
     mode,
     text: shown,

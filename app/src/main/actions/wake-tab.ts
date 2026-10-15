@@ -3,6 +3,8 @@ import type { WebContentsView } from 'electron'
 import type { TabId } from '@shared/types'
 import type { MainContext } from '../context'
 import { createTabView } from '../functions/create-tab-view'
+import { getLiveContents } from '../functions/get-live-contents'
+import { hideTabView } from '../functions/show-tab-view'
 import { planScrollRestore } from '../functions/restore-scroll'
 
 // devolve a view existente, ou a nova; null para Nova aba (sem webContents)
@@ -11,7 +13,12 @@ export function wakeTab(
   tabId: TabId
 ): WebContentsView | null {
   const existing = ctx.views.get(tabId)
-  if (existing) return existing
+  if (existing) {
+    if (getLiveContents(existing)) return existing
+    // a página morreu e o evento ainda não chegou: descarta a view e recria como numa suspensão
+    if (ctx.attached.view === existing) hideTabView(ctx)
+    ctx.views.delete(tabId)
+  }
   const tab = ctx.store.getTab(tabId)
   if (!tab || !tab.url) return null
 

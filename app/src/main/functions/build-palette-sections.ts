@@ -18,6 +18,7 @@ import type {
   TabId
 } from '@shared/types'
 import { getHostname, getSiteName, splitUrl } from '@shared/url-parts'
+import { limitUrl } from '@shared/limit-stored-text'
 import { toUrlKey } from '@shared/url-key'
 import { getEntryKey } from '../store/get-entry-key'
 import { getSearchText } from '../store/get-search-text'
@@ -51,7 +52,7 @@ function toTabItem(tab: Tab): PaletteItem {
     tabId: tab.id,
     spaceId: tab.spaceId,
     title: getTabLabel(tab.title, tab.url),
-    url: tab.url
+    url: limitUrl(tab.url)
   }
 }
 
@@ -123,7 +124,7 @@ export function buildPaletteSections(input: PaletteInput): PaletteSection[] {
     words,
     tab => ({
       title: getTabLabel(tab.title, tab.url),
-      url: tab.url,
+      url: limitUrl(tab.url),
       recency: tab.lastActiveAt
     }),
     LIMIT_TABS
@@ -141,7 +142,7 @@ export function buildPaletteSections(input: PaletteInput): PaletteSection[] {
     favoriteId: favorite.id,
     spaceId: space.id,
     title: favorite.title,
-    url: favorite.url
+    url: limitUrl(favorite.url)
   }))
 
   // o que já aparece como aba ou favorito não se repete no histórico. O histórico de cada espaço
@@ -175,7 +176,7 @@ export function buildPaletteSections(input: PaletteInput): PaletteSection[] {
     kind: 'history',
     spaceId,
     title: entry.title || getHostname(entry.url) || entry.url,
-    url: entry.url,
+    url: limitUrl(entry.url),
     visitedAt: entry.visitedAt
   }))
 

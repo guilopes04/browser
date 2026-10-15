@@ -8,6 +8,7 @@ import type {
   Theme
 } from '@shared/types'
 import type { TabsFile } from '../functions/read-tabs-file'
+import { createDownloadStatus } from './create-download-status'
 import { createTabRecord } from './create-tab-record'
 import { createDefaultSpaces, DEFAULT_SPACE_ID } from './default-spaces'
 import { sanitizeSettings } from './defaults'
@@ -77,7 +78,8 @@ export function buildInitialState(input: BuildInput): {
     effectiveSidebar: sidebar,
     settings,
     overlay: [],
-    fullscreen: false
+    fullscreen: false,
+    downloads: createDownloadStatus()
   }
   return { state, closed: useSession ? session.closed : [] }
 }

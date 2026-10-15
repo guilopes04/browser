@@ -9,6 +9,7 @@ import {
   type Shortcut
 } from '@shared/shortcuts'
 import { runCommand } from '../actions/run-command'
+import { showWindow } from '../actions/show-window'
 import type { MainContext } from '../context'
 import { getActiveContents } from '../functions/get-active-contents'
 
@@ -19,11 +20,68 @@ function toItem(
   return {
     label: shortcut.label,
     accelerator: shortcut.accelerator,
-    click: () => runCommand(ctx, shortcut.command)
+    click: () => {
+      // janela escondida (botão vermelho): o atalho a traz de volta antes de agir
+      if (!ctx.win.isVisible()) showWindow(ctx)
+      runCommand(ctx, shortcut.command)
+    }
   }
 }
 
-export function buildAppMenu(ctx: MainContext): void {
+// os papéis (role) do Electron trazem os textos em inglês; o rótulo explícito vence
+const APP_NAME = 'Gilas Browser'
+
+function appMenu(): MenuItemConstructorOptions {
+  return {
+    label: APP_NAME,
+    submenu: [
+      { role: 'about', label: `Sobre o ${APP_NAME}` },
+      { type: 'separator' },
+      { role: 'services', label: 'Serviços' },
+      { type: 'separator' },
+      { role: 'hide', label: `Ocultar ${APP_NAME}` },
+      { role: 'hideOthers', label: 'Ocultar Outros' },
+      { role: 'unhide', label: 'Mostrar Tudo' },
+      { type: 'separator' },
+      { role: 'quit', label: `Encerrar ${APP_NAME}` }
+    ]
+  }
+}
+
+function editMenu(): MenuItemConstructorOptions {
+  return {
+    label: 'Editar',
+    submenu: [
+      { role: 'undo', label: 'Desfazer' },
+      { role: 'redo', label: 'Refazer' },
+      { type: 'separator' },
+      { role: 'cut', label: 'Recortar' },
+      { role: 'copy', label: 'Copiar' },
+      { role: 'paste', label: 'Colar' },
+      { role: 'pasteAndMatchStyle', label: 'Colar e Combinar Estilo' },
+      { role: 'delete', label: 'Apagar' },
+      { role: 'selectAll', label: 'Selecionar Tudo' }
+    ]
+  }
+}
+
+function windowMenu(): MenuItemConstructorOptions {
+  return {
+    label: 'Janela',
+    role: 'window',
+    submenu: [
+      { role: 'minimize', label: 'Minimizar' },
+      { role: 'zoom', label: 'Zoom' },
+      { type: 'separator' },
+      { role: 'front', label: 'Trazer Todas para a Frente' }
+    ]
+  }
+}
+
+// separado do Menu do Electron para os testes conferirem os rótulos
+export function buildMenuTemplate(
+  ctx: MainContext
+): MenuItemConstructorOptions[] {
   const all = [
     ...FIXED_SHORTCUTS,
     ...getTabShortcuts(),
@@ -54,22 +112,26 @@ export function buildAppMenu(ctx: MainContext): void {
     : []
 
   const template: MenuItemConstructorOptions[] = [
-    { role: 'appMenu' },
+    appMenu(),
     { label: 'Arquivo', submenu: group('file') },
-    { role: 'editMenu' },
+    editMenu(),
     {
       label: 'Visualizar',
       submenu: [
         ...group('view'),
         zoomInAlias,
         { type: 'separator' },
-        { role: 'togglefullscreen' },
+        { role: 'togglefullscreen', label: 'Tela Cheia' },
         ...devTools
       ]
     },
     { label: 'Navegar', submenu: group('navigate') },
     { label: 'Espaços', submenu: group('spaces') },
-    { role: 'windowMenu' }
+    windowMenu()
   ]
-  Menu.setApplicationMenu(Menu.buildFromTemplate(template))
+  return template
+}
+
+export function buildAppMenu(ctx: MainContext): void {
+  Menu.setApplicationMenu(Menu.buildFromTemplate(buildMenuTemplate(ctx)))
 }
