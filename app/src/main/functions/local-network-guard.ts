@@ -4,9 +4,17 @@
 // (localhost:3000 chamando localhost:8080, um painel interno) e o que o usuário digita na barra
 // de endereço (sem iniciador) passam.
 //
-// A zona do iniciador é a da conexão que carregou o documento, gravada quando o pedido do
-// documento sai: um nome que a DNS vira para 127.0.0.1 depois do carregamento (rebinding) continua
-// "público" e o destino, que resolve para a rede local, é cancelado.
+// A zona do iniciador é a da conexão que carregou o documento, lembrada por origem:
+// - nome público que a DNS vira para 127.0.0.1 depois do carregamento (rebinding) continua
+//   "público" e o destino, que resolve para a rede local, é cancelado;
+// - a zona de uma origem nunca passa de pública a privada na sessão. Sem isto, a página criava um
+//   <iframe> da própria origem depois de a DNS virar: o documento "carregava" do loopback, a origem
+//   do atacante virava privada e ele alcançava a rede local inteira. Um pedido cancelado também não
+//   grava zona nenhuma;
+// - o endereço IP que respondeu de verdade (onHeadersReceived) só pode rebaixar a origem a pública:
+//   se a DNS disse "privado" para a nossa consulta e o Chromium conectou num IP público, vale o IP;
+// - origem sem registro (a lista é limitada, ou o documento veio de fora) conta como pública quando
+//   é um nome de DNS: resolver o nome agora devolveria o que o atacante quiser.
 import type { Session } from 'electron'
 import {
   getNetworkHost,
@@ -26,8 +34,18 @@ export interface GuardRequest {
   topUrl?: string
 }
 
+// a resposta de um pedido (onHeadersReceived)
+export interface GuardResponse {
+  url: string
+  resourceType: string
+  // endereço IP que respondeu de verdade; ausente em respostas do cache
+  ip?: string
+}
+
 export interface LocalNetworkGuard {
   shouldBlock(request: GuardRequest): Promise<boolean>
+  // o IP real da conexão de um documento: só rebaixa a origem a pública
+  observeResponse(response: GuardResponse): void
 }
 
 type Zone = 'private' | 'public'
@@ -44,6 +62,10 @@ function originOf(url: string): string | null {
   } catch {
     return null
   }
+}
+
+function isDocument(resourceType: string): boolean {
+  return resourceType === 'mainFrame' || resourceType === 'subFrame'
 }
 
 function remember<K, V>(map: Map<K, V>, key: K, value: V, max: number): void {
@@ -72,15 +94,26 @@ export function createLocalNetworkGuard(
     return addresses
   }
 
-  // zona de um host: literais e nomes locais sem consulta; nome público pela resolução (privada só
-  // se todos os endereços forem de rede local)
-  const zoneOfHost = async (host: string): Promise<Zone> => {
+  // zona pelo texto do host: literais e nomes de rede local. Nome de DNS não tem zona pelo texto
+  const zoneOfText = (host: string): Zone | null => {
     if (isPrivateHost(host)) return 'private'
-    if (isIpLiteral(host)) return 'public'
+    return isIpLiteral(host) ? 'public' : null
+  }
+
+  // zona de um documento que vai carregar: pelo texto ou pela resolução (privada só se todos os
+  // endereços forem de rede local). Nome que não resolve não diz nada: null
+  const zoneOfHost = async (host: string): Promise<Zone | null> => {
+    const byText = zoneOfText(host)
+    if (byText) return byText
     const addresses = await lookup(host)
-    return addresses.length > 0 && addresses.every(isPrivateAddress)
-      ? 'private'
-      : 'public'
+    if (addresses.length === 0) return null
+    return addresses.every(isPrivateAddress) ? 'private' : 'public'
+  }
+
+  // uma origem pública continua pública até o app reiniciar; privada pode ser rebaixada a pública
+  const recordZone = (origin: string, zone: Zone) => {
+    if (zone === 'private' && zones.get(origin) === 'public') return
+    remember(zones, origin, zone, MAX_ZONES)
   }
 
   const destinationIsPrivate = async (host: string): Promise<boolean> => {
@@ -89,37 +122,58 @@ export function createLocalNetworkGuard(
     return (await lookup(host)).some(isPrivateAddress)
   }
 
-  const initiatorZone = async (request: GuardRequest): Promise<Zone | null> => {
+  const initiatorZone = (request: GuardRequest): Zone | null => {
     let origin = originOf(request.initiatorOrigin ?? '')
     // origem opaca (iframe com sandbox, data:): vale a página de topo da aba
     if (!origin && request.initiatorOrigin === 'null' && request.topUrl)
       origin = originOf(request.topUrl)
     if (!origin) return null
     const known = zones.get(origin)
-    if (known) return known
+    if (known) {
+      // quem está pedindo agora é o que menos deve sair da lista
+      remember(zones, origin, known, MAX_ZONES)
+      return known
+    }
     const host = getNetworkHost(origin)
-    return host ? zoneOfHost(host) : null
+    if (!host) return null
+    // sem registro: nome de DNS conta como público (ver o cabeçalho)
+    return zoneOfText(host) ?? 'public'
+  }
+
+  const isBlocked = async (
+    request: GuardRequest,
+    destHost: string
+  ): Promise<boolean> => {
+    // sem iniciador: o próprio navegador (endereço digitado, restauração da sessão)
+    if (request.initiatorOrigin === undefined) return false
+    const zone = initiatorZone(request)
+    if (zone === null || zone === 'private') return false
+    return destinationIsPrivate(destHost)
   }
 
   return {
     async shouldBlock(request) {
       const destHost = getNetworkHost(request.url)
-      const destOrigin = originOf(request.url)
       if (!destHost) return false
+      const block = await isBlocked(request, destHost)
+      // o documento que está para carregar grava a zona da conexão dele, mas só se o pedido
+      // segue: um iframe cancelado não carrega nada e não pode mexer na zona de ninguém
+      const destOrigin = originOf(request.url)
+      if (!block && destOrigin && isDocument(request.resourceType)) {
+        const zone = await zoneOfHost(destHost)
+        if (zone) recordZone(destOrigin, zone)
+      }
+      return block
+    },
 
-      // o documento que está para carregar: grava a zona da conexão dele
-      if (
-        destOrigin &&
-        (request.resourceType === 'mainFrame' ||
-          request.resourceType === 'subFrame')
-      )
-        remember(zones, destOrigin, await zoneOfHost(destHost), MAX_ZONES)
-
-      // sem iniciador: o próprio navegador (endereço digitado, restauração da sessão)
-      if (request.initiatorOrigin === undefined) return false
-      const zone = await initiatorZone(request)
-      if (zone === null || zone === 'private') return false
-      return destinationIsPrivate(destHost)
+    observeResponse({ url, resourceType, ip }) {
+      if (!ip || !isDocument(resourceType)) return
+      const host = getNetworkHost(url)
+      const origin = originOf(url)
+      // literais e nomes de rede local têm zona pelo texto; atrás de um proxy o IP é o dele
+      if (!host || !origin || zoneOfText(host)) return
+      // só rebaixa: um IP privado não prova que a página é da rede local
+      if (!isPrivateAddress(ip)) recordZone(origin, 'public')
     }
   }
 }
@@ -149,6 +203,25 @@ export function installLocalNetworkGuard(ses: Session): void {
           block => callback({ cancel: block }),
           () => callback({ cancel: false })
         )
+    }
+  )
+  // o IP que respondeu de verdade ao documento (a nossa consulta de DNS pode ter dado outra
+  // resposta que a do Chromium). Os cabeçalhos chegam antes de o documento executar qualquer
+  // coisa; onResponseStarted não dispara no Electron 44, e onCompleted vem tarde demais. O campo
+  // `ip` existe em tempo de execução mas não nos tipos. O pedido nunca é cancelado por aqui: atrás
+  // de um proxy o IP é o do proxy
+  ses.webRequest.onHeadersReceived(
+    { urls: ['http://*/*', 'https://*/*'] },
+    (details, callback) => {
+      try {
+        guard.observeResponse({
+          url: details.url,
+          resourceType: details.resourceType,
+          ip: (details as { ip?: string }).ip
+        })
+      } finally {
+        callback({})
+      }
     }
   )
 }

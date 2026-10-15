@@ -276,6 +276,7 @@ test('favicon: página pública não aponta o ícone para a rede local', () => {
 
 test('toda sessão de espaço instala a guarda de rede local no webRequest', async () => {
   const registered: unknown[][] = []
+  const responses: unknown[][] = []
   const ses = {
     getUserAgent: () => 'Mozilla/5.0 Chrome/1 Safari/1',
     setUserAgent() {},
@@ -287,7 +288,8 @@ test('toda sessão de espaço instala a guarda de rede local no webRequest', asy
       endpoints: host === 'rebind.example' ? [{ address: '127.0.0.1' }] : []
     }),
     webRequest: {
-      onBeforeRequest: (...args: unknown[]) => void registered.push(args)
+      onBeforeRequest: (...args: unknown[]) => void registered.push(args),
+      onHeadersReceived: (...args: unknown[]) => void responses.push(args)
     },
     on() {}
   }
@@ -299,6 +301,7 @@ test('toda sessão de espaço instala a guarda de rede local no webRequest', asy
     ;(session as any).fromPartition = original
   }
   assert.equal(registered.length, 1)
+  assert.equal(responses.length, 1)
   const [filter, listener] = registered[0] as [
     { urls: string[] },
     (details: unknown, callback: (r: { cancel: boolean }) => void) => void
@@ -340,4 +343,299 @@ test('toda sessão de espaço instala a guarda de rede local no webRequest', asy
   )
   // pedido do próprio navegador (sem iniciador)
   assert.equal(await decide({ url: 'http://127.0.0.1:3000/' }), false)
+
+  // o IP real do documento chega pelo onResponseStarted: o Chromium conectou num IP público num
+  // nome que a nossa consulta tinha dado como local, e a origem passa a ser pública
+  const [responseFilter, headersListener] = responses[0] as [
+    { urls: string[] },
+    (
+      details: Record<string, unknown>,
+      callback: (response: object) => void
+    ) => void
+  ]
+  // a resposta segue sempre sem alteração, com ou sem IP
+  const answered: object[] = []
+  const responseListener = (details: Record<string, unknown>) =>
+    headersListener(details, response => answered.push(response))
+  assert.deepEqual(responseFilter.urls, ['http://*/*', 'https://*/*'])
+  await decide({
+    url: 'http://rebind.example/',
+    resourceType: 'mainFrame'
+  })
+  assert.equal(
+    await decide({
+      url: 'http://127.0.0.1:9229/json',
+      initiatorOrigin: 'http://rebind.example'
+    }),
+    false,
+    'o nome resolveu para o loopback: página local até o IP real dizer outra coisa'
+  )
+  responseListener({
+    url: 'http://rebind.example/',
+    resourceType: 'mainFrame',
+    ip: '93.184.216.34'
+  })
+  assert.equal(
+    await decide({
+      url: 'http://127.0.0.1:9229/json',
+      initiatorOrigin: 'http://rebind.example'
+    }),
+    true
+  )
+  responseListener({
+    url: 'https://cdn.example.net/a.css',
+    resourceType: 'stylesheet'
+  })
+  assert.deepEqual(answered, [{}, {}])
+})
+
+test('rebinding com iframe da própria origem: o atacante não vira "página da rede local"', async () => {
+  // o PoC da revisão, passo a passo
+  let address = '93.184.216.34'
+  let now = 1_000
+  const guard = createLocalNetworkGuard(
+    async host => {
+      if (host === 'evil.example') return [address]
+      throw new Error('NXDOMAIN')
+    },
+    () => now
+  )
+  const xhr = (url: string) => request(url, { resourceType: 'xhr' })
+  // 1. o documento carrega de IP público
+  assert.equal(
+    await guard.shouldBlock({
+      url: 'https://evil.example/',
+      resourceType: 'mainFrame'
+    }),
+    false
+  )
+  // 2. a DNS vira para o loopback: o fetch ao próprio nome é cancelado
+  address = '127.0.0.1'
+  now += 10_000
+  assert.equal(await guard.shouldBlock(xhr('https://evil.example/admin')), true)
+  // 3. a página cria um iframe da própria origem: cancelado também (o destino é local)
+  assert.equal(
+    await guard.shouldBlock(
+      request('https://evil.example/admin', { resourceType: 'subFrame' })
+    ),
+    true
+  )
+  // 4 e 5. e nada mudou: nem o nome, nem o literal do loopback, nem um navegador novo no iframe
+  now += 10_000
+  assert.equal(await guard.shouldBlock(xhr('https://evil.example/admin')), true)
+  assert.equal(await guard.shouldBlock(xhr('http://127.0.0.1:9229/json')), true)
+  assert.equal(
+    await guard.shouldBlock(
+      request('https://evil.example/', { resourceType: 'subFrame' })
+    ),
+    true
+  )
+})
+
+test('o iframe da própria origem que carrega de IP público segue a zona pública', async () => {
+  const guard = createLocalNetworkGuard(
+    dns({ 'evil.example': ['93.184.216.34'] }).resolve
+  )
+  await guard.shouldBlock({
+    url: 'https://evil.example/',
+    resourceType: 'mainFrame'
+  })
+  assert.equal(
+    await guard.shouldBlock(
+      request('https://evil.example/ads', { resourceType: 'subFrame' })
+    ),
+    false
+  )
+  assert.equal(
+    await guard.shouldBlock(request('http://127.0.0.1:9229/json')),
+    true
+  )
+})
+
+test('origem pública não volta a ser privada, nem navegando de novo ou com a DNS de volta', async () => {
+  let address = '93.184.216.34'
+  let now = 0
+  const guard = createLocalNetworkGuard(
+    async () => [address],
+    () => now
+  )
+  const load = () =>
+    guard.shouldBlock({
+      url: 'https://evil.example/',
+      resourceType: 'mainFrame'
+    })
+  await load()
+  address = '10.0.0.9'
+  now += 10_000
+  // outro documento da origem (aba nova, endereço digitado) com a DNS já local
+  assert.equal(await load(), false)
+  assert.equal(
+    await guard.shouldBlock(
+      request('http://192.168.0.1/', {
+        initiatorOrigin: 'https://evil.example'
+      })
+    ),
+    true
+  )
+})
+
+test('origem sem registro conta como pública: lotar a lista não devolve a zona privada', async () => {
+  let address = '93.184.216.34'
+  let now = 0
+  const guard = createLocalNetworkGuard(
+    async host => (host === 'evil.example' ? [address] : ['151.101.1.1']),
+    () => now
+  )
+  await guard.shouldBlock({
+    url: 'https://evil.example/',
+    resourceType: 'mainFrame'
+  })
+  // a página carrega 600 origens para empurrar a dela para fora da lista (limite de 500)
+  for (let i = 0; i < 600; i++)
+    await guard.shouldBlock(
+      request(`https://s${i}.example/`, { resourceType: 'subFrame' })
+    )
+  address = '127.0.0.1'
+  now += 10_000
+  assert.equal(
+    await guard.shouldBlock(request('https://evil.example/admin')),
+    true
+  )
+  assert.equal(
+    await guard.shouldBlock(
+      request('https://evil.example/', { resourceType: 'subFrame' })
+    ),
+    true
+  )
+  assert.equal(await guard.shouldBlock(request('http://127.0.0.1:9229/')), true)
+})
+
+test('o intranet que está sendo usado fica na lista; nomes locais valem sem registro', async () => {
+  const guard = createLocalNetworkGuard(async host =>
+    host === 'jira.corp.example' ? ['10.0.1.5'] : ['151.101.1.1']
+  )
+  await guard.shouldBlock({
+    url: 'https://jira.corp.example/',
+    resourceType: 'mainFrame'
+  })
+  const fromJira = request('http://10.0.1.9/', {
+    initiatorOrigin: 'https://jira.corp.example'
+  })
+  for (let i = 0; i < 600; i++) {
+    await guard.shouldBlock(
+      request(`https://s${i}.example/`, { resourceType: 'subFrame' })
+    )
+    // o pedido da própria página mantém a zona dela viva
+    if (i % 100 === 0) assert.equal(await guard.shouldBlock(fromJira), false)
+  }
+  assert.equal(await guard.shouldBlock(fromJira), false)
+  // localhost e IP privado nunca precisam de registro
+  assert.equal(
+    await guard.shouldBlock(
+      request('http://192.168.0.1/', {
+        initiatorOrigin: 'http://localhost:3000'
+      })
+    ),
+    false
+  )
+})
+
+test('o IP que respondeu de verdade rebaixa a origem a pública, nunca a promove', async () => {
+  // a nossa consulta pegou o loopback e o Chromium conectou no IP do atacante (TTL 0)
+  const guard = createLocalNetworkGuard(async () => ['127.0.0.1'])
+  await guard.shouldBlock({
+    url: 'https://evil.example/',
+    resourceType: 'mainFrame'
+  })
+  const toLocal = request('http://127.0.0.1:9229/json')
+  assert.equal(await guard.shouldBlock(toLocal), false, 'antes do IP real')
+  guard.observeResponse({
+    url: 'https://evil.example/',
+    resourceType: 'mainFrame',
+    ip: '93.184.216.34'
+  })
+  assert.equal(await guard.shouldBlock(toLocal), true)
+
+  // IP privado (proxy local, corporativo): não promove uma origem pública
+  const viaProxy = createLocalNetworkGuard(async () => ['93.184.216.34'])
+  await viaProxy.shouldBlock({
+    url: 'https://site.example/',
+    resourceType: 'mainFrame'
+  })
+  viaProxy.observeResponse({
+    url: 'https://site.example/',
+    resourceType: 'mainFrame',
+    ip: '127.0.0.1'
+  })
+  assert.equal(
+    await viaProxy.shouldBlock(
+      request('http://127.0.0.1:9229/json', {
+        initiatorOrigin: 'https://site.example'
+      })
+    ),
+    true
+  )
+
+  // sem IP (resposta do cache), subrecurso, localhost e literais: nada muda
+  const quiet = createLocalNetworkGuard(async () => ['10.0.1.5'])
+  await quiet.shouldBlock({
+    url: 'https://jira.corp.example/',
+    resourceType: 'mainFrame'
+  })
+  for (const response of [
+    { url: 'https://jira.corp.example/', resourceType: 'mainFrame' },
+    {
+      url: 'https://jira.corp.example/a.js',
+      resourceType: 'script',
+      ip: '93.184.216.34'
+    },
+    {
+      url: 'http://localhost:3000/',
+      resourceType: 'mainFrame',
+      ip: '93.184.216.34'
+    }
+  ])
+    quiet.observeResponse(response)
+  assert.equal(
+    await quiet.shouldBlock(
+      request('http://10.0.1.9/', {
+        initiatorOrigin: 'https://jira.corp.example'
+      })
+    ),
+    false
+  )
+  assert.equal(
+    await quiet.shouldBlock(
+      request('http://10.0.1.9/', { initiatorOrigin: 'http://localhost:3000' })
+    ),
+    false
+  )
+})
+
+test('nome que não resolve não grava zona: a VPN que conecta depois dá a zona da intranet', async () => {
+  let vpn = false
+  let now = 0
+  const guard = createLocalNetworkGuard(
+    async () => {
+      if (!vpn) throw new Error('NXDOMAIN')
+      return ['10.0.1.5']
+    },
+    () => now
+  )
+  const load = () =>
+    guard.shouldBlock({
+      url: 'https://jira.corp.example/',
+      resourceType: 'mainFrame'
+    })
+  const fromJira = request('http://10.0.1.9/', {
+    initiatorOrigin: 'https://jira.corp.example'
+  })
+  // sem VPN o nome não resolve: nada fica gravado e a página, se existisse, seria pública
+  await load()
+  assert.equal(await guard.shouldBlock(fromJira), true)
+  // a VPN conecta e a página recarrega: agora é da intranet
+  vpn = true
+  now += 10_000
+  await load()
+  assert.equal(await guard.shouldBlock(fromJira), false)
 })

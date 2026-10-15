@@ -356,7 +356,7 @@ function clearEnv() {
     setPermissionCheckHandler() {},
     setDevicePermissionHandler() {},
     setBluetoothPairingHandler() {},
-    webRequest: { onBeforeRequest() {} },
+    webRequest: { onBeforeRequest() {}, onHeadersReceived() {} },
     on() {},
     clearStorageData: async () => void calls.push('storage'),
     clearCache: async () => void calls.push('cache'),

@@ -24,7 +24,7 @@ export function fakeSession() {
     setDevicePermissionHandler: noop,
     setBluetoothPairingHandler: noop,
     resolveHost: async () => ({ endpoints: [] }),
-    webRequest: { onBeforeRequest: noop },
+    webRequest: { onBeforeRequest: noop, onHeadersReceived: noop },
     on: noop
   }
 }

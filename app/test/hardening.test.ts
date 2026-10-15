@@ -39,7 +39,8 @@ function recordingSession() {
     setBluetoothPairingHandler: (fn: unknown) => (handlers.pairing = fn),
     resolveHost: async () => ({ endpoints: [] }),
     webRequest: {
-      onBeforeRequest: (...args: unknown[]) => (handlers.before = args)
+      onBeforeRequest: (...args: unknown[]) => (handlers.before = args),
+      onHeadersReceived: (...args: unknown[]) => (handlers.headers = args)
     },
     on: (event: string, fn: Listener) => {
       ;(listeners[event] ??= []).push(fn)
