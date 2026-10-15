@@ -12,6 +12,29 @@ npmRebuild: false
 # mantém só os idiomas usados (a interface é em português); o resto cai em inglês
 electronLanguages: [en, en_GB, pt_BR, pt_PT]
 
+# Fuses do Electron: gravados no binário na hora do empacotamento, logo antes da assinatura
+# (veja docs/seguranca-build.md). Um fuse errado quebra o app, por isso o scripts/confere-build.sh
+# confere os valores no build final. As chaves vêm do schema do electron-builder 26.
+electronFuses:
+  # ELECTRON_RUN_AS_NODE transformaria o binário assinado num Node com os direitos do app
+  runAsNode: false
+  # NODE_OPTIONS e NODE_EXTRA_CA_CERTS no ambiente não valem
+  enableNodeOptionsEnvironmentVariable: false
+  # --inspect, --inspect-brk e o sinal SIGUSR1 não abrem o inspetor do processo principal
+  enableNodeCliInspectArguments: false
+  # o app.asar é validado contra o hash gravado no Info.plist (ElectronAsarIntegrity)
+  enableEmbeddedAsarIntegrityValidation: true
+  # só carrega o app de dentro do app.asar: uma pasta app/ solta ao lado não é lida
+  onlyLoadAppFromAsar: true
+  # o banco de cookies é cifrado com a chave da keychain ("Gilas Browser Safe Storage")
+  enableCookieEncryption: true
+  # páginas file:// não ganham privilégios extras (a shell vem de app://, não de file://)
+  grantFileProtocolExtraPrivileges: false
+  # no arm64 a mudança nos bytes invalida a assinatura ad-hoc do Electron e o kernel mata o app
+  # (SIGKILL na abertura). Em build assinado o electron-builder reassina por cima; no "dist:sem-assinar" é
+  # esta linha que deixa o app abrir
+  resetAdHocDarwinSignature: true
+
 directories:
   output: dist
   buildResources: build
@@ -35,6 +58,9 @@ mac:
   notarize: true
   extendInfo:
     NSHumanReadableCopyright: Copyright © 2026 Guilherme Lopes
+    # Nesta versão toda permissão de site é negada e as entitlements de câmera e microfone não
+    # estão assinadas: estes textos só aparecem se a peça de Permissão chegar e as entitlements
+    # device.camera e device.audio-input voltarem junto
     NSCameraUsageDescription: Sites que você permitir podem usar a câmera.
     NSMicrophoneUsageDescription: Sites que você permitir podem usar o microfone.
     # registra o app como opção de navegador padrão (http e https)

@@ -2,19 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <!-- V8 e WebAssembly precisam de memória executável -->
+  <!-- processo principal: o V8 do Electron também aloca código com MAP_JIT. Mesma lista mínima
+       dos helpers (entitlements.mac.inherit.plist, que explica o que ficou de fora e por quê). -->
   <key>com.apple.security.cs.allow-jit</key>
-  <true/>
-  <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
-  <true/>
-  <key>com.apple.security.cs.allow-dyld-environment-variables</key>
-  <true/>
-  <key>com.apple.security.cs.disable-library-validation</key>
-  <true/>
-  <!-- câmera e microfone para os sites que o usuário permitir -->
-  <key>com.apple.security.device.camera</key>
-  <true/>
-  <key>com.apple.security.device.audio-input</key>
   <true/>
   <!-- A entitlement restrita de navegador (com.apple.developer.web-browser.public-key-credential)
        NÃO entra aqui: sem o perfil de provisionamento embutido o macOS mata o app na abertura.

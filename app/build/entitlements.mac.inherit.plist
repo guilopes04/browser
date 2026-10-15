@@ -2,18 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <!-- helpers do Electron (renderer, GPU, utilitários) -->
+  <!-- helpers do Electron (renderer, GPU, rede): o V8 e o WebAssembly alocam código com MAP_JIT.
+       É a única exceção do hardened runtime que o app precisa. As outras que o Electron costuma
+       pedir ficaram de fora de propósito (veja docs/seguranca-build.md):
+       - cs.allow-unsigned-executable-memory: JIT, WebAssembly, WebGL, canvas, áudio e o leitor de PDF
+         rodam só com allow-jit (testado com hardened runtime);
+       - cs.allow-dyld-environment-variables: deixaria DYLD_INSERT_LIBRARIES injetar código no app;
+       - cs.disable-library-validation: deixaria o app carregar bibliotecas de outro Team ID;
+       - device.camera e device.audio-input: nesta versão toda permissão de site é negada. -->
   <key>com.apple.security.cs.allow-jit</key>
-  <true/>
-  <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
-  <true/>
-  <key>com.apple.security.cs.allow-dyld-environment-variables</key>
-  <true/>
-  <key>com.apple.security.cs.disable-library-validation</key>
-  <true/>
-  <key>com.apple.security.device.camera</key>
-  <true/>
-  <key>com.apple.security.device.audio-input</key>
   <true/>
 </dict>
 </plist>
