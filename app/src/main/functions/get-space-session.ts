@@ -2,24 +2,15 @@
 import { session, type Session } from 'electron'
 import { cleanUserAgent } from './clean-user-agent'
 import { getPartitionName } from './get-partition-name'
-
-// o padrão do Electron concede tudo; até a peça de Permissão existir, só estes passam
-const ALLOWED_PERMISSIONS = new Set([
-  'fullscreen',
-  'clipboard-sanitized-write',
-  'pointerLock'
-])
+import { hardenSession } from './harden-session'
+import { PAGE_PERMISSIONS } from './permission-policy'
 
 const configured = new Set<string>()
 
 function configureSession(ses: Session): void {
   ses.setUserAgent(cleanUserAgent(ses.getUserAgent()))
-  ses.setPermissionRequestHandler((_contents, permission, callback) => {
-    callback(ALLOWED_PERMISSIONS.has(permission))
-  })
-  ses.setPermissionCheckHandler((_contents, permission) =>
-    ALLOWED_PERMISSIONS.has(permission)
-  )
+  // o padrão do Electron concede tudo; até a peça de Permissão existir, só PAGE_PERMISSIONS passa
+  hardenSession(ses, PAGE_PERMISSIONS)
 }
 
 export function getSpaceSession(spaceId: string): Session {

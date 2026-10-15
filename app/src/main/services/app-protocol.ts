@@ -1,13 +1,15 @@
 // Serve a shell por app://shell/ lendo só de out/renderer (bloqueia "..").
-import { net, protocol } from 'electron'
+import { app, net, protocol } from 'electron'
 import { join, normalize, sep } from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { resolveShellUrl, SHELL_URL } from '../functions/resolve-shell-url'
 
-export const SHELL_URL = 'app://shell/index.html'
+export { SHELL_URL }
 
-// no desenvolvimento (electron-vite dev) a shell vem do servidor do Vite
+// no desenvolvimento (electron-vite dev) a shell vem do servidor do Vite (http://localhost:<porta>);
+// empacotado é sempre app://shell, seja qual for o ambiente
 export function getShellUrl(): string {
-  return process.env['ELECTRON_RENDERER_URL'] ?? SHELL_URL
+  return resolveShellUrl(process.env['ELECTRON_RENDERER_URL'], app.isPackaged)
 }
 
 // antes de app.ready

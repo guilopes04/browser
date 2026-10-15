@@ -3,9 +3,12 @@
 class Empty {}
 
 export const app = {
+  isPackaged: false,
   getPath: () => '',
   getName: () => 'Gilas Browser',
-  commandLine: { hasSwitch: () => false, appendSwitch() {} }
+  commandLine: { hasSwitch: () => false, appendSwitch() {} },
+  on() {},
+  enableSandbox() {}
 }
 export const BaseWindow = Empty
 
@@ -18,6 +21,10 @@ export function fakeSession() {
     setUserAgent: noop,
     setPermissionRequestHandler: noop,
     setPermissionCheckHandler: noop,
+    setDevicePermissionHandler: noop,
+    setBluetoothPairingHandler: noop,
+    resolveHost: async () => ({ endpoints: [] }),
+    webRequest: { onBeforeRequest: noop },
     on: noop
   }
 }
@@ -77,6 +84,8 @@ export const ipcMain = { on() {}, handle() {} }
 export const protocol = { handle() {}, registerSchemesAsPrivileged() {} }
 export const dialog = {
   showMessageBoxSync: () => 1,
+  showMessageBox: async () => ({ response: 1 }),
+  showErrorBox() {},
   showSaveDialogSync: () => undefined
 }
 export const clipboard = { writeText() {}, writeImage() {} }

@@ -1,5 +1,5 @@
 // Bootstrap do main: flags, protocolo, estado, janela, shell, menu, timers.
-import { app, BaseWindow, nativeTheme, WebContentsView } from 'electron'
+import { app, BaseWindow, dialog, nativeTheme, WebContentsView } from 'electron'
 import { join } from 'node:path'
 import { getSpaceBackground } from '@shared/tokens'
 import { activateTab, hideWindow, showWindow, wakeTab } from './actions'
@@ -9,6 +9,7 @@ import {
   applyLayout,
   cleanUserAgent,
   exitVideoFullscreen,
+  findRefusedDebugFlags,
   forwardEarlyKey,
   guardShell,
   handleEarlyShortcut,
@@ -20,8 +21,12 @@ import { registerIpc } from './ipc/register-ipc'
 import {
   buildAppMenu,
   getShellUrl,
+  enableAppSandbox,
   handleAppProtocol,
   installErrorLog,
+  hardenDefaultSession,
+  installAppHardening,
+  installClientCertificateDialog,
   readTheme,
   registerAppScheme,
   scheduleCapture,
@@ -42,19 +47,46 @@ installErrorLog()
 
 const flags = parseFlags(process.argv)
 // com --abas a sessão é de uso único: não lê nem grava o session.json (o do usuário fica intacto)
+// depuração remota e inspetor abrem uma porta com controle total do app: empacotado, só com --dev
+const refusedDebugFlags = findRefusedDebugFlags(
+  process.argv,
+  app.isPackaged,
+  process.env['NODE_OPTIONS']
+)
+const startupRefused = refusedDebugFlags.length > 0
+if (startupRefused) {
+  dialog.showErrorBox(
+    'Gilas Browser',
+    `Estas opções abrem uma porta de depuração que dá controle total do app e dos seus dados: ${refusedDebugFlags.join(', ')}.\n\nSe isso é de propósito, abra o app com --dev.`
+  )
+  app.exit(1)
+}
+
+// todo renderer nasce com sandbox, e sessão nenhuma concede permissão ou dispositivo por conta própria
+// (antes de app.ready)
+enableAppSandbox()
+installAppHardening()
+
 const ephemeralSession = flags.tabsSource !== null
 // ...e também não toca no perfil real: sem --user-data-dir, os cookies e o cache das partições
 // dos espaços vão para uma pasta temporária (antes de pedir o lock, que depende dela)
-if (ephemeralSession && !app.commandLine.hasSwitch('user-data-dir'))
+if (
+  !startupRefused &&
+  ephemeralSession &&
+  !app.commandLine.hasSwitch('user-data-dir')
+)
   useTempProfile()
 
-// menos processos de UI: sem renderer reserva (permitido pela arquitetura, seção 7)
+// menos processos de UI: sem renderer reserva (permitido pela arquitetura, seção 7) e sem Web
+// Bluetooth (o pedido chegaria ao TCC do macOS). Um navegador que só fala quando o usuário manda:
+// nada de serviços de segundo plano do Chromium
 app.commandLine.appendSwitch(
   'disable-features',
-  'SpareRendererForSitePerProcess'
+  'SpareRendererForSitePerProcess,WebBluetooth'
 )
 registerAppScheme()
 
+app.commandLine.appendSwitch('disable-background-networking')
 // user agent global sem "Electron/x" e sem o token do app (as sessões dos espaços, e a shell,
 // partem deste valor)
 app.userAgentFallback = cleanUserAgent(app.userAgentFallback)
@@ -62,12 +94,13 @@ app.userAgentFallback = cleanUserAgent(app.userAgentFallback)
 if (flags.theme) nativeTheme.themeSource = flags.theme
 
 // uma instância por userData (partições e session.json não toleram duas)
-const hasLock = app.requestSingleInstanceLock()
-if (!hasLock) app.quit()
+const hasLock = !startupRefused && app.requestSingleInstanceLock()
+if (!hasLock && !startupRefused) app.quit()
 
 async function bootstrap(): Promise<void> {
   handleAppProtocol(join(__dirname, '../renderer'))
 
+  hardenDefaultSession()
   const userData = app.getPath('userData')
   const sessionPath = getSessionPath(userData)
   if (ephemeralSession)
@@ -145,6 +178,7 @@ async function bootstrap(): Promise<void> {
   guardShell(ctx, shellUrl)
   shell.webContents.on('before-input-event', (event, input) => {
     if (!handleEarlyShortcut(ctx, event, input))
+  installClientCertificateDialog(() => (win.isDestroyed() ? null : win))
       forwardEarlyKey(ctx, event, input)
   })
   win.contentView.addChildView(shell)
