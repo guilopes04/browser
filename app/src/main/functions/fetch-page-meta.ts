@@ -126,9 +126,13 @@ export async function fetchSiteMeta(
       : meta.touchIcons
     : []
   let favicon =
-    declared.length > 0 ? await faviconToDataUrl(ses, declared) : null
-  favicon ??= await faviconToDataUrl(ses, [new URL('/favicon.ico', url).href])
+    declared.length > 0 ? await faviconToDataUrl(ses, declared, url) : null
+  favicon ??= await faviconToDataUrl(
+    ses,
+    [new URL('/favicon.ico', url).href],
+    url
+  )
   if (!favicon && meta && meta.icons.length > 0 && meta.touchIcons.length > 0)
-    favicon = await faviconToDataUrl(ses, meta.touchIcons)
+    favicon = await faviconToDataUrl(ses, meta.touchIcons, url)
   return { title, favicon }
 }

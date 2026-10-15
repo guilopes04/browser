@@ -2,7 +2,10 @@
 import { clipboard, type ContextMenuParams, type WebContents } from 'electron'
 import type { TabId } from '@shared/types'
 import type { MainContext } from '../context'
-import type { PageMenuAction } from '../functions/describe-page-menu'
+import {
+  isSavableImage,
+  type PageMenuAction
+} from '../functions/describe-page-menu'
 import { createTab } from './create-tab'
 
 export function runPageMenuAction(
@@ -35,6 +38,7 @@ export function runPageMenuAction(
       wc.copyImageAt(params.x, params.y)
       break
     case 'save-image':
+      if (!isSavableImage(params.srcURL)) break
       // o download desta imagem mostra o diálogo de salvar (services/downloads.ts)
       ctx.saveAs.add(params.srcURL)
       wc.downloadURL(params.srcURL)

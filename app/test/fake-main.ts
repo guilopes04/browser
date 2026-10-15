@@ -22,6 +22,8 @@ export interface FakeContents {
   on(event: string, listener: (...args: any[]) => void): void
   emit(event: string, ...args: any[]): void
   getURL(): string
+  title: string
+  getTitle(): string
 }
 
 export interface FakeView {
@@ -39,6 +41,7 @@ export function fakeContents(url = ''): FakeContents {
     closeCalls: [],
     focused: 0,
     url,
+    title: '',
     listeners: new Map(),
     isDestroyed: () => wc.destroyed,
     isCurrentlyAudible: () => false,
@@ -63,7 +66,8 @@ export function fakeContents(url = ''): FakeContents {
     emit: (event, ...args) => {
       for (const listener of wc.listeners.get(event) ?? []) listener(...args)
     },
-    getURL: () => wc.url
+    getURL: () => wc.url,
+    getTitle: () => wc.title
   }
   return wc
 }
@@ -98,7 +102,14 @@ export function fakeContext(urls: string[] = []) {
 
   const ctx = {
     store,
-    history: { record() {}, setTitle() {}, saveNow() {} },
+    history: {
+      record() {},
+      setTitle() {},
+      saveNow() {},
+      warm() {},
+      getEntries: () => [],
+      clearSpace() {}
+    },
     flags: parseFlags(['--suspender-apos=5']),
     win: {
       isDestroyed: () => false,

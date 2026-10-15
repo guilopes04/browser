@@ -44,8 +44,9 @@ export function App() {
         ? SIDEBAR_COMPACT_WIDTH
         : PANEL_INSET
   const tab = activeTab.value
-  const isNewTab = tab?.url === ''
   const hasError = tab?.error != null
+  // Nova aba com erro (file://): a página de erro toma o lugar dela
+  const isNewTab = tab?.url === '' && !hasError
 
   const vars = {
     '--bg': spaceTokens.bg,

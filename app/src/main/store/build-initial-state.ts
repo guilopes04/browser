@@ -13,6 +13,7 @@ import { createTabRecord } from './create-tab-record'
 import { createDefaultSpaces, DEFAULT_SPACE_ID } from './default-spaces'
 import { sanitizeSettings } from './defaults'
 import { hydrateTab } from './hydrate-tab'
+import { sanitizeClosed } from './sanitize-closed'
 
 interface BuildInput {
   theme: Theme
@@ -81,5 +82,5 @@ export function buildInitialState(input: BuildInput): {
     fullscreen: false,
     downloads: createDownloadStatus()
   }
-  return { state, closed: useSession ? session.closed : [] }
+  return { state, closed: useSession ? sanitizeClosed(session.closed) : [] }
 }

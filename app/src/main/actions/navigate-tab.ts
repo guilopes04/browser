@@ -2,6 +2,7 @@
 import type { TabId } from '@shared/types'
 import { resolveTyped } from '@shared/resolve-input'
 import type { MainContext } from '../context'
+import { blockLocalFile } from '../functions/block-local-file'
 import { getLiveContents } from '../functions/get-live-contents'
 import { activateTab } from './activate-tab'
 
@@ -13,10 +14,15 @@ export function navigateTab(
   const { store } = ctx
   const tab = store.getTab(tabId)
   if (!tab) return
-  const { url, httpFallback } = resolveTyped(
+  const { url, httpFallback, refused } = resolveTyped(
     input,
     store.state.settings.searchUrl
   )
+  // file://: esta versão não abre; a página de erro explica
+  if (refused) {
+    blockLocalFile(ctx, tabId)
+    return
+  }
   if (!url) return
   // domínio sem esquema: https primeiro; se o servidor só fala http, attach-tab-events tenta http
   if (httpFallback)
@@ -32,7 +38,13 @@ export function navigateTab(
 
   // Nova aba ou dormente: a navegação nova descarta o histórico guardado
   ctx.stash.delete(tabId)
-  store.patchTab(tabId, { url, title: '', favicon: null, dormant: true })
+  store.patchTab(tabId, {
+    url,
+    title: '',
+    favicon: null,
+    dormant: true,
+    error: null
+  })
   if (
     store.getActiveTabId(tab.spaceId) === tabId &&
     tab.spaceId === store.state.window.spaceId

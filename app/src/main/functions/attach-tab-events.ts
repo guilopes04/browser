@@ -1,5 +1,6 @@
 // Liga os eventos do webContents de uma aba ao store (título, favicon, áudio, navegação).
 import type { WebContents } from 'electron'
+import { sanitizeTitle } from '@shared/sanitize-title'
 import type { Tab, TabId } from '@shared/types'
 import { getHostname } from '@shared/url-parts'
 import type { MainContext } from '../context'
@@ -46,7 +47,11 @@ export function attachTabEvents(
   const recordVisit = () => {
     const tab = store.getTab(tabId)
     if (tab && !wc.isDestroyed())
-      ctx.history.record(tab.spaceId, wc.getURL(), wc.getTitle())
+      ctx.history.record(
+        tab.spaceId,
+        wc.getURL(),
+        sanitizeTitle(wc.getTitle())
+      )
   }
 
   wc.on('before-input-event', (event, input) => {
@@ -58,15 +63,17 @@ export function attachTabEvents(
   wc.on('page-title-updated', (_event, title) => {
     // a página de erro é da shell: o título da aba segue sendo o host que falhou
     if (store.getTab(tabId)?.error) return
-    store.patchTab(tabId, { title })
+    // controles e marcas bidi do título viram espaço antes de qualquer lugar vê-lo
+    const clean = sanitizeTitle(title)
+    store.patchTab(tabId, { title: clean })
     const tab = store.getTab(tabId)
-    if (tab) ctx.history.setTitle(tab.spaceId, wc.getURL(), title)
+    if (tab) ctx.history.setTitle(tab.spaceId, wc.getURL(), clean)
   })
 
   wc.on('page-favicon-updated', (_event, favicons) => {
     const tab = store.getTab(tabId)
     if (!tab) return
-    void faviconToDataUrl(wc.session, favicons).then(favicon => {
+    void faviconToDataUrl(wc.session, favicons, wc.getURL()).then(favicon => {
       if (!favicon || wc.isDestroyed()) return
       store.patchTab(tabId, { favicon })
       store.fillFavoriteFavicons(wc.getURL(), favicon)
@@ -90,7 +97,9 @@ export function attachTabEvents(
       error,
       ...(error
         ? { title: getHostname(failedUrl) || failedUrl, favicon: null }
-        : {})
+        : // a página voltou: o título que o erro tinha trocado volta a ser o dela (o evento de
+          // título nem sempre chega de novo, como num recarregamento da mesma página)
+          { title: sanitizeTitle(wc.getTitle()) })
     })
     if (ctx.attached.tabId !== tabId) return
     applyLayout(ctx)

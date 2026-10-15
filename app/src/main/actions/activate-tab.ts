@@ -36,7 +36,7 @@ export function activateTab(ctx: MainContext, tabId: TabId): void {
     hideTabView(ctx)
     ctx.shell.webContents.focus()
     // (reativar a Nova aba que já está na tela não muda o foco do campo dela)
-    if (ctx.shellReady && previous?.id !== tabId)
+    if (ctx.shellReady && previous?.id !== tabId && !tab.error)
       openKeyGate(ctx, { kind: 'new-tab', tabId })
   }
   applyWindowBackground(ctx)
