@@ -57,6 +57,18 @@ test('o portão fica aberto até o teto de 600 ms', () => {
   assert.equal(getOpenKeyGate(ctx, openedAt + 601), null)
 })
 
+test('o portão da busca espera até 2 s: a barra é um renderer novo a cada ⌘F', () => {
+  const { ctx } = fakeContext()
+  openKeyGate(ctx, FIND)
+  const openedAt = ctx.keyGate?.openedAt ?? 0
+  assert.deepEqual(getOpenKeyGate(ctx, openedAt + 1500), FIND)
+  assert.equal(getOpenKeyGate(ctx, openedAt + 2001), null)
+  // pronta a caixa, fecha 100 ms depois, como os outros
+  markKeyGateReady(ctx, FIND)
+  const readyAt = ctx.keyGate?.readyAt ?? 0
+  assert.equal(getOpenKeyGate(ctx, readyAt + 110), null)
+})
+
 test('com o aviso da shell, fecha 100 ms depois', () => {
   const { ctx } = fakeContext()
   openKeyGate(ctx, PALETTE)
