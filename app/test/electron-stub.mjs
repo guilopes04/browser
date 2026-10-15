@@ -75,8 +75,10 @@ export const net = { fetch: async () => ({}) }
 export const nativeImage = { createFromBuffer: () => ({}) }
 export const ipcMain = { on() {}, handle() {} }
 export const protocol = { handle() {}, registerSchemesAsPrivileged() {} }
+// o padrão dos diálogos é o botão 0 (Cancelar) e sem marcar a caixa: o teste troca o que precisa
 export const dialog = {
   showMessageBoxSync: () => 1,
+  showMessageBox: async () => ({ response: 0, checkboxChecked: false }),
   showSaveDialogSync: () => undefined
 }
 export const clipboard = { writeText() {}, writeImage() {} }

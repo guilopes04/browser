@@ -61,6 +61,8 @@ registerAppScheme()
 app.userAgentFallback = cleanUserAgent(app.userAgentFallback)
 
 if (flags.theme) nativeTheme.themeSource = flags.theme
+// testes: os downloads vão para uma pasta de teste, nunca para a do usuário
+if (flags.downloadsDir) app.setPath('downloads', flags.downloadsDir)
 
 // uma instância por userData (partições e session.json não toleram duas)
 const hasLock = app.requestSingleInstanceLock()

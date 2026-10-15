@@ -19,6 +19,8 @@ export interface Flags {
   // texto que a paleta mostra ao abrir na captura (padrão: vazio)
   paletteQuery: string
   dev: boolean
+  // pasta de downloads trocada (testes: nunca escrever em ~/Downloads). null = a do sistema
+  downloadsDir: string | null
 }
 
 // aceita "--nome=valor" e "--nome valor"
@@ -105,6 +107,7 @@ export function parseFlags(argv: string[]): Flags {
     captureScene,
     captureDelayMs: delay ?? 1500,
     paletteQuery: readValue(argv, 'paleta-consulta') ?? '',
-    dev: hasFlag(argv, 'dev')
+    dev: hasFlag(argv, 'dev'),
+    downloadsDir: readValue(argv, 'pasta-downloads') || null
   }
 }
