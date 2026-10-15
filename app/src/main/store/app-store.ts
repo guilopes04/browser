@@ -231,6 +231,8 @@ export class AppStore {
   setFullscreen(on: boolean): void {
     if (this.state.fullscreen === on) return
     this.state.fullscreen = on
+    // o aviso de tela cheia não sobrevive à saída dela
+    if (!on) this.removeOverlay('notice')
     this.emit({ kind: 'view' })
   }
 

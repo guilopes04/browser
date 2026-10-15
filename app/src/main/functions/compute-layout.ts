@@ -1,5 +1,6 @@
 // Geometria da janela em pt (docs/arquitetura.md, seção 1). Pura.
 import {
+  FULLSCREEN_NOTICE,
   NARROW_WINDOW,
   PANEL_INSET,
   PANEL_RADIUS,
@@ -17,6 +18,8 @@ export interface LayoutInput {
   videoFullscreen?: boolean
   // sidebar oculta revelada pela borda: flutua sobre a página
   peek?: boolean
+  // aviso de tela cheia: a shell vira só a faixa do aviso, sobre a página
+  fullscreenNotice?: boolean
 }
 
 export interface Layout {
@@ -42,15 +45,25 @@ export function computeLayout({
   height,
   sidebar,
   videoFullscreen,
-  peek
+  peek,
+  fullscreenNotice
 }: LayoutInput): Layout {
   const shell: Rect = { x: 0, y: 0, width, height }
   const mode = getEffectiveSidebar(sidebar, width)
 
   if (videoFullscreen) {
+    // com o aviso, a shell cobre só a faixa dele (o resto da página segue recebendo os cliques)
+    const noticeWidth = Math.min(FULLSCREEN_NOTICE.width, width)
     return {
       sidebar: mode,
-      shell,
+      shell: fullscreenNotice
+        ? {
+            x: Math.round((width - noticeWidth) / 2),
+            y: FULLSCREEN_NOTICE.top,
+            width: noticeWidth,
+            height: FULLSCREEN_NOTICE.height
+          }
+        : shell,
       page: { x: 0, y: 0, width, height },
       pageRadius: 0,
       trafficLights: { visible: false, position: { x: 15, y: 21 } }

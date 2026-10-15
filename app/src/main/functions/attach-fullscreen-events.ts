@@ -4,6 +4,10 @@ import type { WebContents } from 'electron'
 import type { TabId } from '@shared/types'
 import type { MainContext } from '../context'
 import { applyLayout } from './apply-layout'
+import {
+  hideFullscreenNotice,
+  showFullscreenNotice
+} from './show-fullscreen-notice'
 
 export function attachFullscreenEvents(
   ctx: MainContext,
@@ -15,10 +19,12 @@ export function attachFullscreenEvents(
     if (ctx.attached.tabId !== tabId) return
     ctx.store.setFullscreen(true)
     applyLayout(ctx)
+    showFullscreenNotice(ctx)
   })
   wc.on('leave-html-full-screen', () => {
     if (!ctx.store.state.fullscreen) return
     ctx.store.setFullscreen(false)
+    hideFullscreenNotice(ctx)
     applyLayout(ctx)
   })
 }

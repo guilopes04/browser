@@ -5,7 +5,9 @@ export type TabId = string
 export type Theme = 'light' | 'dark'
 export type SidebarMode = 'open' | 'compact' | 'hidden'
 export type SpaceColor = 'indigo' | 'amber'
-export type OverlayReason = 'palette' | 'peek' | 'tooltip' | 'popover'
+// 'notice': aviso de tela cheia ("Site em tela cheia. Esc para sair"), só o main liga
+export type OverlayReason =
+  'palette' | 'peek' | 'tooltip' | 'popover' | 'notice'
 
 export interface Point {
   x: number

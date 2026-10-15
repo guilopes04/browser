@@ -11,7 +11,8 @@ export function getLayout(ctx: MainContext): Layout {
     height,
     sidebar: state.window.sidebar,
     videoFullscreen: state.fullscreen,
-    peek: state.overlay.includes('peek')
+    peek: state.overlay.includes('peek'),
+    fullscreenNotice: state.overlay.includes('notice')
   })
 }
 
