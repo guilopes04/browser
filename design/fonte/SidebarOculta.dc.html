@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Sidebar oculta</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#4352C4}a:hover{color:#2F3C9A}
+</style>
+</helmet>
+<div style="position: relative; width: 1440px; height: 900px; box-sizing: border-box; padding: 8px; display: flex; background: #E8E9F0; color: #17181C; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; overflow: hidden">
+  <main aria-label="Conteúdo da página" style="flex: 1; background: #FFFFFF; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06); overflow: hidden; display: flex; flex-direction: column">
+    <div aria-hidden="true" style="height: 60px; flex: none; border-bottom: 1px solid #EEEEF2; display: flex; align-items: center; gap: 28px; padding: 0 64px">
+      <span style="width: 110px; height: 14px; border-radius: 4px; background: #DFE0E7"></span>
+      <span style="flex: 1"></span>
+      <span style="width: 56px; height: 10px; border-radius: 3px; background: #E8E9EF"></span>
+      <span style="width: 56px; height: 10px; border-radius: 3px; background: #E8E9EF"></span>
+      <span style="width: 92px; height: 30px; border-radius: 8px; background: #DFE0E7"></span>
+    </div>
+    <div aria-hidden="true" style="flex: 1; display: flex; justify-content: center; padding: 72px 64px">
+      <div style="width: 720px; display: flex; flex-direction: column; gap: 14px">
+        <span style="width: 64%; height: 32px; border-radius: 6px; background: #DFE0E7"></span>
+        <span style="height: 14px"></span>
+        <span style="width: 100%; height: 12px; border-radius: 3px; background: #EEEEF2"></span>
+        <span style="width: 96%; height: 12px; border-radius: 3px; background: #EEEEF2"></span>
+        <span style="width: 99%; height: 12px; border-radius: 3px; background: #EEEEF2"></span>
+        <span style="width: 58%; height: 12px; border-radius: 3px; background: #EEEEF2"></span>
+        <span style="height: 14px"></span>
+        <span style="width: 100%; height: 220px; border-radius: 10px; background: #F3F3F7"></span>
+      </div>
+    </div>
+  </main>
+
+  <div style="position: absolute; left: 8px; top: 8px; width: 260px; height: 884px; border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.14), 0 18px 48px rgba(0,0,0,0.22)">
+    <dc-import name="Sidebar" space="pessoal" theme="claro" active="p1" hint-size="260px,900px"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

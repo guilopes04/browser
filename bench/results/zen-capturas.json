@@ -1,0 +1,26 @@
+{
+  "janela": "bench/results/zen-janela.png",
+  "sidebar": "bench/results/zen-sidebar.png",
+  "paleta": "bench/results/zen-paleta.png",
+  "larguraSidebarPx": 230,
+  "larguraSidebarPxImagem": 460,
+  "larguraRecortePxImagem": 476,
+  "escala": 2,
+  "tamanhoJanelaPxImagem": {
+    "largura": 2880,
+    "altura": 1684
+  },
+  "tamanhoJanelaCssPx": {
+    "largura": 1440,
+    "altura": 842
+  },
+  "zenVersao": "1.23.2b",
+  "notas": [
+    "Caminhos relativos à raiz do projeto. As imagens são @2x: 2880x1684 px = janela de 1440x842 px CSS (o macOS recorta a janela pedida de 1440x900 para a área útil). larguraSidebarPx = 230 px CSS (a barra lateral do Zen mede 460 px na imagem, medido por pixel: o conteúdo da página começa na coluna 460 a y=900). zen-sidebar.png tem 476 px de largura na imagem (230 + 8 px CSS, que mostram a borda arredondada da área de conteúdo) por 1684 px de altura, do topo à base da janela.",
+    "zen-janela.png é o zen-rodada1.png reaproveitado (Zen 1.23.2b, perfil temporário, tema claro, dez abas de bench/tabs.json, primeira aba ativa, sem diálogos nem balões). Conferido olhando a imagem. Os botões de semáforo aparecem cinza porque a janela da bancada não estava como janela principal do macOS na hora da captura.",
+    "zen-sidebar.png foi recortado com script Node a partir do BMP da zen-janela.png (x=0, y=0, 476x1684). O sips -c com --cropOffset 0 0 ignora o deslocamento zero e recorta no centro (saiu o conteúdo da página, não a barra), por isso não foi usado.",
+    "zen-paleta.png: no Zen 1.23.2b o atalho ⌘K NÃO abre paleta de comandos; a tecla vai para a página (no site do Electron abre o modal Search docs do Algolia). Foi usado o plano B: ⌘L e a letra e, que abre a barra de endereço flutuante do Zen centralizada na janela (aprox. 749 px CSS de largura por 224 de altura, x=345, y=254 a partir do canto da janela) com o campo de busca, a primeira linha selecionada em verde (e: Search with Google) e quatro sugestões de Switch to Tab (Pull requests electron/electron GitHub, lofi hip hop radio YouTube, :has() CSS pseudo-class MDN, MacBook Air Apple BR). Linhas com passo de cerca de 49 px CSS; a página atrás fica com uma sombra suave, sem escurecer. O pill do URL na barra lateral fica vazio durante a edição.",
+    "Captura feita com screencapture -x -o -l <id> pelo id do winlist: não inclui sombra da janela nem o ponteiro do mouse. Primeira tentativa de ⌘K deixou o modal do Algolia aberto atrás da barra; foi fechado com Esc, a janela conferida limpa e a captura refeita antes de gravar zen-paleta.png.",
+    "Zen aberto com perfil temporário em scratchpad (cópia de bench/zen-base), sem --remote-debugging-port, com as dez URLs de tabs.json como argumentos separados. Encerrado ao final; ps e winlist sem nenhum processo nem janela do Zen."
+  ]
+}

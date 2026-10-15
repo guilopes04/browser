@@ -1,0 +1,92 @@
+
+DevTools listening on ws://127.0.0.1:29339/devtools/browser/e9261aad-65fb-4061-9e26-8afbed04b58e
+[harness] 280ms app pronto
+[harness] 349ms passo servidor-local: início
+[harness] 356ms passo servidor-local: ok
+[harness] 356ms passo loadExtension: início
+(node:69570) ExtensionLoadWarning: Warnings loading extension at /Users/guilhermelopes/Documents/Projects/navegador/experiments/extensoes/bitwarden:
+  Permission 'contextMenus' is unknown.
+  Permission 'sidePanel' is unknown.
+  Permission 'webNavigation' is unknown.
+  Permission 'notifications' is unknown.
+  Permission 'privacy' is unknown.
+
+(Use `Electron --trace-warnings ...` to show where the warning was created)
+[harness] 401ms passo loadExtension: ok
+[harness] 38461ms passo carregar-site: início
+[harness] 39221ms passo carregar-site: ok
+[harness] 39330ms passo carregar-popup: início
+[69570:1015/022136.796293:INFO:CONSOLE:2] "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security
+  Policy set or a policy with "unsafe-eval" enabled. This exposes users of
+  this app to unnecessary security risks.
+
+For more information and help, consult
+https://electronjs.org/docs/tutorial/security.
+This warning will not show up
+once the app is packaged.", source: node:electron/js2c/sandbox_bundle (2)
+[69570:1015/022137.057148:INFO:CONSOLE:2] "WebAssembly is supported in this environment", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/background.js (2)
+[69570:1015/022137.122815:INFO:CONSOLE:2] "Uncaught TypeError: Cannot read properties of undefined (reading 'onCommitted')", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/background.js (2)
+[69570:1015/022137.123509:ERROR:extensions/browser/extensions_browser_client.cc:93] Extension Error:
+  OTR:     false
+  Level:   2
+  Source:  chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/background.js
+  Message: Uncaught TypeError: Cannot read properties of undefined (reading 'onCommitted')
+  ID:      ldlmmohhdkimgaaagmkmejnikmkopcgc
+  Type:    RuntimeError
+  Context: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/background.js
+  Stack Trace: 
+    {
+      Line:     2
+      Column:   1
+      URL:      chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/background.js
+      Function: (anonymous function)
+    }
+[69570:1015/022137.130741:ERROR:extensions/browser/extensions_browser_client.cc:93] Extension Error:
+  OTR:     false
+  Level:   1
+  Source:  manifest.json
+  Message: Service worker registration failed. Status code: 15
+  ID:      ldlmmohhdkimgaaagmkmejnikmkopcgc
+  Type:    ManifestError
+[69570:1015/022140.606071:INFO:CONSOLE:575] "WebAssembly is supported in this environment", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (575)
+[69570:1015/022140.755884:INFO:CONSOLE:2] "TypeError: chrome.tabs.getCurrent is not a function", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/polyfills.js (2)
+[harness] 43426ms passo carregar-popup: ok
+[harness] 43426ms extensão Bitwarden Password Manager 2026.9.3 id=ldlmmohhdkimgaaagmkmejnikmkopcgc; aguardando 8000ms
+[69570:1015/022140.806378:INFO:CONSOLE:1] "WASM SDK loaded in 53ms", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022140.810214:INFO:CONSOLE:1] "No state version found, assuming empty state.", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022140.813376:INFO:CONSOLE:1] "No state version found, assuming empty state.", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022140.813471:INFO:CONSOLE:1] "Waiting for migrations to finish, waiting for 4ms", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022140.819574:INFO:CONSOLE:1] "No state version found, assuming empty state.", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022140.819859:INFO:CONSOLE:1] "Waiting for migrations to finish, waiting for 8ms", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022140.829121:INFO:CONSOLE:1] "No state version found, assuming empty state.", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022140.829178:INFO:CONSOLE:1] "Waiting for migrations to finish, waiting for 16ms", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022140.847548:INFO:CONSOLE:1] "No state version found, assuming empty state.", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022140.847611:INFO:CONSOLE:1] "Waiting for migrations to finish, waiting for 32ms", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022140.882481:INFO:CONSOLE:1] "No state version found, assuming empty state.", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022140.882577:INFO:CONSOLE:1] "Waiting for migrations to finish, waiting for 64ms", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022140.954026:INFO:CONSOLE:1] "No state version found, assuming empty state.", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022140.954113:INFO:CONSOLE:1] "Waiting for migrations to finish, waiting for 128ms", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022141.085176:INFO:CONSOLE:1] "No state version found, assuming empty state.", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022141.085390:INFO:CONSOLE:1] "Waiting for migrations to finish, waiting for 256ms", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022141.343628:INFO:CONSOLE:1] "No state version found, assuming empty state.", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022141.343766:INFO:CONSOLE:1] "Waiting for migrations to finish, waiting for 512ms", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022141.859515:INFO:CONSOLE:1] "No state version found, assuming empty state.", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022141.859648:INFO:CONSOLE:1] "Waiting for migrations to finish, waiting for 1024ms", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022142.885955:INFO:CONSOLE:1] "No state version found, assuming empty state.", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022142.886268:INFO:CONSOLE:1] "Waiting for migrations to finish, waiting for 2048ms", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022145.566488:INFO:CONSOLE:1] "No state version found, assuming empty state.", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022145.567120:INFO:CONSOLE:1] "Waiting for migrations to finish, waiting for 4096ms", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[harness] 51441ms passo service-worker: início
+[harness] 51547ms passo service-worker: ok
+[harness] 51547ms passo popup: início
+[harness] 51671ms passo popup: ok
+[harness] 51671ms passo content-script: início
+[harness] 52342ms passo content-script: ok
+[harness] 52343ms passo captura-site: início
+[harness] 52371ms passo captura-site: ok
+[harness] 52371ms passo captura-popup: início
+[harness] 52383ms passo captura-popup: ok
+[harness] 52383ms passo teste-rede: início
+[69570:1015/022149.738562:INFO:CONSOLE:1] "No state version found, assuming empty state.", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[69570:1015/022149.738641:INFO:CONSOLE:1] "Waiting for migrations to finish, waiting for 8192ms", source: chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js (1)
+[harness] 52453ms passo teste-rede: ok

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Modo leitura</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap">
+<style>
+body{margin:0}
+a{color:#4352C4}a:hover{color:#2F3C9A}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; background: #E8E9F0; color: #17181C; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; overflow: hidden">
+  <div style="width: 260px; height: 900px; flex: none">
+    <dc-import name="Sidebar" space="pessoal" theme="claro" active="p4" domain="developer.mozilla.org" path="/pt-BR/docs/Web/CSS/:has" blocked="0" hint-size="260px,900px"></dc-import>
+  </div>
+  <main style="position: relative; flex: 1; min-width: 0; padding: 8px 8px 8px 0; display: flex">
+    <div style="flex: 1; background: #FFFFFF; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06); overflow: hidden; display: flex; justify-content: center">
+      <article style="width: 640px; padding-top: 112px; font-family: 'Newsreader', 'Iowan Old Style', Georgia, serif; color: #1E1F24">
+        <p style="margin: 0 0 14px; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; font-size: 13px; color: #565863">developer.mozilla.org, 6 min de leitura</p>
+        <h1 style="margin: 0 0 28px; font-size: 44px; line-height: 1.12; font-weight: 600; letter-spacing: -0.01em">O seletor :has()</h1>
+        <p style="margin: 0 0 20px; font-size: 20px; line-height: 1.62; text-wrap: pretty">Durante muito tempo, o CSS só sabia olhar para baixo: um seletor descrevia um elemento a partir dos seus ancestrais, nunca a partir do que ele contém. O :has() inverte essa direção. Ele seleciona um elemento quando pelo menos um dos seletores passados como argumento encontra algo relativo a ele.</p>
+        <p style="margin: 0 0 20px; font-size: 20px; line-height: 1.62; text-wrap: pretty">Na prática, isso resolve casos que antes pediam JavaScript. Um card pode ganhar outro layout só porque tem uma imagem dentro; um formulário pode mudar de cor quando um dos campos está inválido; uma lista pode reagir ao item que está com foco.</p>
+        <p style="margin: 0; font-size: 20px; line-height: 1.62; text-wrap: pretty">O cuidado é com o custo. Como o navegador precisa reavaliar o pai sempre que um descendente muda, seletores muito amplos podem pesar em páginas grandes. Prefira ancorar o :has() em um elemento específico em vez de usá-lo solto no documento.</p>
+      </article>
+    </div>
+
+    <div role="toolbar" aria-label="Modo leitura" style="position: absolute; top: 28px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 4px; height: 44px; padding: 0 6px; border-radius: 12px; background: rgba(250,250,252,0.96); box-shadow: 0 0 0 0.5px rgba(0,0,0,0.14), 0 8px 24px rgba(0,0,0,0.12)">
+      <button type="button" aria-label="Diminuir texto" style="width: 36px; height: 32px; border: 0; border-radius: 7px; background: transparent; font: inherit; font-size: 13px; color: #3A3B42; padding: 0">A−</button>
+      <button type="button" aria-label="Aumentar texto" style="width: 36px; height: 32px; border: 0; border-radius: 7px; background: transparent; font: inherit; font-size: 17px; color: #3A3B42; padding: 0">A+</button>
+      <div style="width: 1px; height: 20px; background: rgba(0,0,0,0.1); margin: 0 4px"></div>
+      <div role="group" aria-label="Fonte" style="display: flex; gap: 2px">
+        <button type="button" aria-pressed="true" style="height: 32px; padding: 0 10px; border: 0; border-radius: 7px; background: rgba(23,24,28,0.08); font-family: 'Newsreader', Georgia, serif; font-size: 15px; color: #17181C">Serifa</button>
+        <button type="button" aria-pressed="false" style="height: 32px; padding: 0 10px; border: 0; border-radius: 7px; background: transparent; font: inherit; font-size: 13px; color: #3A3B42">Sem serifa</button>
+      </div>
+      <div style="width: 1px; height: 20px; background: rgba(0,0,0,0.1); margin: 0 4px"></div>
+      <div role="group" aria-label="Fundo" style="display: flex; gap: 6px; padding: 0 4px">
+        <button type="button" aria-label="Fundo claro" aria-pressed="true" style="width: 22px; height: 22px; border: 0; border-radius: 11px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(0,0,0,0.18), 0 0 0 3px #FFFFFF, 0 0 0 4.5px #4352C4; padding: 0"></button>
+        <button type="button" aria-label="Fundo papel" aria-pressed="false" style="width: 22px; height: 22px; border: 0; border-radius: 11px; background: #F3EEE3; box-shadow: 0 0 0 1px rgba(0,0,0,0.14); padding: 0"></button>
+        <button type="button" aria-label="Fundo escuro" aria-pressed="false" style="width: 22px; height: 22px; border: 0; border-radius: 11px; background: #1E1F24; padding: 0"></button>
+      </div>
+      <div style="width: 1px; height: 20px; background: rgba(0,0,0,0.1); margin: 0 4px"></div>
+      <button type="button" style="height: 32px; padding: 0 10px; border: 0; border-radius: 7px; background: transparent; font: inherit; font-size: 13px; color: #17181C; display: flex; align-items: center; gap: 8px">Sair<span style="font-size: 11.5px; color: #565863">⇧⌘R</span></button>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

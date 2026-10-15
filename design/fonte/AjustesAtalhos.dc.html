@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Ajustes, Atalhos</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#4352C4}a:hover{color:#2F3C9A}
+</style>
+</helmet>
+<div style="width: 760px; height: 640px; display: flex; flex-direction: column; background: #F4F4F7; color: #17181C; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; overflow: hidden">
+
+  <header style="flex: none; background: #ECECF0; border-bottom: 1px solid rgba(23,24,28,0.09)">
+    <div style="position: relative; height: 32px; display: flex; align-items: center; justify-content: center">
+      <div aria-hidden="true" style="position: absolute; left: 14px; top: 10px; display: flex; gap: 8px">
+        <span style="width: 12px; height: 12px; border-radius: 6px; background: #FF5F57"></span>
+        <span style="width: 12px; height: 12px; border-radius: 6px; background: #D3D3D8"></span>
+        <span style="width: 12px; height: 12px; border-radius: 6px; background: #D3D3D8"></span>
+      </div>
+      <h1 style="margin: 0; font-size: 13px; font-weight: 600">Atalhos</h1>
+    </div>
+    <nav aria-label="Seções dos ajustes" style="display: flex; justify-content: center; gap: 2px; padding: 0 0 8px">
+      <sc-for list="{{panes}}" as="p" hint-placeholder-count="6">
+        <button type="button" aria-current="{{p.current}}" style="width: 84px; height: 54px; border: 0; border-radius: 8px; background: {{p.bg}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 0; font: inherit; color: {{p.color}}">
+          <span aria-hidden="true" style="width: 22px; height: 22px; border-radius: 6px; background: {{p.iconBg}}; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 11px; font-weight: 700">{{p.glyph}}</span>
+          <span style="font-size: 11.5px; font-weight: {{p.weight}}">{{p.name}}</span>
+        </button>
+      </sc-for>
+    </nav>
+  </header>
+
+  <div style="flex: 1; min-height: 0; display: flex; justify-content: center; padding: 18px 0 0">
+    <div style="width: 600px; display: flex; flex-direction: column; gap: 14px; min-height: 0">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <div style="flex: 1; display: flex; align-items: center; gap: 8px; height: 30px; padding: 0 10px; border-radius: 8px; background: #FFFFFF; box-shadow: 0 0 0 0.5px rgba(23,24,28,0.18)">
+          <svg aria-hidden="true" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#565863" stroke-width="1.7" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"></circle><path d="m10.5 10.5 3 3"></path></svg>
+          <label for="atalhos-busca" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Buscar atalho</label>
+          <input id="atalhos-busca" type="text" placeholder="Buscar ação ou atalho" style="flex: 1; min-width: 0; border: 0; outline: none; background: transparent; font: inherit; font-size: 13px; color: #17181C; padding: 0">
+        </div>
+        <button type="button" style="height: 30px; padding: 0 12px; border: 0; border-radius: 7px; background: rgba(23,24,28,0.07); font: inherit; font-size: 13px; color: #17181C">Restaurar padrões</button>
+      </div>
+
+      <div style="flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 14px">
+        <sc-for list="{{groups}}" as="g" hint-placeholder-count="2">
+          <section style="display: flex; flex-direction: column; gap: 6px">
+            <h2 style="margin: 0; padding-left: 4px; font-size: 13px; font-weight: 600; color: #3A3B42">{{g.title}}</h2>
+            <div style="background: #FFFFFF; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(23,24,28,0.14); padding: 2px 0">
+              <sc-for list="{{g.rows}}" as="r" hint-placeholder-count="6">
+                <div style="display: flex; align-items: center; gap: 12px; height: 34px; padding: 0 8px 0 14px">
+                  <span style="flex: 1; font-size: 13px">{{r.name}}</span>
+                  <sc-if value="{{r.idle}}" hint-placeholder-val="{{ true }}">
+                    <button type="button" aria-label="{{r.name}}: {{r.keys}}. Alterar atalho" style="min-width: 56px; height: 24px; padding: 0 8px; border: 0; border-radius: 6px; background: rgba(23,24,28,0.06); font: inherit; font-size: 12.5px; color: #17181C">{{r.keys}}</button>
+                  </sc-if>
+                  <sc-if value="{{r.recording}}" hint-placeholder-val="{{ false }}">
+                    <span role="status" style="height: 24px; padding: 0 10px; border-radius: 6px; background: #E9EBF8; box-shadow: 0 0 0 1.5px #4352C4; font-size: 12.5px; color: #2F3C9A; display: flex; align-items: center">Pressione o novo atalho</span>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":640}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var current = 'atalhos';
+    var list = [
+      { id: 'geral', name: 'Geral', glyph: 'G', tint: '#6E7079' },
+      { id: 'espacos', name: 'Espaços', glyph: 'E', tint: '#4352C4' },
+      { id: 'bloqueador', name: 'Bloqueador', glyph: 'B', tint: '#2F7D5B' },
+      { id: 'privacidade', name: 'Privacidade', glyph: 'P', tint: '#3D4452' },
+      { id: 'atalhos', name: 'Atalhos', glyph: '⌘', tint: '#6A4FB3' },
+      { id: 'extensoes', name: 'Extensões', glyph: 'X', tint: '#A35A06' }
+    ];
+    var row = function (name, keys, rec) { return { name: name, keys: keys, idle: !rec, recording: !!rec }; };
+    return {
+      panes: list.map(function (p) {
+        var on = p.id === current;
+        return {
+          name: p.name, glyph: p.glyph, iconBg: p.tint,
+          bg: on ? 'rgba(23,24,28,0.08)' : 'transparent',
+          color: on ? '#17181C' : '#3A3B42',
+          weight: on ? 600 : 400,
+          current: on ? 'page' : 'false'
+        };
+      }),
+      groups: [
+        { title: 'Abas e janelas', rows: [
+          row('Paleta de comandos', '⌘K'),
+          row('Ir para o endereço', '⌘L'),
+          row('Nova aba', '⌘T'),
+          row('Fechar aba', '⌘W'),
+          row('Reabrir aba fechada', '⇧⌘T'),
+          row('Mostrar ou ocultar sidebar', '⌘S'),
+          row('Nova janela anônima', '⇧⌘N')
+        ] },
+        { title: 'Ferramentas e espaços', rows: [
+          row('Split view com outra aba', '⌃⌘N', true),
+          row('Modo leitura', '⇧⌘R'),
+          row('Buscar na página', '⌘F'),
+          row('Copiar URL limpa', '⇧⌘C'),
+          row('Capturar página', '⌥⌘S'),
+          row('Ir para o espaço 1', '⌃1'),
+          row('Ir para o espaço 2', '⌃2')
+        ] }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

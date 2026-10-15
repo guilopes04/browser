@@ -1,0 +1,428 @@
+/* Sidebar: medidas e cores de Sidebar.dc.html. */
+.sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 260px;
+  padding: 14px 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* linha dos semáforos e dos botões */
+.top-bar {
+  display: flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 6px;
+  flex: none;
+  -webkit-app-region: drag;
+}
+
+/* espaço dos semáforos nativos: 3 de 12 px com 8 px entre eles */
+.top-bar-lights {
+  width: 52px;
+  height: 12px;
+}
+
+.top-bar-actions {
+  display: flex;
+  gap: 0;
+}
+
+.icon-btn {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--icon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex: none;
+  -webkit-app-region: no-drag;
+}
+
+.icon-btn[data-off='true'] {
+  color: var(--icon-off);
+}
+
+.icon-btn:hover {
+  background: var(--hover-bg);
+}
+
+/* seletor de espaço */
+.space-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 2px;
+  flex: none;
+}
+
+.space-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+}
+
+.space-btn:hover {
+  background: var(--hover-bg);
+}
+
+.space-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--accent);
+}
+
+.space-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.other-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 5px;
+  opacity: 0.75;
+}
+
+/* barra de endereço */
+.address {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 4px;
+  border-radius: 10px;
+  background: var(--fill);
+  flex: none;
+}
+
+.shield-btn {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--accent);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.shield-btn:hover {
+  background: var(--hover-bg);
+}
+
+.address-btn {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  height: 28px;
+  padding: 0 6px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+}
+
+.address-domain {
+  flex: none;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.address-path {
+  min-width: 0;
+  font-size: 13px;
+  color: var(--sec);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* favoritos essenciais */
+.essentials {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  flex: none;
+}
+
+.essential {
+  height: 44px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--fill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.essential:hover {
+  box-shadow: inset 0 0 0 1px var(--hair);
+}
+
+/* tiles */
+.tile {
+  flex: none;
+  color: #ffffff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.tile-18 {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  font-size: 10px;
+}
+
+.tile-20 {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  font-size: 10px;
+}
+
+.tile-22 {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+.tile-24 {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+.tile-26 {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.tile-44 {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  font-size: 17px;
+}
+
+.tile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hairline {
+  height: 1px;
+  background: var(--hair);
+  margin: 2px 6px;
+  flex: none;
+}
+
+.hairline-footer {
+  margin: 0 6px;
+}
+
+/* lista de abas: rola quando passa da altura */
+.tabs-scroll {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.tabs-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: none;
+}
+
+.tab-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 34px;
+  padding: 0 4px 0 8px;
+  border-radius: 8px;
+  flex: none;
+  background: transparent;
+}
+
+.tab-row:hover {
+  background: var(--hover-bg);
+}
+
+.tab-row[data-active='true'] {
+  background: var(--active-bg);
+  box-shadow: var(--active-shadow);
+}
+
+.tab-main {
+  flex: 1;
+  min-width: 0;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--text);
+  text-align: left;
+}
+
+.tab-row[data-dormant='true'] .tab-main {
+  color: var(--sec);
+}
+
+.tab-title {
+  font-size: 13px;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tab-row[data-active='true'] .tab-title {
+  font-weight: 600;
+}
+
+.slot-btn,
+.slot-moon {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--sec);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.slot-btn:hover {
+  background: var(--hover-bg);
+}
+
+.slot-audio {
+  color: var(--accent);
+}
+
+.slot-audio[data-muted='true'] {
+  color: var(--sec);
+}
+
+/* Nova aba (botão da lista) */
+.new-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 34px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--sec);
+  text-align: left;
+  flex: none;
+}
+
+.new-tab-btn:hover {
+  background: var(--hover-bg);
+}
+
+.new-tab-label {
+  flex: 1;
+  font-size: 13px;
+}
+
+.new-tab-keys {
+  font-size: 11.5px;
+}
+
+/* rodapé */
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 2px;
+  flex: none;
+}
+
+.footer-btn {
+  height: 30px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--icon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.footer-downloads {
+  gap: 6px;
+  padding: 0 8px;
+  font-size: 11.5px;
+}
+
+.footer-extensions {
+  width: 34px;
+}
+
+.footer-btn:hover {
+  background: var(--hover-bg);
+}
+
+.blocked-today {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-right: 6px;
+  font-size: 11.5px;
+  color: var(--sec);
+  white-space: nowrap;
+}

@@ -1,0 +1,1223 @@
+{
+  "extensao": "bitwarden-shim",
+  "pasta": "/private/tmp/claude-501/-Users-guilhermelopes-Documents-Projects-navegador/b8b36086-abf3-450d-9b8c-7e0b2ae630f8/scratchpad/extensoes/bitwarden-shim",
+  "electron": "44.7.2",
+  "chromium": "152.0.7977.149",
+  "node": "24.21.0",
+  "quando": "2026-10-15T05:25:45.672Z",
+  "carregou": true,
+  "erroCarregar": null,
+  "eventos": [
+    {
+      "t": 212,
+      "evento": "extension-loaded",
+      "id": "bokomkncifbpnbndnlampoamjcfmdjgk",
+      "nome": "Bitwarden Password Manager",
+      "versao": "2026.9.3"
+    },
+    {
+      "t": 213,
+      "evento": "extension-ready",
+      "id": "bokomkncifbpnbndnlampoamjcfmdjgk",
+      "nome": "Bitwarden Password Manager",
+      "versao": "2026.9.3"
+    }
+  ],
+  "serviceWorker": {
+    "registrado": true,
+    "iniciou": true,
+    "registros": [
+      {
+        "t": 35362,
+        "scope": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/"
+      }
+    ],
+    "status": [],
+    "alvosCdp": [
+      {
+        "type": "page",
+        "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/popup/index.html#/intro-carousel",
+        "title": "Bitwarden"
+      },
+      {
+        "type": "page",
+        "url": "http://127.0.0.1:28765/",
+        "title": "Login de teste local"
+      },
+      {
+        "type": "service_worker",
+        "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+        "title": "Service Worker chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js"
+      }
+    ],
+    "emExecucao": {
+      "0": {
+        "scriptUrl": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+        "scope": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/",
+        "renderProcessId": 5
+      }
+    },
+    "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+    "chavesStorageLocal": [
+      "global_applicationId_appId",
+      "global_config_byServer",
+      "global_taskScheduler_activeAlarms",
+      "stateVersion"
+    ],
+    "manifestNoSw": "2026.9.3"
+  },
+  "logsConsole": [
+    {
+      "t": 34749,
+      "origem": "wc:window",
+      "nivel": "warning",
+      "texto": "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged.",
+      "url": "node:electron/js2c/sandbox_bundle",
+      "linha": 2
+    },
+    {
+      "t": 35278,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "[stubs] webNavigation definido como stub",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 11
+    },
+    {
+      "t": 35278,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "[stubs] windows definido como stub",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 11
+    },
+    {
+      "t": 35278,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "[stubs] contextMenus definido como stub",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 11
+    },
+    {
+      "t": 35278,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "[stubs] notifications definido como stub",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 11
+    },
+    {
+      "t": 35278,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "[stubs] commands definido como stub",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 11
+    },
+    {
+      "t": 35278,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "[stubs] permissions definido como stub",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 11
+    },
+    {
+      "t": 35278,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "[stubs] privacy definido como stub",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 11
+    },
+    {
+      "t": 35278,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "[stubs] sidePanel definido como stub",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 11
+    },
+    {
+      "t": 35278,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "WebAssembly is supported in this environment",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 32
+    },
+    {
+      "t": 35314,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "[stubs] webNavigation definido como stub",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/chrome-stubs.js",
+      "linha": 11
+    },
+    {
+      "t": 35314,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "[stubs] windows definido como stub",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/chrome-stubs.js",
+      "linha": 11
+    },
+    {
+      "t": 35315,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "[stubs] contextMenus definido como stub",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/chrome-stubs.js",
+      "linha": 11
+    },
+    {
+      "t": 35315,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "[stubs] notifications definido como stub",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/chrome-stubs.js",
+      "linha": 11
+    },
+    {
+      "t": 35315,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "[stubs] commands definido como stub",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/chrome-stubs.js",
+      "linha": 11
+    },
+    {
+      "t": 35315,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "[stubs] permissions definido como stub",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/chrome-stubs.js",
+      "linha": 11
+    },
+    {
+      "t": 35315,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "[stubs] privacy definido como stub",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/chrome-stubs.js",
+      "linha": 11
+    },
+    {
+      "t": 35315,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "[stubs] sidePanel definido como stub",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/chrome-stubs.js",
+      "linha": 11
+    },
+    {
+      "t": 37439,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "WebAssembly is supported in this environment",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/popup/main.js",
+      "linha": 575
+    },
+    {
+      "t": 37471,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "Managed configuration: unavailable, keeping the last known profile. [object Object]",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 32
+    },
+    {
+      "t": 37487,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "WASM SDK loaded in 35ms",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 32
+    },
+    {
+      "t": 37495,
+      "origem": "service-worker",
+      "nivel": "error",
+      "texto": "Uncaught (in promise) Error: Could not establish connection. Receiving end does not exist.",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 0
+    },
+    {
+      "t": 37499,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "No state version found, assuming empty state.",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 32
+    },
+    {
+      "t": 37510,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "Retrieving application id",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 32
+    },
+    {
+      "t": 37536,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "[BrowserApi] Message sender appears to be internal",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 32
+    },
+    {
+      "t": 37641,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "WASM SDK loaded in 101ms",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 37644,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "State version: 85",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 37689,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": " INFO bitwarden_managed_settings::managed_settings_client: Managed settings profile cleared\n",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/popup/vendor.js",
+      "linha": 2
+    },
+    {
+      "t": 37695,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "Retrieving application id",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 46236,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "[BrowserApi] Message sender appears to be internal",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 32
+    }
+  ],
+  "errosConsole": [
+    {
+      "t": 34749,
+      "origem": "wc:window",
+      "nivel": "warning",
+      "texto": "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged.",
+      "url": "node:electron/js2c/sandbox_bundle",
+      "linha": 2
+    },
+    {
+      "t": 37495,
+      "origem": "service-worker",
+      "nivel": "error",
+      "texto": "Uncaught (in promise) Error: Could not establish connection. Receiving end does not exist.",
+      "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js",
+      "linha": 0
+    }
+  ],
+  "popup": {
+    "url": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/popup/index.html",
+    "urlFinal": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/popup/index.html#/intro-carousel",
+    "titulo": "Bitwarden",
+    "innerTextLength": 191,
+    "innerTextAmostra": "Security, prioritized\n\nSave logins, cards, and identities to your secure vault. Bitwarden uses zero-knowledge, end-to-end encryption to protect what’s important to you.\n\nCreate account\nLog in",
+    "elementos": 177,
+    "readyState": "complete",
+    "inputs": [],
+    "botoes": [
+      "Pop out to a new window",
+      "Back",
+      "Security, prioritized",
+      "Quick and easy login",
+      "Level up your logins",
+      "Your data, when and where you need it",
+      "Next",
+      "Create account",
+      "Log in"
+    ],
+    "renderizouAlemDeBranco": true,
+    "cliqueEmBotao": "Log in",
+    "textoAposClique": "Log in\nEmail address\n*\n(required)\nRemember email\nContinue\nor\n Log in with passkey\n Use single sign-on\nNew to Bitwarden? \nCreate account\nAccessing: \nbitwarden.com",
+    "campoFocado": {
+      "id": "email",
+      "tipo": "email"
+    },
+    "valorDigitado": "teste@exemplo.invalid",
+    "aceitouDigitacao": true
+  },
+  "contentScript": {
+    "contextos": [
+      {
+        "id": 3,
+        "nome": "Bitwarden Password Manager",
+        "origem": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk",
+        "tipo": "isolated",
+        "isDefault": false
+      },
+      {
+        "id": 2,
+        "nome": "Electron Isolated Context",
+        "origem": "http://127.0.0.1:28765",
+        "tipo": "isolated",
+        "isDefault": false
+      },
+      {
+        "id": 1,
+        "nome": "",
+        "origem": "http://127.0.0.1:28765",
+        "tipo": "default",
+        "isDefault": true
+      }
+    ],
+    "contextosDaExtensao": [
+      {
+        "id": 3,
+        "nome": "Bitwarden Password Manager",
+        "origem": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk",
+        "tipo": "isolated",
+        "isDefault": false
+      }
+    ],
+    "avaliacoesNoMundoIsolado": [
+      {
+        "contexto": 3,
+        "valor": {
+          "chaves": [
+            "dom",
+            "i18n",
+            "runtime",
+            "scripting",
+            "storage"
+          ],
+          "runtimeId": "bokomkncifbpnbndnlampoamjcfmdjgk",
+          "atributosHtml": [
+            "lang"
+          ]
+        }
+      }
+    ],
+    "injetou": true,
+    "pagina": {
+      "atributosHtml": [
+        "lang=pt-BR"
+      ],
+      "elementosAlemDoOriginal": [],
+      "elementosCustom": [],
+      "iframes": [],
+      "folhasDeEstilo": [
+        "inline:STYLE"
+      ],
+      "atributosDoInput": [
+        [
+          "id",
+          "name",
+          "type",
+          "placeholder",
+          "autocomplete"
+        ],
+        [
+          "id",
+          "name",
+          "type",
+          "placeholder",
+          "autocomplete"
+        ]
+      ],
+      "sombrasAbertas": 0,
+      "totalElementos": 11
+    },
+    "atributoSonda": null
+  },
+  "apis": {
+    "totalUsadasAnalisadas": 105,
+    "sw": {
+      "temChrome": true,
+      "chaves": [
+        "action",
+        "alarms",
+        "clipboard",
+        "commands",
+        "contextMenus",
+        "cookies",
+        "dom",
+        "extension",
+        "i18n",
+        "idle",
+        "management",
+        "notifications",
+        "offscreen",
+        "permissions",
+        "privacy",
+        "runtime",
+        "scripting",
+        "sidePanel",
+        "storage",
+        "tabs",
+        "webNavigation",
+        "webRequest",
+        "windows"
+      ],
+      "lista": {
+        "action": {
+          "definido": true,
+          "membros": {
+            "setBadgeText": "function",
+            "setBadgeBackgroundColor": "function",
+            "setIcon": "function",
+            "setTitle": "function",
+            "setPopup": "function",
+            "getPopup": "function",
+            "openPopup": "function",
+            "onClicked": "object",
+            "enable": "function",
+            "disable": "function"
+          }
+        },
+        "alarms": {
+          "definido": true,
+          "membros": {
+            "create": "function",
+            "get": "function",
+            "getAll": "function",
+            "clear": "function",
+            "clearAll": "function",
+            "onAlarm": "object"
+          }
+        },
+        "browsingData": {
+          "definido": false,
+          "membros": {}
+        },
+        "clipboard": {
+          "definido": true,
+          "membros": {}
+        },
+        "commands": {
+          "definido": true,
+          "membros": {
+            "getAll": "function",
+            "onCommand": "object"
+          }
+        },
+        "contextMenus": {
+          "definido": true,
+          "membros": {
+            "create": "function",
+            "update": "function",
+            "remove": "function",
+            "removeAll": "function",
+            "onClicked": "object"
+          }
+        },
+        "cookies": {
+          "definido": true,
+          "membros": {
+            "get": "function",
+            "getAll": "function",
+            "set": "function",
+            "remove": "function",
+            "onChanged": "object"
+          }
+        },
+        "declarativeNetRequest": {
+          "definido": false,
+          "membros": {}
+        },
+        "dom": {
+          "definido": true,
+          "membros": {
+            "openOrClosedShadowRoot": "function"
+          }
+        },
+        "extension": {
+          "definido": true,
+          "membros": {
+            "getURL": "indefinido",
+            "getBackgroundPage": "indefinido",
+            "isAllowedFileSchemeAccess": "indefinido",
+            "isAllowedIncognitoAccess": "indefinido"
+          }
+        },
+        "fontSettings": {
+          "definido": false,
+          "membros": {}
+        },
+        "history": {
+          "definido": false,
+          "membros": {}
+        },
+        "i18n": {
+          "definido": true,
+          "membros": {
+            "getMessage": "function",
+            "getUILanguage": "function",
+            "detectLanguage": "function"
+          }
+        },
+        "identity": {
+          "definido": false,
+          "membros": {}
+        },
+        "idle": {
+          "definido": true,
+          "membros": {
+            "queryState": "function",
+            "setDetectionInterval": "function",
+            "onStateChanged": "object"
+          }
+        },
+        "management": {
+          "definido": true,
+          "membros": {
+            "getAll": "function",
+            "getSelf": "function",
+            "get": "function",
+            "onInstalled": "indefinido"
+          }
+        },
+        "notifications": {
+          "definido": true,
+          "membros": {
+            "create": "function",
+            "clear": "function",
+            "getAll": "function",
+            "onClicked": "object",
+            "onClosed": "object"
+          }
+        },
+        "offscreen": {
+          "definido": true,
+          "membros": {
+            "createDocument": "function",
+            "closeDocument": "function",
+            "hasDocument": "function"
+          }
+        },
+        "permissions": {
+          "definido": true,
+          "membros": {
+            "contains": "function",
+            "request": "function",
+            "getAll": "function",
+            "onAdded": "object",
+            "onRemoved": "object"
+          }
+        },
+        "privacy": {
+          "definido": true,
+          "membros": {}
+        },
+        "runtime": {
+          "definido": true,
+          "membros": {
+            "id": "string",
+            "getURL": "function",
+            "getManifest": "function",
+            "sendMessage": "function",
+            "connect": "function",
+            "onMessage": "object",
+            "onConnect": "object",
+            "onInstalled": "object",
+            "onStartup": "object",
+            "getContexts": "function",
+            "getPlatformInfo": "function",
+            "reload": "function",
+            "sendNativeMessage": "function",
+            "connectNative": "function",
+            "lastError": "indefinido",
+            "onSuspend": "object",
+            "setUninstallURL": "function",
+            "openOptionsPage": "function"
+          }
+        },
+        "scripting": {
+          "definido": true,
+          "membros": {
+            "executeScript": "function",
+            "insertCSS": "function",
+            "removeCSS": "function",
+            "registerContentScripts": "function",
+            "getRegisteredContentScripts": "function",
+            "unregisterContentScripts": "function",
+            "updateContentScripts": "function"
+          }
+        },
+        "sessions": {
+          "definido": false,
+          "membros": {}
+        },
+        "sidePanel": {
+          "definido": true,
+          "membros": {
+            "setOptions": "function",
+            "setPanelBehavior": "function",
+            "open": "function",
+            "getOptions": "function"
+          }
+        },
+        "storage": {
+          "definido": true,
+          "membros": {
+            "local": "object",
+            "sync": "object",
+            "session": "object",
+            "managed": "object",
+            "onChanged": "object"
+          }
+        },
+        "system": {
+          "definido": false,
+          "membros": {}
+        },
+        "tabs": {
+          "definido": true,
+          "membros": {
+            "query": "function",
+            "get": "function",
+            "getCurrent": "function",
+            "create": "function",
+            "update": "function",
+            "remove": "function",
+            "reload": "function",
+            "sendMessage": "function",
+            "executeScript": "function",
+            "captureVisibleTab": "function",
+            "duplicate": "function",
+            "group": "function",
+            "ungroup": "function",
+            "move": "function",
+            "goBack": "function",
+            "goForward": "function",
+            "setZoom": "function",
+            "getZoom": "function",
+            "detectLanguage": "function",
+            "onCreated": "object",
+            "onUpdated": "object",
+            "onRemoved": "object",
+            "onActivated": "object",
+            "onReplaced": "object",
+            "onHighlighted": "object",
+            "onMoved": "object"
+          }
+        },
+        "tabGroups": {
+          "definido": false,
+          "membros": {}
+        },
+        "topSites": {
+          "definido": false,
+          "membros": {}
+        },
+        "userScripts": {
+          "definido": false,
+          "membros": {}
+        },
+        "webNavigation": {
+          "definido": true,
+          "membros": {
+            "getFrame": "function",
+            "getAllFrames": "function",
+            "onBeforeNavigate": "object",
+            "onCommitted": "object",
+            "onCompleted": "object",
+            "onDOMContentLoaded": "object",
+            "onCreatedNavigationTarget": "object",
+            "onHistoryStateUpdated": "object"
+          }
+        },
+        "webRequest": {
+          "definido": true,
+          "membros": {
+            "onBeforeRequest": "object",
+            "onBeforeSendHeaders": "object",
+            "onSendHeaders": "object",
+            "onHeadersReceived": "object",
+            "onAuthRequired": "object",
+            "onCompleted": "object",
+            "onErrorOccurred": "object",
+            "handlerBehaviorChanged": "function"
+          }
+        },
+        "windows": {
+          "definido": true,
+          "membros": {
+            "getAll": "function",
+            "get": "function",
+            "getCurrent": "function",
+            "getLastFocused": "function",
+            "create": "function",
+            "update": "function",
+            "remove": "function",
+            "onCreated": "object",
+            "onRemoved": "object",
+            "onFocusChanged": "object",
+            "onBoundsChanged": "object"
+          }
+        }
+      },
+      "usadasIndefinidas": [
+        "extension.getBackgroundPage",
+        "runtime.MessageSender",
+        "tabs.Tab"
+      ],
+      "usadasDefinidas": 102,
+      "extensaoId": "bokomkncifbpnbndnlampoamjcfmdjgk",
+      "contexto": "worker"
+    },
+    "popup": {
+      "temChrome": true,
+      "chaves": [
+        "action",
+        "alarms",
+        "clipboard",
+        "commands",
+        "contextMenus",
+        "cookies",
+        "dom",
+        "extension",
+        "i18n",
+        "idle",
+        "management",
+        "notifications",
+        "offscreen",
+        "permissions",
+        "privacy",
+        "runtime",
+        "scripting",
+        "sidePanel",
+        "storage",
+        "tabs",
+        "webNavigation",
+        "webRequest",
+        "windows"
+      ],
+      "lista": {
+        "action": {
+          "definido": true,
+          "membros": {
+            "setBadgeText": "function",
+            "setBadgeBackgroundColor": "function",
+            "setIcon": "function",
+            "setTitle": "function",
+            "setPopup": "function",
+            "getPopup": "function",
+            "openPopup": "function",
+            "onClicked": "object",
+            "enable": "function",
+            "disable": "function"
+          }
+        },
+        "alarms": {
+          "definido": true,
+          "membros": {
+            "create": "function",
+            "get": "function",
+            "getAll": "function",
+            "clear": "function",
+            "clearAll": "function",
+            "onAlarm": "object"
+          }
+        },
+        "browsingData": {
+          "definido": false,
+          "membros": {}
+        },
+        "clipboard": {
+          "definido": true,
+          "membros": {}
+        },
+        "commands": {
+          "definido": true,
+          "membros": {
+            "getAll": "function",
+            "onCommand": "object"
+          }
+        },
+        "contextMenus": {
+          "definido": true,
+          "membros": {
+            "create": "function",
+            "update": "function",
+            "remove": "function",
+            "removeAll": "function",
+            "onClicked": "object"
+          }
+        },
+        "cookies": {
+          "definido": true,
+          "membros": {
+            "get": "function",
+            "getAll": "function",
+            "set": "function",
+            "remove": "function",
+            "onChanged": "object"
+          }
+        },
+        "declarativeNetRequest": {
+          "definido": false,
+          "membros": {}
+        },
+        "dom": {
+          "definido": true,
+          "membros": {
+            "openOrClosedShadowRoot": "function"
+          }
+        },
+        "extension": {
+          "definido": true,
+          "membros": {
+            "getURL": "indefinido",
+            "getBackgroundPage": "function",
+            "isAllowedFileSchemeAccess": "indefinido",
+            "isAllowedIncognitoAccess": "indefinido"
+          }
+        },
+        "fontSettings": {
+          "definido": false,
+          "membros": {}
+        },
+        "history": {
+          "definido": false,
+          "membros": {}
+        },
+        "i18n": {
+          "definido": true,
+          "membros": {
+            "getMessage": "function",
+            "getUILanguage": "function",
+            "detectLanguage": "function"
+          }
+        },
+        "identity": {
+          "definido": false,
+          "membros": {}
+        },
+        "idle": {
+          "definido": true,
+          "membros": {
+            "queryState": "function",
+            "setDetectionInterval": "function",
+            "onStateChanged": "object"
+          }
+        },
+        "management": {
+          "definido": true,
+          "membros": {
+            "getAll": "function",
+            "getSelf": "function",
+            "get": "function",
+            "onInstalled": "indefinido"
+          }
+        },
+        "notifications": {
+          "definido": true,
+          "membros": {
+            "create": "function",
+            "clear": "function",
+            "getAll": "function",
+            "onClicked": "object",
+            "onClosed": "object"
+          }
+        },
+        "offscreen": {
+          "definido": true,
+          "membros": {
+            "createDocument": "function",
+            "closeDocument": "function",
+            "hasDocument": "function"
+          }
+        },
+        "permissions": {
+          "definido": true,
+          "membros": {
+            "contains": "function",
+            "request": "function",
+            "getAll": "function",
+            "onAdded": "object",
+            "onRemoved": "object"
+          }
+        },
+        "privacy": {
+          "definido": true,
+          "membros": {}
+        },
+        "runtime": {
+          "definido": true,
+          "membros": {
+            "id": "string",
+            "getURL": "function",
+            "getManifest": "function",
+            "sendMessage": "function",
+            "connect": "function",
+            "onMessage": "object",
+            "onConnect": "object",
+            "onInstalled": "object",
+            "onStartup": "object",
+            "getContexts": "function",
+            "getPlatformInfo": "function",
+            "reload": "function",
+            "sendNativeMessage": "function",
+            "connectNative": "function",
+            "lastError": "indefinido",
+            "onSuspend": "object",
+            "setUninstallURL": "function",
+            "openOptionsPage": "function"
+          }
+        },
+        "scripting": {
+          "definido": true,
+          "membros": {
+            "executeScript": "function",
+            "insertCSS": "function",
+            "removeCSS": "function",
+            "registerContentScripts": "function",
+            "getRegisteredContentScripts": "function",
+            "unregisterContentScripts": "function",
+            "updateContentScripts": "function"
+          }
+        },
+        "sessions": {
+          "definido": false,
+          "membros": {}
+        },
+        "sidePanel": {
+          "definido": true,
+          "membros": {
+            "setOptions": "function",
+            "setPanelBehavior": "function",
+            "open": "function",
+            "getOptions": "function"
+          }
+        },
+        "storage": {
+          "definido": true,
+          "membros": {
+            "local": "object",
+            "sync": "object",
+            "session": "object",
+            "managed": "object",
+            "onChanged": "object"
+          }
+        },
+        "system": {
+          "definido": false,
+          "membros": {}
+        },
+        "tabs": {
+          "definido": true,
+          "membros": {
+            "query": "function",
+            "get": "function",
+            "getCurrent": "function",
+            "create": "function",
+            "update": "function",
+            "remove": "function",
+            "reload": "function",
+            "sendMessage": "function",
+            "executeScript": "function",
+            "captureVisibleTab": "function",
+            "duplicate": "function",
+            "group": "function",
+            "ungroup": "function",
+            "move": "function",
+            "goBack": "function",
+            "goForward": "function",
+            "setZoom": "function",
+            "getZoom": "function",
+            "detectLanguage": "function",
+            "onCreated": "object",
+            "onUpdated": "object",
+            "onRemoved": "object",
+            "onActivated": "object",
+            "onReplaced": "object",
+            "onHighlighted": "object",
+            "onMoved": "object"
+          }
+        },
+        "tabGroups": {
+          "definido": false,
+          "membros": {}
+        },
+        "topSites": {
+          "definido": false,
+          "membros": {}
+        },
+        "userScripts": {
+          "definido": false,
+          "membros": {}
+        },
+        "webNavigation": {
+          "definido": true,
+          "membros": {
+            "getFrame": "function",
+            "getAllFrames": "function",
+            "onBeforeNavigate": "object",
+            "onCommitted": "object",
+            "onCompleted": "object",
+            "onDOMContentLoaded": "object",
+            "onCreatedNavigationTarget": "object",
+            "onHistoryStateUpdated": "object"
+          }
+        },
+        "webRequest": {
+          "definido": true,
+          "membros": {
+            "onBeforeRequest": "object",
+            "onBeforeSendHeaders": "object",
+            "onSendHeaders": "object",
+            "onHeadersReceived": "object",
+            "onAuthRequired": "object",
+            "onCompleted": "object",
+            "onErrorOccurred": "object",
+            "handlerBehaviorChanged": "function"
+          }
+        },
+        "windows": {
+          "definido": true,
+          "membros": {
+            "getAll": "function",
+            "get": "function",
+            "getCurrent": "function",
+            "getLastFocused": "function",
+            "create": "function",
+            "update": "function",
+            "remove": "function",
+            "onCreated": "object",
+            "onRemoved": "object",
+            "onFocusChanged": "object",
+            "onBoundsChanged": "object"
+          }
+        }
+      },
+      "usadasIndefinidas": [
+        "runtime.MessageSender",
+        "tabs.Tab"
+      ],
+      "usadasDefinidas": 103,
+      "extensaoId": "bokomkncifbpnbndnlampoamjcfmdjgk",
+      "contexto": "pagina"
+    }
+  },
+  "passos": {
+    "servidor-local": {
+      "ok": true,
+      "ms": 8
+    },
+    "loadExtension": {
+      "ok": true,
+      "ms": 30
+    },
+    "carregar-site": {
+      "ok": true,
+      "ms": 643
+    },
+    "carregar-popup": {
+      "ok": true,
+      "ms": 2866
+    },
+    "service-worker": {
+      "ok": true,
+      "ms": 226
+    },
+    "popup": {
+      "ok": true,
+      "ms": 3257
+    },
+    "content-script": {
+      "ok": true,
+      "ms": 627
+    },
+    "captura-site": {
+      "ok": true,
+      "ms": 28
+    },
+    "captura-popup": {
+      "ok": true,
+      "ms": 16
+    },
+    "teste-rede": {
+      "ok": true,
+      "ms": 327
+    }
+  },
+  "capturas": [
+    {
+      "arquivo": "capturas/bitwarden-shim-popup-inicial.png",
+      "tamanho": {
+        "width": 760,
+        "height": 1136
+      }
+    },
+    {
+      "arquivo": "capturas/bitwarden-shim-popup-digitando.png",
+      "via": "CDP Page.captureScreenshot"
+    },
+    {
+      "arquivo": "capturas/bitwarden-shim-site.png",
+      "tamanho": {
+        "width": 1520,
+        "height": 1136
+      }
+    },
+    {
+      "arquivo": "capturas/bitwarden-shim-popup.png",
+      "tamanho": {
+        "width": 760,
+        "height": 1136
+      }
+    }
+  ],
+  "extensaoId": "bokomkncifbpnbndnlampoamjcfmdjgk",
+  "extensaoNome": "Bitwarden Password Manager",
+  "extensaoVersao": "2026.9.3",
+  "manifestVersion": 3,
+  "extensaoUrl": "chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/",
+  "permissoesDeclaradas": {
+    "permissions": [
+      "activeTab",
+      "alarms",
+      "clipboardRead",
+      "clipboardWrite",
+      "contextMenus",
+      "idle",
+      "offscreen",
+      "scripting",
+      "sidePanel",
+      "storage",
+      "tabs",
+      "unlimitedStorage",
+      "webNavigation",
+      "webRequest",
+      "webRequestAuthProvider",
+      "notifications"
+    ],
+    "host_permissions": [
+      "https://*/*",
+      "http://*/*"
+    ],
+    "optional": [
+      "nativeMessaging",
+      "privacy"
+    ]
+  },
+  "testeRede": {
+    "controle": "status 200",
+    "declarativeNetRequest": "status 200",
+    "webRequestBloqueante": "status 200",
+    "anuncioDoubleclick": "resolveu (opaque)",
+    "controleExemploCom": "resolveu (opaque)"
+  },
+  "errosConsoleTotal": 2,
+  "duracaoMs": 50099
+}

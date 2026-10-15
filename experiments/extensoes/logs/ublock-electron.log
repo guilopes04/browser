@@ -1,0 +1,55 @@
+
+DevTools listening on ws://127.0.0.1:29339/devtools/browser/a49a47f8-5eb7-47d6-b3e0-28d39183a049
+[harness] 193ms app pronto
+[harness] 232ms passo servidor-local: início
+[harness] 238ms passo servidor-local: ok
+[harness] 238ms passo loadExtension: início
+[harness] 273ms passo loadExtension: ok
+[harness] 44416ms passo carregar-site: início
+[77368:1015/022723.411244:INFO:CONSOLE:871] "Uncaught TypeError: Cannot read properties of undefined (reading 'onRemoved')", source: chrome-extension://nbbjmikbgcmcfgohcpdlkhflllmeembb/js/background.js (871)
+[77368:1015/022723.411534:ERROR:extensions/browser/extensions_browser_client.cc:93] Extension Error:
+  OTR:     false
+  Level:   2
+  Source:  chrome-extension://nbbjmikbgcmcfgohcpdlkhflllmeembb/js/background.js
+  Message: Uncaught TypeError: Cannot read properties of undefined (reading 'onRemoved')
+  ID:      nbbjmikbgcmcfgohcpdlkhflllmeembb
+  Type:    RuntimeError
+  Context: chrome-extension://nbbjmikbgcmcfgohcpdlkhflllmeembb/js/background.js
+  Stack Trace: 
+    {
+      Line:     871
+      Column:   1
+      URL:      chrome-extension://nbbjmikbgcmcfgohcpdlkhflllmeembb/js/background.js
+      Function: (anonymous function)
+    }
+[77368:1015/022723.414325:ERROR:extensions/browser/extensions_browser_client.cc:93] Extension Error:
+  OTR:     false
+  Level:   1
+  Source:  manifest.json
+  Message: Service worker registration failed. Status code: 15
+  ID:      nbbjmikbgcmcfgohcpdlkhflllmeembb
+  Type:    ManifestError
+[harness] 47340ms passo carregar-site: ok
+[harness] 47360ms passo carregar-popup: início
+[77368:1015/022726.304137:INFO:CONSOLE:2] "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security
+  Policy set or a policy with "unsafe-eval" enabled. This exposes users of
+  this app to unnecessary security risks.
+
+For more information and help, consult
+https://electronjs.org/docs/tutorial/security.
+This warning will not show up
+once the app is packaged.", source: node:electron/js2c/sandbox_bundle (2)
+[harness] 47541ms passo carregar-popup: ok
+[harness] 47541ms extensão uBlock Origin Lite 2026.1012.1545 id=nbbjmikbgcmcfgohcpdlkhflllmeembb; aguardando 8000ms
+[harness] 55543ms passo service-worker: início
+[harness] 55595ms passo service-worker: ok
+[harness] 55595ms passo popup: início
+[harness] 55625ms passo popup: ok
+[harness] 55625ms passo content-script: início
+[harness] 56265ms passo content-script: ok
+[harness] 56265ms passo captura-site: início
+[harness] 56297ms passo captura-site: ok
+[harness] 56297ms passo captura-popup: início
+[harness] 56308ms passo captura-popup: ok
+[harness] 56308ms passo teste-rede: início
+[harness] 56649ms passo teste-rede: ok

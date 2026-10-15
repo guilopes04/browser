@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Ajustes, Espaços</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#4352C4}a:hover{color:#2F3C9A}
+</style>
+</helmet>
+<div style="width: 760px; height: 640px; display: flex; flex-direction: column; background: #F4F4F7; color: #17181C; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; overflow: hidden">
+
+  <header style="flex: none; background: #ECECF0; border-bottom: 1px solid rgba(23,24,28,0.09)">
+    <div style="position: relative; height: 32px; display: flex; align-items: center; justify-content: center">
+      <div aria-hidden="true" style="position: absolute; left: 14px; top: 10px; display: flex; gap: 8px">
+        <span style="width: 12px; height: 12px; border-radius: 6px; background: #FF5F57"></span>
+        <span style="width: 12px; height: 12px; border-radius: 6px; background: #D3D3D8"></span>
+        <span style="width: 12px; height: 12px; border-radius: 6px; background: #D3D3D8"></span>
+      </div>
+      <h1 style="margin: 0; font-size: 13px; font-weight: 600">Espaços</h1>
+    </div>
+    <nav aria-label="Seções dos ajustes" style="display: flex; justify-content: center; gap: 2px; padding: 0 0 8px">
+      <sc-for list="{{panes}}" as="p" hint-placeholder-count="6">
+        <button type="button" aria-current="{{p.current}}" style="width: 84px; height: 54px; border: 0; border-radius: 8px; background: {{p.bg}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 0; font: inherit; color: {{p.color}}">
+          <span aria-hidden="true" style="width: 22px; height: 22px; border-radius: 6px; background: {{p.iconBg}}; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 11px; font-weight: 700">{{p.glyph}}</span>
+          <span style="font-size: 11.5px; font-weight: {{p.weight}}">{{p.name}}</span>
+        </button>
+      </sc-for>
+    </nav>
+  </header>
+
+  <div style="flex: 1; overflow: hidden; display: flex; justify-content: center; padding: 20px 0">
+    <div style="width: 680px; display: flex; gap: 20px">
+
+      <div style="width: 190px; flex: none; display: flex; flex-direction: column; gap: 8px">
+        <div role="listbox" aria-label="Espaços" style="background: #FFFFFF; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(23,24,28,0.14); padding: 4px; display: flex; flex-direction: column; gap: 2px">
+          <button type="button" role="option" aria-selected="false" style="display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border: 0; border-radius: 7px; background: transparent; font: inherit; font-size: 13px; color: #17181C; text-align: left"><span aria-hidden="true" style="width: 10px; height: 10px; border-radius: 5px; background: #4352C4"></span><span style="flex: 1">Pessoal</span><span style="font-size: 12px; color: #565863">⌃1</span></button>
+          <button type="button" role="option" aria-selected="true" style="display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border: 0; border-radius: 7px; background: rgba(23,24,28,0.08); font: inherit; font-size: 13px; font-weight: 600; color: #17181C; text-align: left"><span aria-hidden="true" style="width: 10px; height: 10px; border-radius: 5px; background: #A35A06"></span><span style="flex: 1">Trabalho</span><span style="font-size: 12px; font-weight: 400; color: #565863">⌃2</span></button>
+        </div>
+        <button type="button" style="display: flex; align-items: center; gap: 8px; height: 30px; padding: 0 10px; border: 0; border-radius: 7px; background: transparent; font: inherit; font-size: 13px; color: #4352C4; text-align: left"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3v10M3 8h10"></path></svg>Novo espaço</button>
+      </div>
+
+      <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+        <div style="background: #FFFFFF; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(23,24,28,0.14)">
+          <div style="display: flex; align-items: center; gap: 12px; min-height: 42px; padding: 0 14px">
+            <label for="espaco-nome" style="flex: 1; font-size: 13px">Nome</label>
+            <input id="espaco-nome" type="text" value="Trabalho" style="width: 180px; height: 26px; box-sizing: border-box; padding: 0 8px; border: 0; border-radius: 6px; background: rgba(23,24,28,0.06); font: inherit; font-size: 13px; color: #17181C; outline: none">
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; min-height: 42px; padding: 0 14px; border-top: 1px solid rgba(23,24,28,0.07)">
+            <span id="espaco-cor" style="flex: 1; font-size: 13px">Cor</span>
+            <div role="radiogroup" aria-labelledby="espaco-cor" style="display: flex; gap: 8px">
+              <sc-for list="{{swatches}}" as="s" hint-placeholder-count="6">
+                <button type="button" role="radio" aria-checked="{{s.checked}}" aria-label="{{s.name}}" style="width: 20px; height: 20px; border: 0; border-radius: 10px; background: {{s.hex}}; box-shadow: {{s.ring}}; padding: 0"></button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <h2 style="margin: 0; padding-left: 4px; font-size: 13px; font-weight: 600; color: #3A3B42">Regras de abertura</h2>
+          <p style="margin: 0; padding-left: 4px; font-size: 12px; line-height: 1.45; color: #565863">Links que batem com uma regra abrem neste espaço, inclusive quando vêm de outros apps.</p>
+        </div>
+        <div style="background: #FFFFFF; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(23,24,28,0.14)">
+          <sc-for list="{{rules}}" as="r" hint-placeholder-count="4">
+            <div style="display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 6px 0 14px; border-bottom: 1px solid rgba(23,24,28,0.07)">
+              <span style="flex: none; font-size: 12px; color: #565863; width: 64px">{{r.kind}}</span>
+              <span style="flex: 1; font-size: 13px">{{r.value}}</span>
+              <button type="button" aria-label="Remover regra {{r.value}}" style="width: 28px; height: 28px; border: 0; border-radius: 6px; background: transparent; color: #565863; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 8h9"></path></svg></button>
+            </div>
+          </sc-for>
+          <button type="button" style="display: flex; align-items: center; gap: 8px; width: 100%; height: 38px; padding: 0 14px; border: 0; background: transparent; font: inherit; font-size: 13px; color: #4352C4; text-align: left"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3v10M3 8h10"></path></svg>Adicionar regra</button>
+        </div>
+
+        <p style="margin: 0; padding-left: 4px; font-size: 12px; line-height: 1.45; color: #565863">Cookies, logins, permissões e histórico deste espaço ficam separados dos outros.</p>
+        <div style="display: flex; justify-content: flex-end">
+          <button type="button" style="height: 28px; padding: 0 12px; border: 0; border-radius: 7px; background: rgba(23,24,28,0.07); font: inherit; font-size: 13px; color: #B42318">Apagar espaço…</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":640}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var current = 'espacos';
+    var list = [
+      { id: 'geral', name: 'Geral', glyph: 'G', tint: '#6E7079' },
+      { id: 'espacos', name: 'Espaços', glyph: 'E', tint: '#4352C4' },
+      { id: 'bloqueador', name: 'Bloqueador', glyph: 'B', tint: '#2F7D5B' },
+      { id: 'privacidade', name: 'Privacidade', glyph: 'P', tint: '#3D4452' },
+      { id: 'atalhos', name: 'Atalhos', glyph: '⌘', tint: '#6A4FB3' },
+      { id: 'extensoes', name: 'Extensões', glyph: 'X', tint: '#A35A06' }
+    ];
+    var colors = [
+      { name: 'Índigo', hex: '#4352C4' },
+      { name: 'Âmbar', hex: '#A35A06' },
+      { name: 'Verde', hex: '#2F7D5B' },
+      { name: 'Roxo', hex: '#6A4FB3' },
+      { name: 'Rosa', hex: '#B03A63' },
+      { name: 'Grafite', hex: '#3D4452' }
+    ];
+    return {
+      panes: list.map(function (p) {
+        var on = p.id === current;
+        return {
+          name: p.name, glyph: p.glyph, iconBg: p.tint,
+          bg: on ? 'rgba(23,24,28,0.08)' : 'transparent',
+          color: on ? '#17181C' : '#3A3B42',
+          weight: on ? 600 : 400,
+          current: on ? 'page' : 'false'
+        };
+      }),
+      swatches: colors.map(function (c) {
+        var on = c.hex === '#A35A06';
+        return { name: c.name, hex: c.hex, checked: on ? 'true' : 'false', ring: on ? '0 0 0 2px #FFFFFF, 0 0 0 3.5px ' + c.hex : 'none' };
+      }),
+      rules: [
+        { kind: 'Site', value: 'linear.app' },
+        { kind: 'Site', value: '*.aws.amazon.com' },
+        { kind: 'Site', value: 'meet.google.com' },
+        { kind: 'Endereço', value: 'github.com/[sua-org]' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

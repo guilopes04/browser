@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Pedido de permissão</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#A35A06}a:hover{color:#7A4405}
+</style>
+</helmet>
+<div style="position: relative; width: 1440px; height: 900px; display: flex; background: #EFEAE1; color: #17181C; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; overflow: hidden">
+  <div style="width: 260px; height: 900px; flex: none">
+    <dc-import name="Sidebar" space="trabalho" theme="claro" active="t0" domain="meet.google.com" path="/abc-defg-hij" blocked="3" hint-size="260px,900px"></dc-import>
+  </div>
+  <main style="position: relative; flex: 1; min-width: 0; padding: 8px 8px 8px 0; display: flex">
+    <div aria-hidden="true" style="flex: 1; background: #202124; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.12); display: flex; flex-direction: column; padding: 32px; box-sizing: border-box; gap: 16px">
+      <div style="flex: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+        <span style="border-radius: 12px; background: #2D2E31"></span>
+        <span style="border-radius: 12px; background: #2D2E31"></span>
+        <span style="border-radius: 12px; background: #2D2E31"></span>
+        <span style="border-radius: 12px; background: #34353A"></span>
+      </div>
+      <div style="height: 56px; display: flex; align-items: center; justify-content: center; gap: 12px">
+        <span style="width: 44px; height: 44px; border-radius: 22px; background: #3C3D42"></span>
+        <span style="width: 44px; height: 44px; border-radius: 22px; background: #3C3D42"></span>
+        <span style="width: 64px; height: 44px; border-radius: 22px; background: #8C2F2A"></span>
+      </div>
+    </div>
+
+    <div role="alertdialog" aria-labelledby="perm-titulo" style="position: absolute; left: 16px; top: 16px; width: 380px; box-sizing: border-box; padding: 18px; border-radius: 12px; background: #FBFBFD; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.16), 0 16px 44px rgba(0,0,0,0.32); display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; gap: 12px; align-items: flex-start">
+        <span aria-hidden="true" style="flex: none; width: 36px; height: 36px; border-radius: 10px; background: #F4E8D6; color: #7A4405; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="1.5" y="4" width="9" height="8" rx="1.5"></rect><path d="m10.5 7 4-2v6l-4-2"></path></svg></span>
+        <div style="display: flex; flex-direction: column; gap: 4px">
+          <span id="perm-titulo" style="font-size: 14px; font-weight: 600; line-height: 1.35">meet.google.com quer usar sua câmera e seu microfone</span>
+          <span style="font-size: 12.5px; line-height: 1.45; color: #565863">Vale só para o espaço Trabalho. Você muda isso depois no painel do site.</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px; justify-content: flex-end">
+        <button type="button" style="height: 30px; padding: 0 12px; border: 0; border-radius: 7px; background: rgba(23,24,28,0.07); font: inherit; font-size: 13px; color: #17181C">Bloquear</button>
+        <button type="button" style="height: 30px; padding: 0 12px; border: 0; border-radius: 7px; background: rgba(23,24,28,0.07); font: inherit; font-size: 13px; color: #17181C">Sempre permitir</button>
+        <button type="button" style="height: 30px; padding: 0 12px; border: 0; border-radius: 7px; background: #A35A06; font: inherit; font-size: 13px; font-weight: 600; color: #FFFFFF">Permitir agora</button>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

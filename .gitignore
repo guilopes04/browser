@@ -1,0 +1,30 @@
+# dependências e builds
+node_modules/
+app/out/
+app/dist/
+app/.vite/
+
+# estado local da página de progresso
+progress/.lock
+
+# bancada: perfis temporários e capturas (regeneráveis)
+bench/results/*-profile*/
+bench/results/*.png
+bench/winlist
+
+# experimentos: pacotes baixados e extensões descompactadas (pesados)
+experiments/**/pacotes/
+experiments/**/bitwarden/
+experiments/**/ublock*/
+experiments/**/capturas/
+experiments/**/*.png
+experiments/**/*.crx
+experiments/**/*.zip
+
+# dados pessoais (e-mail e time ID da conta Apple)
+docs/apple-entitlement-pedido.md
+
+.DS_Store
+
+# diário de trabalho (contém detalhes operacionais; fica fora do repositório público)
+progress/

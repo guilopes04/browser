@@ -1,0 +1,38 @@
+{
+  "name": "browser",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Gilas Browser: navegador leve para macOS em Electron e TypeScript",
+  "author": "Guilherme Lopes",
+  "license": "MIT",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "start": "electron-vite build && electron .",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "lint": "eslint .",
+    "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./test/register.mjs --test test/*.test.ts test-web/*.test.ts",
+    "e2e:palette": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON e2e/palette.ts",
+    "e2e:new-tab": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON e2e/new-tab.ts",
+    "e2e:migration": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON e2e/migration.ts",
+    "dist": "electron-vite build && APPLE_KEYCHAIN_PROFILE=browser-notary electron-builder --mac --arm64 -c.directories.output=\"${GILAS_DIST:-$HOME/Library/Caches/gilas-browser/dist}\"",
+    "dist:sem-assinar": "electron-vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac --arm64 -c.directories.output=\"${GILAS_DIST:-$HOME/Library/Caches/gilas-browser/dist}\""
+  },
+  "devDependencies": {
+    "@preact/signals": "^2.11.3",
+    "@types/node": "^26.6.5",
+    "@typescript-eslint/eslint-plugin": "^8.71.2",
+    "@typescript-eslint/parser": "^8.71.2",
+    "electron": "^44.7.2",
+    "electron-builder": "^26.15.3",
+    "electron-vite": "^6.0.0",
+    "eslint": "^10.12.0",
+    "preact": "^11.0.1",
+    "prettier": "^3.9.10",
+    "typescript": "^6.0.3",
+    "vite": "^8.3.4"
+  },
+  "productName": "Gilas Browser"
+}

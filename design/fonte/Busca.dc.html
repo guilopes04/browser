@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Buscar na página</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#4352C4}a:hover{color:#2F3C9A}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; background: #E8E9F0; color: #17181C; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; overflow: hidden">
+  <div style="width: 260px; height: 900px; flex: none">
+    <dc-import name="Sidebar" space="pessoal" theme="claro" active="p1" hint-size="260px,900px"></dc-import>
+  </div>
+  <main style="position: relative; flex: 1; min-width: 0; padding: 8px 8px 8px 0; display: flex">
+    <div style="flex: 1; background: #FFFFFF; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06); overflow: hidden; display: flex; justify-content: center">
+      <article style="width: 680px; padding-top: 104px; color: #2A2B31">
+        <h1 style="margin: 0 0 24px; font-size: 34px; line-height: 1.15; font-weight: 700; color: #17181C">WebContentsView</h1>
+        <p style="margin: 0 0 18px; font-size: 16px; line-height: 1.6">Uma <mark style="background: #F5B54A; color: #17181C; border-radius: 2px; box-shadow: 0 0 0 2px #F5B54A">WebContents</mark>View mostra conteúdo web dentro de uma janela. Ela é uma view como qualquer outra: você cria, define a posição e adiciona à árvore de views da janela.</p>
+        <p style="margin: 0 0 18px; font-size: 16px; line-height: 1.6">Cada view carrega seu próprio <mark style="background: #FBE7A6; color: #17181C; border-radius: 2px">webContents</mark>, com navegação, histórico e processo de renderização independentes. Por isso é a peça certa para representar uma aba.</p>
+        <p style="margin: 0 0 18px; font-size: 16px; line-height: 1.6">Para trocar de aba, mude qual view está visível ou remova a anterior da janela. Destruir o <mark style="background: #FBE7A6; color: #17181C; border-radius: 2px">webContents</mark> de uma aba parada libera a memória do processo dela.</p>
+        <p style="margin: 0; font-size: 16px; line-height: 1.6">As preferências de segurança são definidas ao criar a view, em webPreferences, e não mudam depois.</p>
+      </article>
+    </div>
+
+    <div role="search" aria-label="Buscar na página" style="position: absolute; top: 20px; right: 20px; display: flex; align-items: center; gap: 4px; height: 44px; padding: 0 6px 0 12px; border-radius: 12px; background: rgba(250,250,252,0.97); box-shadow: 0 0 0 0.5px rgba(0,0,0,0.14), 0 8px 24px rgba(0,0,0,0.14)">
+      <label for="busca-pagina" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Buscar na página</label>
+      <input id="busca-pagina" type="text" value="webcontents" style="width: 180px; border: 0; outline: none; background: transparent; font: inherit; font-size: 14px; color: #17181C; padding: 0">
+      <span aria-live="polite" style="font-size: 12.5px; color: #565863; padding: 0 6px">1 de 3</span>
+      <button type="button" aria-label="Anterior (⇧⌘G)" style="width: 30px; height: 30px; border: 0; border-radius: 7px; background: transparent; color: #3A3B42; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m4 10 4-4 4 4"></path></svg></button>
+      <button type="button" aria-label="Próximo (⌘G)" style="width: 30px; height: 30px; border: 0; border-radius: 7px; background: transparent; color: #3A3B42; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m4 6 4 4 4-4"></path></svg></button>
+      <button type="button" aria-label="Diferenciar maiúsculas" aria-pressed="false" style="height: 30px; padding: 0 8px; border: 0; border-radius: 7px; background: transparent; font: inherit; font-size: 13px; font-weight: 600; color: #3A3B42">Aa</button>
+      <div style="width: 1px; height: 20px; background: rgba(0,0,0,0.1); margin: 0 2px"></div>
+      <button type="button" aria-label="Fechar busca (esc)" style="width: 30px; height: 30px; border: 0; border-radius: 7px; background: transparent; color: #565863; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"></path></svg></button>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+
+DevTools listening on ws://127.0.0.1:29339/devtools/browser/c16ce34b-b930-474a-a472-b8f174f665e7
+[harness] 124ms app pronto
+[harness] 175ms passo servidor-local: início
+[harness] 183ms passo servidor-local: ok
+[harness] 183ms passo loadExtension: início
+(node:76569) ExtensionLoadWarning: Warnings loading extension at /private/tmp/claude-501/-Users-guilhermelopes-Documents-Projects-navegador/b8b36086-abf3-450d-9b8c-7e0b2ae630f8/scratchpad/extensoes/bitwarden-shim:
+  Permission 'contextMenus' is unknown.
+  Permission 'sidePanel' is unknown.
+  Permission 'webNavigation' is unknown.
+  Permission 'notifications' is unknown.
+  Permission 'privacy' is unknown.
+
+(Use `Electron --trace-warnings ...` to show where the warning was created)
+[harness] 213ms passo loadExtension: ok
+[harness] 34078ms passo carregar-site: início
+[harness] 34721ms passo carregar-site: ok
+[harness] 34743ms passo carregar-popup: início
+[76569:1015/022620.421380:INFO:CONSOLE:2] "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security
+  Policy set or a policy with "unsafe-eval" enabled. This exposes users of
+  this app to unnecessary security risks.
+
+For more information and help, consult
+https://electronjs.org/docs/tutorial/security.
+This warning will not show up
+once the app is packaged.", source: node:electron/js2c/sandbox_bundle (2)
+[76569:1015/022620.943136:INFO:CONSOLE:11] "[stubs] webNavigation definido como stub", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js (11)
+[76569:1015/022620.943515:INFO:CONSOLE:11] "[stubs] windows definido como stub", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js (11)
+[76569:1015/022620.943541:INFO:CONSOLE:11] "[stubs] contextMenus definido como stub", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js (11)
+[76569:1015/022620.943558:INFO:CONSOLE:11] "[stubs] notifications definido como stub", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js (11)
+[76569:1015/022620.943573:INFO:CONSOLE:11] "[stubs] commands definido como stub", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js (11)
+[76569:1015/022620.943587:INFO:CONSOLE:11] "[stubs] permissions definido como stub", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js (11)
+[76569:1015/022620.943601:INFO:CONSOLE:11] "[stubs] privacy definido como stub", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js (11)
+[76569:1015/022620.943615:INFO:CONSOLE:11] "[stubs] sidePanel definido como stub", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js (11)
+[76569:1015/022620.943668:INFO:CONSOLE:32] "WebAssembly is supported in this environment", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js (32)
+[76569:1015/022620.986914:INFO:CONSOLE:11] "[stubs] webNavigation definido como stub", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/chrome-stubs.js (11)
+[76569:1015/022620.986993:INFO:CONSOLE:11] "[stubs] windows definido como stub", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/chrome-stubs.js (11)
+[76569:1015/022620.987021:INFO:CONSOLE:11] "[stubs] contextMenus definido como stub", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/chrome-stubs.js (11)
+[76569:1015/022620.987043:INFO:CONSOLE:11] "[stubs] notifications definido como stub", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/chrome-stubs.js (11)
+[76569:1015/022620.987109:INFO:CONSOLE:11] "[stubs] commands definido como stub", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/chrome-stubs.js (11)
+[76569:1015/022620.987143:INFO:CONSOLE:11] "[stubs] permissions definido como stub", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/chrome-stubs.js (11)
+[76569:1015/022620.987171:INFO:CONSOLE:11] "[stubs] privacy definido como stub", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/chrome-stubs.js (11)
+[76569:1015/022620.987219:INFO:CONSOLE:11] "[stubs] sidePanel definido como stub", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/chrome-stubs.js (11)
+[76569:1015/022623.102712:INFO:CONSOLE:32] "Managed configuration: unavailable, keeping the last known profile. [object Object]", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js (32)
+[76569:1015/022623.111709:INFO:CONSOLE:575] "WebAssembly is supported in this environment", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/popup/main.js (575)
+[76569:1015/022623.144548:INFO:CONSOLE:32] "WASM SDK loaded in 35ms", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js (32)
+[76569:1015/022623.166999:INFO:CONSOLE:0] "Uncaught (in promise) Error: Could not establish connection. Receiving end does not exist.", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js (0)
+[76569:1015/022623.167518:ERROR:extensions/browser/extensions_browser_client.cc:93] Extension Error:
+  OTR:     false
+  Level:   2
+  Source:  chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js
+  Message: Uncaught (in promise) Error: Could not establish connection. Receiving end does not exist.
+  ID:      bokomkncifbpnbndnlampoamjcfmdjgk
+  Type:    RuntimeError
+  Context: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js
+  Stack Trace: 
+    {
+      Line:     0
+      Column:   1
+      URL:      chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js
+      Function: (anonymous function)
+    }
+[76569:1015/022623.171103:INFO:CONSOLE:32] "No state version found, assuming empty state.", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js (32)
+[76569:1015/022623.182492:INFO:CONSOLE:32] "Retrieving application id", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js (32)
+[76569:1015/022623.199830:ERROR:extensions/browser/api/runtime/runtime_api.cc:945] NOTREACHED hit. Unexpected view type found: 0, Extension ID: bokomkncifbpnbndnlampoamjcfmdjgk
+[76569:1015/022623.208481:INFO:CONSOLE:32] "[BrowserApi] Message sender appears to be internal", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js (32)
+[harness] 37609ms passo carregar-popup: ok
+[harness] 37611ms extensão Bitwarden Password Manager 2026.9.3 id=bokomkncifbpnbndnlampoamjcfmdjgk; aguardando 8000ms
+[76569:1015/022623.313903:INFO:CONSOLE:1] "WASM SDK loaded in 101ms", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/popup/main.js (1)
+[76569:1015/022623.316631:INFO:CONSOLE:1] "State version: 85", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/popup/main.js (1)
+[76569:1015/022623.361126:INFO:CONSOLE:2] " INFO bitwarden_managed_settings::managed_settings_client: Managed settings profile cleared
+", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/popup/vendor.js (2)
+[76569:1015/022623.367069:INFO:CONSOLE:1] "Retrieving application id", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/popup/main.js (1)
+[harness] 45618ms passo service-worker: início
+[harness] 45844ms passo service-worker: ok
+[harness] 45844ms passo popup: início
+[76569:1015/022631.908144:INFO:CONSOLE:32] "[BrowserApi] Message sender appears to be internal", source: chrome-extension://bokomkncifbpnbndnlampoamjcfmdjgk/background.js (32)
+[76569:1015/022633.230011:ERROR:extensions/browser/api/runtime/runtime_api.cc:945] NOTREACHED hit. Unexpected view type found: 0, Extension ID: bokomkncifbpnbndnlampoamjcfmdjgk
+[harness] 49101ms passo popup: ok
+[harness] 49101ms passo content-script: início
+[harness] 49728ms passo content-script: ok
+[harness] 49728ms passo captura-site: início
+[harness] 49756ms passo captura-site: ok
+[harness] 49756ms passo captura-popup: início
+[harness] 49772ms passo captura-popup: ok
+[harness] 49772ms passo teste-rede: início
+[harness] 50099ms passo teste-rede: ok

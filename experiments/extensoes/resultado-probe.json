@@ -1,0 +1,1492 @@
+{
+  "extensao": "probe",
+  "pasta": "/Users/guilhermelopes/Documents/Projects/navegador/experiments/extensoes/probe",
+  "electron": "44.7.2",
+  "chromium": "152.0.7977.149",
+  "node": "24.21.0",
+  "quando": "2026-10-15T05:05:49.326Z",
+  "carregou": true,
+  "erroCarregar": null,
+  "eventos": [
+    {
+      "t": 240,
+      "evento": "extension-loaded",
+      "id": "iehaoeheflelggancikipdhgkafjabnc",
+      "nome": "Sonda de APIs",
+      "versao": "1.0"
+    },
+    {
+      "t": 240,
+      "evento": "extension-ready",
+      "id": "iehaoeheflelggancikipdhgkafjabnc",
+      "nome": "Sonda de APIs",
+      "versao": "1.0"
+    }
+  ],
+  "serviceWorker": {
+    "registrado": true,
+    "iniciou": true,
+    "registros": [
+      {
+        "t": 2543,
+        "scope": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/"
+      }
+    ],
+    "status": [],
+    "alvosCdp": [
+      {
+        "type": "page",
+        "url": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html",
+        "title": "Sonda"
+      },
+      {
+        "type": "page",
+        "url": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html",
+        "title": "Sonda"
+      },
+      {
+        "type": "page",
+        "url": "http://127.0.0.1:28765/",
+        "title": "Login de teste local"
+      },
+      {
+        "type": "service_worker",
+        "url": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/sw.js",
+        "title": "Service Worker chrome-extension://iehaoeheflelggancikipdhgkafjabnc/sw.js"
+      }
+    ],
+    "emExecucao": {
+      "0": {
+        "scriptUrl": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/sw.js",
+        "scope": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/",
+        "renderProcessId": 5
+      }
+    },
+    "url": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/sw.js",
+    "chavesStorageLocal": [
+      "k"
+    ],
+    "manifestNoSw": "1.0"
+  },
+  "logsConsole": [
+    {
+      "t": 466,
+      "origem": "wc:window",
+      "nivel": "warning",
+      "texto": "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged.",
+      "url": "node:electron/js2c/sandbox_bundle",
+      "linha": 2
+    },
+    {
+      "t": 2526,
+      "origem": "wc:window",
+      "nivel": "warning",
+      "texto": "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged.",
+      "url": "node:electron/js2c/sandbox_bundle",
+      "linha": 2
+    },
+    {
+      "t": 2542,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "SONDA sw iniciou",
+      "url": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/sw.js",
+      "linha": 3
+    },
+    {
+      "t": 3826,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "SONDA install",
+      "url": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/sw.js",
+      "linha": 3
+    },
+    {
+      "t": 3827,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "SONDA content recebeu resposta {\"eco\":{\"tipo\":\"content-ola\",\"url\":\"http://127.0.0.1:28765/\"},\"sw\":true}",
+      "url": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/content.js",
+      "linha": 5
+    },
+    {
+      "t": 3829,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "SONDA activate",
+      "url": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/sw.js",
+      "linha": 3
+    },
+    {
+      "t": 3829,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "SONDA popup {\"id\":\"iehaoeheflelggancikipdhgkafjabnc\",\"sw\":{\"eco\":{\"tipo\":\"popup-ola\"},\"sw\":true},\"tabs\":[{\"id\":2,\"url\":\"chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html\",\"active\":false},{\"id\":1,\"url\":\"http://127.0.0.1:28765/\",\"active\":true}],\"tabAtiva\":[\"http://127.0.0.1:28765/\"]}",
+      "url": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.js",
+      "linha": 9
+    },
+    {
+      "t": 5055,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "SONDA_ALARM criados em 1792040754381",
+      "url": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/sw.js",
+      "linha": 50
+    },
+    {
+      "t": 5073,
+      "origem": "wc:remote",
+      "nivel": "info",
+      "texto": "SONDA popup {\"id\":\"iehaoeheflelggancikipdhgkafjabnc\",\"sw\":{\"eco\":{\"tipo\":\"popup-ola\"},\"sw\":true},\"tabsErro\":\"TypeError: Cannot read properties of undefined (reading 'query')\",\"tabAtivaErro\":\"TypeError: Cannot read properties of undefined (reading 'query')\"}",
+      "url": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.js",
+      "linha": 9
+    },
+    {
+      "t": 7587,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "SONDA_RESULT {\"existencia\":{\"action\":{\"definido\":true,\"membros\":{\"setBadgeText\":\"funcao\",\"setBadgeBackgroundColor\":\"funcao\",\"setIcon\":\"funcao\",\"setTitle\":\"funcao\",\"setPopup\":\"funcao\",\"getPopup\":\"funcao\",\"openPopup\":\"funcao\",\"onClicked\":\"objeto\",\"enable\":\"funcao\",\"disable\":\"funcao\"}},\"alarms\":{\"definido\":true,\"membros\":{\"create\":\"funcao\",\"get\":\"funcao\",\"getAll\":\"funcao\",\"clear\":\"funcao\",\"clearAll\":\"funcao\",\"onAlarm\":\"objeto\"}},\"browsingData\":{\"definido\":false},\"clipboard\":{\"definido\":true,\"membros\":{}},\"commands\":{\"definido\":false},\"contextMenus\":{\"definido\":false},\"cookies\":{\"definido\":false},\"declarativeNetRequest\":{\"definido\":true,\"membros\":{\"updateDynamicRules\":\"funcao\",\"getDynamicRules\":\"funcao\",\"updateEnabledRulesets\":\"funcao\",\"getEnabledRulesets\":\"funcao\",\"updateSessionRules\":\"funcao\"}},\"dom\":{\"definido\":true,\"membros\":{\"openOrClosedShadowRoot\":\"funcao\"}},\"extension\":{\"definido\":true,\"membros\":{\"getURL\":\"indefinido\",\"getBackgroundPage\":\"indefinido\",\"isAllowedFileSchemeAccess\":\"indefinido\",\"isAllowedIncognitoAccess\":\"indefinido\"}},\"fontSettings\":{\"definido\":false},\"history\":{\"definido\":false},\"i18n\":{\"definido\":true,\"membros\":{\"getMessage\":\"funcao\",\"getUILanguage\":\"funcao\",\"detectLanguage\":\"funcao\"}},\"identity\":{\"definido\":false},\"idle\":{\"definido\":true,\"membros\":{\"queryState\":\"funcao\",\"setDetectionInterval\":\"funcao\",\"onStateChanged\":\"objeto\"}},\"management\":{\"definido\":true,\"membros\":{\"getAll\":\"indefinido\",\"getSelf\":\"funcao\",\"get\":\"indefinido\",\"onInstalled\":\"indefinido\"}},\"notifications\":{\"definido\":false},\"offscreen\":{\"definido\":true,\"membros\":{\"createDocument\":\"funcao\",\"closeDocument\":\"funcao\",\"hasDocument\":\"funcao\"}},\"permissions\":{\"definido\":false},\"privacy\":{\"definido\":false},\"runtime\":{\"definido\":true,\"membros\":{\"id\":\"objeto\",\"getURL\":\"funcao\",\"getManifest\":\"funcao\",\"sendMessage\":\"funcao\",\"connect\":\"funcao\",\"onMessage\":\"objeto\",\"onConnect\":\"objeto\",\"onInstalled\":\"objeto\",\"onStartup\":\"objeto\",\"getContexts\":\"funcao\",\"getPlatformInfo\":\"funcao\",\"reload\":\"funcao\",\"sendNativeMessage\":\"indefinido\",\"connectNative\":\"indefinido\",\"lastError\":\"indefinido\",\"onSuspend\":\"objeto\",\"setUninstallURL\":\"funcao\",\"openOptionsPage\":\"funcao\"}},\"scripting\":{\"definido\":true,\"membros\":{\"executeScript\":\"funcao\",\"insertCSS\":\"funcao\",\"removeCSS\":\"funcao\",\"registerContentScripts\":\"funcao\",\"getRegisteredContentScripts\":\"funcao\",\"unregisterContentScripts\":\"funcao\",\"updateContentScripts\":\"funcao\"}},\"sessions\":{\"definido\":false},\"sidePanel\":{\"definido\":false},\"storage\":{\"definido\":true,\"membros\":{\"local\":\"objeto\",\"sync\":\"objeto\",\"session\":\"objeto\",\"managed\":\"objeto\",\"onChanged\":\"objeto\"}},\"system\":{\"definido\":false},\"tabs\":{\"definido\":true,\"membros\":{\"query\":\"funcao\",\"get\":\"funcao\",\"getCurrent\":\"indefinido\",\"create\":\"indefinido\",\"update\":\"funcao\",\"remove\":\"indefinido\",\"reload\":\"funcao\",\"sendMessage\":\"funcao\",\"executeScript\":\"indefinido\",\"captureVisibleTab\":\"indefinido\",\"duplicate\":\"indefinido\",\"group\":\"indefinido\",\"ungroup\":\"indefinido\",\"move\":\"indefinido\",\"goBack\":\"indefinido\",\"goForward\":\"indefinido\",\"setZoom\":\"funcao\",\"getZoom\":\"funcao\",\"detectLanguage\":\"indefinido\",\"onCreated\":\"objeto\",\"onUpdated\":\"objeto\",\"onRemoved\":\"objeto\",\"onActivated\":\"objeto\",\"onReplaced\":\"objeto\",\"onHighlighted\":\"objeto\",\"onMoved\":\"objeto\"}},\"tabGroups\":{\"definido\":false},\"topSites\":{\"definido\":false},\"userScripts\":{\"definido\":false},\"webNavigation\":{\"definido\":false},\"webRequest\":{\"definido\":true,\"membros\":{\"onBeforeRequest\":\"objeto\",\"onBeforeSendHeaders\":\"objeto\",\"onSendHeaders\":\"objeto\",\"onHeadersReceived\":\"objeto\",\"onAuthRequired\":\"objeto\",\"onCompleted\":\"objeto\",\"onErrorOccurred\":\"objeto\",\"handlerBehaviorChanged\":\"funcao\"}},\"windows\":{\"definido\":false}},\"webRequestBloqueante\":\"listener aceito sem erro\",\"storage.local\":{\"ok\":true,\"valor\":{\"k\":\"v\"},\"ms\":6},\"storage.session\":{\"ok\":true,\"valor\":{\"k\":\"v\"},\"ms\":0},\"storage.sync\":{\"ok\":false,\"erro\":\"\\\"sync\\\" is not available in this instance of Chrome\"},\"alarms.create\":{\"ok\":true,\"valor\":[{\"name\":\"rapido-1_2s\",\"persistAcrossSessions\":true,\"scheduledTime\":1792040755581.126},{\"name\":\"lento-30s\",\"persistAcrossSessions\":true,\"scheduledTime\":1792040784381.187}],\"ms\":1},\"runtime.getManifest\":{\"ok\":true,\"valor\":\"Sonda de APIs\",\"ms\":0},\"runtime.getPlatformInfo\":{\"ok\":true,\"valor\":{\"arch\":\"arm64\",\"os\":\"mac\"},\"ms\":0},\"runtime.getContexts\":{\"ok\":true,\"valor\":[{\"contextId\":\"5f4c8d26-82f1-49c8-98b4-2e2637c3ad02\",\"contextType\":\"BACKGROUND\",\"frameId\":-1,\"incognito\":false,\"tabId\":-1,\"windowId\":-1}],\"ms\":1},\"i18n.getUILanguage\":{\"ok\":true,\"valor\":\"pt-BR\",\"ms\":0},\"tabs.query({})\":{\"ok\":true,\"valor\":[{\"id\":2,\"url\":\"chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html\",\"active\":false,\"windowId\":0},{\"id\":1,\"url\":\"http://127.0.0.1:28765/\",\"active\":true,\"windowId\":0}],\"ms\":0},\"tabs.query(active)\":{\"ok\":true,\"valor\":[\"http://127.0.0.1:28765/\"],\"ms\":0},\"windows.getAll\":{\"ok\":false,\"erro\":\"Cannot read properties of undefined (reading 'getAll')\"},\"windows.getCurrent\":{\"ok\":false,\"erro\":\"Cannot read properties of undefined (reading 'getCurrent')\"},\"tabs.sendMessage\":{\"ok\":true,\"valor\":{\"contentRecebeu\":{\"tipo\":\"sw-ola\"}},\"ms\":1},\"scripting.executeScript\":{\"ok\":true,\"valor\":[{\"documentId\":\"373000010437DCBBCE22DF8AD992B40F\",\"frameId\":0,\"result\":\"Login de teste local\"}],\"ms\":1},\"scripting.registerContentScripts\":{\"ok\":true,\"valor\":[{\"allFrames\":false,\"id\":\"sonda-reg\",\"js\":[\"content.js\"],\"matchOriginAsFallback\":false,\"matches\":[\"http://127.0.0.1/*\"],\"persistAcrossSessions\":true,\"runAt\":\"document_start\",\"world\":\"ISOLATED\"}],\"ms\":1},\"cookies.getAll\":{\"ok\":false,\"erro\":\"Cannot read properties of undefined (reading 'getAll')\"},\"contextMenus.create\":{\"ok\":false,\"erro\":\"Cannot read properties of undefined (reading 'create')\"},\"action.setBadgeText\":{\"ok\":true,\"valor\":\"\",\"ms\":0},\"action.setIcon\":{\"ok\":true,\"valor\":\"chamado\",\"ms\":0},\"commands.getAll\":{\"ok\":false,\"erro\":\"Cannot read properties of undefined (reading 'getAll')\"},\"notifications.create\":{\"ok\":false,\"erro\":\"Cannot read properties of undefined (reading 'create')\"},\"idle.queryState\":{\"ok\":true,\"valor\":\"active\",\"ms\":0},\"management.getSelf\":{\"ok\":true,\"valor\":{\"name\":\"Sonda de APIs\",\"id\":\"iehaoeheflelggancikipdhgkafjabnc\"},\"ms\":1},\"permissions.getAll\":{\"ok\":false,\"erro\":\"Cannot read properties of undefined (reading 'getAll')\"},\"offscreen.createDocument\":{\"ok\":true,\"valor\":true,\"ms\":13},\"sidePanel.setOptions\":{\"ok\":false,\"erro\":\"Cannot read properties of undefined (reading 'setOptions')\"},\"declarativeNetRequest.updateDynamicRules\":{\"ok\":true,\"valor\":[{\"action\":{\"type\":\"block\"},\"condition\":{\"resourceTypes\":[\"xmlhttprequest\",\"main_frame\"],\"urlFilter\":\"bloquear-dnr\"},\"id\":1,\"priority\":1}],\"ms\":4},\"tabs.create\":{\"ok\":false,\"erro\":\"chrome.tabs.create is not a function\"},\"fetch (host_permissions)\":{\"ok\":true,\"valor\":200,\"ms\":2},\"alarmeDisparouApos2500ms\":false,\"mensagensRecebidas\":[{\"m\":{\"tipo\":\"content-ola\",\"url\":\"http://127.0.0.1:28765/\"},\"tab\":\"http://127.0.0.1:28765/\",\"url\":\"http://127.0.0.1:28765/\"},{\"m\":{\"tipo\":\"popup-ola\"},\"tab\":\"chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html\",\"url\":\"chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html\"},{\"m\":{\"tipo\":\"popup-ola\"},\"tab\":\"chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html\",\"url\":\"chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html\"}],\"webRequestEventos\":[],\"webNavigationEventos\":[]}",
+      "url": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/sw.js",
+      "linha": 97
+    }
+  ],
+  "errosConsole": [
+    {
+      "t": 466,
+      "origem": "wc:window",
+      "nivel": "warning",
+      "texto": "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged.",
+      "url": "node:electron/js2c/sandbox_bundle",
+      "linha": 2
+    },
+    {
+      "t": 2526,
+      "origem": "wc:window",
+      "nivel": "warning",
+      "texto": "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged.",
+      "url": "node:electron/js2c/sandbox_bundle",
+      "linha": 2
+    }
+  ],
+  "popup": {
+    "url": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html",
+    "urlFinal": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html",
+    "titulo": "Sonda",
+    "innerTextLength": 421,
+    "innerTextAmostra": "Sonda de APIs\n{\n  \"id\": \"iehaoeheflelggancikipdhgkafjabnc\",\n  \"sw\": {\n    \"eco\": {\n      \"tipo\": \"popup-ola\"\n    },\n    \"sw\": true\n  },\n  \"tabs\": [\n    {\n      \"id\": 2,\n      \"url\": \"chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html\",\n      \"active\": false\n    },\n    {\n      \"id\": 1,\n      \"url\": \"http://127.0.0.1:28765/\",\n      \"active\": true\n    }\n  ],\n  \"tabAtiva\": [\n    \"http://127.0.0.1:28765/\"\n  ]\n}",
+    "elementos": 8,
+    "readyState": "complete",
+    "inputs": [],
+    "botoes": [],
+    "renderizouAlemDeBranco": true,
+    "campoFocado": null,
+    "aceitouDigitacao": null
+  },
+  "contentScript": {
+    "contextos": [
+      {
+        "t": 482,
+        "id": 2,
+        "nome": "Electron Isolated Context",
+        "origem": "://",
+        "tipo": "isolated",
+        "isDefault": false
+      },
+      {
+        "t": 482,
+        "id": 1,
+        "nome": "",
+        "origem": "://",
+        "tipo": "default",
+        "isDefault": true
+      },
+      {
+        "t": 2417,
+        "id": 3,
+        "nome": "",
+        "origem": "http://127.0.0.1:28765",
+        "tipo": "default",
+        "isDefault": true
+      },
+      {
+        "t": 2417,
+        "id": 4,
+        "nome": "Electron Isolated Context",
+        "origem": "http://127.0.0.1:28765",
+        "tipo": "isolated",
+        "isDefault": false
+      },
+      {
+        "t": 2420,
+        "id": 5,
+        "nome": "Sonda de APIs",
+        "origem": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc",
+        "tipo": "isolated",
+        "isDefault": false
+      }
+    ],
+    "contextosDaExtensao": [
+      {
+        "t": 482,
+        "id": 2,
+        "nome": "Electron Isolated Context",
+        "origem": "://",
+        "tipo": "isolated",
+        "isDefault": false
+      },
+      {
+        "t": 2417,
+        "id": 4,
+        "nome": "Electron Isolated Context",
+        "origem": "http://127.0.0.1:28765",
+        "tipo": "isolated",
+        "isDefault": false
+      },
+      {
+        "t": 2420,
+        "id": 5,
+        "nome": "Sonda de APIs",
+        "origem": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc",
+        "tipo": "isolated",
+        "isDefault": false
+      }
+    ],
+    "injetou": true,
+    "avaliacoesNoMundoIsolado": [
+      {
+        "contexto": 2,
+        "erro": "Error: Cannot find context with specified id"
+      },
+      {
+        "contexto": 4,
+        "valor": {
+          "atributosHtml": [
+            "lang",
+            "data-sonda-content"
+          ],
+          "chaves": [],
+          "runtimeId": null
+        }
+      },
+      {
+        "contexto": 5,
+        "valor": {
+          "atributosHtml": [
+            "lang",
+            "data-sonda-content"
+          ],
+          "chaves": [
+            "dom",
+            "i18n",
+            "runtime",
+            "scripting",
+            "storage"
+          ],
+          "runtimeId": "iehaoeheflelggancikipdhgkafjabnc"
+        }
+      }
+    ],
+    "pagina": {
+      "atributosHtml": [
+        "lang=pt-BR",
+        "data-sonda-content=1"
+      ],
+      "elementosAlemDoOriginal": [],
+      "elementosCustom": [],
+      "iframes": [],
+      "folhasDeEstilo": [
+        "inline:STYLE"
+      ],
+      "atributosDoInput": [
+        [
+          "id",
+          "name",
+          "type",
+          "placeholder",
+          "autocomplete"
+        ],
+        [
+          "id",
+          "name",
+          "type",
+          "placeholder",
+          "autocomplete"
+        ]
+      ],
+      "sombrasAbertas": 0,
+      "totalElementos": 11
+    },
+    "atributoSonda": "1"
+  },
+  "apis": {
+    "totalUsadasAnalisadas": 42,
+    "sw": {
+      "temChrome": true,
+      "chaves": [
+        "action",
+        "alarms",
+        "clipboard",
+        "declarativeNetRequest",
+        "dom",
+        "extension",
+        "i18n",
+        "idle",
+        "management",
+        "offscreen",
+        "runtime",
+        "scripting",
+        "storage",
+        "tabs",
+        "webRequest"
+      ],
+      "lista": {
+        "action": {
+          "definido": true,
+          "membros": {
+            "setBadgeText": "function",
+            "setBadgeBackgroundColor": "function",
+            "setIcon": "function",
+            "setTitle": "function",
+            "setPopup": "function",
+            "getPopup": "function",
+            "openPopup": "function",
+            "onClicked": "object",
+            "enable": "function",
+            "disable": "function"
+          }
+        },
+        "alarms": {
+          "definido": true,
+          "membros": {
+            "create": "function",
+            "get": "function",
+            "getAll": "function",
+            "clear": "function",
+            "clearAll": "function",
+            "onAlarm": "object"
+          }
+        },
+        "browsingData": {
+          "definido": false,
+          "membros": {}
+        },
+        "clipboard": {
+          "definido": true,
+          "membros": {}
+        },
+        "commands": {
+          "definido": false,
+          "membros": {}
+        },
+        "contextMenus": {
+          "definido": false,
+          "membros": {}
+        },
+        "cookies": {
+          "definido": false,
+          "membros": {}
+        },
+        "declarativeNetRequest": {
+          "definido": true,
+          "membros": {
+            "updateDynamicRules": "function",
+            "getDynamicRules": "function",
+            "updateEnabledRulesets": "function",
+            "getEnabledRulesets": "function",
+            "updateSessionRules": "function"
+          }
+        },
+        "dom": {
+          "definido": true,
+          "membros": {
+            "openOrClosedShadowRoot": "function"
+          }
+        },
+        "extension": {
+          "definido": true,
+          "membros": {
+            "getURL": "indefinido",
+            "getBackgroundPage": "indefinido",
+            "isAllowedFileSchemeAccess": "indefinido",
+            "isAllowedIncognitoAccess": "indefinido"
+          }
+        },
+        "fontSettings": {
+          "definido": false,
+          "membros": {}
+        },
+        "history": {
+          "definido": false,
+          "membros": {}
+        },
+        "i18n": {
+          "definido": true,
+          "membros": {
+            "getMessage": "function",
+            "getUILanguage": "function",
+            "detectLanguage": "function"
+          }
+        },
+        "identity": {
+          "definido": false,
+          "membros": {}
+        },
+        "idle": {
+          "definido": true,
+          "membros": {
+            "queryState": "function",
+            "setDetectionInterval": "function",
+            "onStateChanged": "object"
+          }
+        },
+        "management": {
+          "definido": true,
+          "membros": {
+            "getAll": "indefinido",
+            "getSelf": "function",
+            "get": "indefinido",
+            "onInstalled": "indefinido"
+          }
+        },
+        "notifications": {
+          "definido": false,
+          "membros": {}
+        },
+        "offscreen": {
+          "definido": true,
+          "membros": {
+            "createDocument": "function",
+            "closeDocument": "function",
+            "hasDocument": "function"
+          }
+        },
+        "permissions": {
+          "definido": false,
+          "membros": {}
+        },
+        "privacy": {
+          "definido": false,
+          "membros": {}
+        },
+        "runtime": {
+          "definido": true,
+          "membros": {
+            "id": "string",
+            "getURL": "function",
+            "getManifest": "function",
+            "sendMessage": "function",
+            "connect": "function",
+            "onMessage": "object",
+            "onConnect": "object",
+            "onInstalled": "object",
+            "onStartup": "object",
+            "getContexts": "function",
+            "getPlatformInfo": "function",
+            "reload": "function",
+            "sendNativeMessage": "indefinido",
+            "connectNative": "indefinido",
+            "lastError": "indefinido",
+            "onSuspend": "object",
+            "setUninstallURL": "function",
+            "openOptionsPage": "function"
+          }
+        },
+        "scripting": {
+          "definido": true,
+          "membros": {
+            "executeScript": "function",
+            "insertCSS": "function",
+            "removeCSS": "function",
+            "registerContentScripts": "function",
+            "getRegisteredContentScripts": "function",
+            "unregisterContentScripts": "function",
+            "updateContentScripts": "function"
+          }
+        },
+        "sessions": {
+          "definido": false,
+          "membros": {}
+        },
+        "sidePanel": {
+          "definido": false,
+          "membros": {}
+        },
+        "storage": {
+          "definido": true,
+          "membros": {
+            "local": "object",
+            "sync": "object",
+            "session": "object",
+            "managed": "object",
+            "onChanged": "object"
+          }
+        },
+        "system": {
+          "definido": false,
+          "membros": {}
+        },
+        "tabs": {
+          "definido": true,
+          "membros": {
+            "query": "function",
+            "get": "function",
+            "getCurrent": "indefinido",
+            "create": "indefinido",
+            "update": "function",
+            "remove": "indefinido",
+            "reload": "function",
+            "sendMessage": "function",
+            "executeScript": "indefinido",
+            "captureVisibleTab": "indefinido",
+            "duplicate": "indefinido",
+            "group": "indefinido",
+            "ungroup": "indefinido",
+            "move": "indefinido",
+            "goBack": "indefinido",
+            "goForward": "indefinido",
+            "setZoom": "function",
+            "getZoom": "function",
+            "detectLanguage": "indefinido",
+            "onCreated": "object",
+            "onUpdated": "object",
+            "onRemoved": "object",
+            "onActivated": "object",
+            "onReplaced": "object",
+            "onHighlighted": "object",
+            "onMoved": "object"
+          }
+        },
+        "tabGroups": {
+          "definido": false,
+          "membros": {}
+        },
+        "topSites": {
+          "definido": false,
+          "membros": {}
+        },
+        "userScripts": {
+          "definido": false,
+          "membros": {}
+        },
+        "webNavigation": {
+          "definido": false,
+          "membros": {}
+        },
+        "webRequest": {
+          "definido": true,
+          "membros": {
+            "onBeforeRequest": "object",
+            "onBeforeSendHeaders": "object",
+            "onSendHeaders": "object",
+            "onHeadersReceived": "object",
+            "onAuthRequired": "object",
+            "onCompleted": "object",
+            "onErrorOccurred": "object",
+            "handlerBehaviorChanged": "function"
+          }
+        },
+        "windows": {
+          "definido": false,
+          "membros": {}
+        }
+      },
+      "usadasIndefinidas": [
+        "commands.getAll",
+        "commands.onCommand.addListener",
+        "contextMenus.create",
+        "cookies.getAll",
+        "notifications.create",
+        "permissions.getAll",
+        "sidePanel.setOptions",
+        "tabs.create",
+        "webNavigation.onCommitted.addListener",
+        "windows.getAll",
+        "windows.getCurrent"
+      ],
+      "usadasDefinidas": 31,
+      "extensaoId": "iehaoeheflelggancikipdhgkafjabnc",
+      "contexto": "worker"
+    },
+    "popup": {
+      "temChrome": true,
+      "chaves": [
+        "action",
+        "alarms",
+        "clipboard",
+        "declarativeNetRequest",
+        "dom",
+        "extension",
+        "i18n",
+        "idle",
+        "management",
+        "offscreen",
+        "runtime",
+        "scripting",
+        "storage",
+        "tabs",
+        "webRequest"
+      ],
+      "lista": {
+        "action": {
+          "definido": true,
+          "membros": {
+            "setBadgeText": "function",
+            "setBadgeBackgroundColor": "function",
+            "setIcon": "function",
+            "setTitle": "function",
+            "setPopup": "function",
+            "getPopup": "function",
+            "openPopup": "function",
+            "onClicked": "object",
+            "enable": "function",
+            "disable": "function"
+          }
+        },
+        "alarms": {
+          "definido": true,
+          "membros": {
+            "create": "function",
+            "get": "function",
+            "getAll": "function",
+            "clear": "function",
+            "clearAll": "function",
+            "onAlarm": "object"
+          }
+        },
+        "browsingData": {
+          "definido": false,
+          "membros": {}
+        },
+        "clipboard": {
+          "definido": true,
+          "membros": {}
+        },
+        "commands": {
+          "definido": false,
+          "membros": {}
+        },
+        "contextMenus": {
+          "definido": false,
+          "membros": {}
+        },
+        "cookies": {
+          "definido": false,
+          "membros": {}
+        },
+        "declarativeNetRequest": {
+          "definido": true,
+          "membros": {
+            "updateDynamicRules": "function",
+            "getDynamicRules": "function",
+            "updateEnabledRulesets": "function",
+            "getEnabledRulesets": "function",
+            "updateSessionRules": "function"
+          }
+        },
+        "dom": {
+          "definido": true,
+          "membros": {
+            "openOrClosedShadowRoot": "function"
+          }
+        },
+        "extension": {
+          "definido": true,
+          "membros": {
+            "getURL": "indefinido",
+            "getBackgroundPage": "function",
+            "isAllowedFileSchemeAccess": "indefinido",
+            "isAllowedIncognitoAccess": "indefinido"
+          }
+        },
+        "fontSettings": {
+          "definido": false,
+          "membros": {}
+        },
+        "history": {
+          "definido": false,
+          "membros": {}
+        },
+        "i18n": {
+          "definido": true,
+          "membros": {
+            "getMessage": "function",
+            "getUILanguage": "function",
+            "detectLanguage": "function"
+          }
+        },
+        "identity": {
+          "definido": false,
+          "membros": {}
+        },
+        "idle": {
+          "definido": true,
+          "membros": {
+            "queryState": "function",
+            "setDetectionInterval": "function",
+            "onStateChanged": "object"
+          }
+        },
+        "management": {
+          "definido": true,
+          "membros": {
+            "getAll": "indefinido",
+            "getSelf": "function",
+            "get": "indefinido",
+            "onInstalled": "indefinido"
+          }
+        },
+        "notifications": {
+          "definido": false,
+          "membros": {}
+        },
+        "offscreen": {
+          "definido": true,
+          "membros": {
+            "createDocument": "function",
+            "closeDocument": "function",
+            "hasDocument": "function"
+          }
+        },
+        "permissions": {
+          "definido": false,
+          "membros": {}
+        },
+        "privacy": {
+          "definido": false,
+          "membros": {}
+        },
+        "runtime": {
+          "definido": true,
+          "membros": {
+            "id": "string",
+            "getURL": "function",
+            "getManifest": "function",
+            "sendMessage": "function",
+            "connect": "function",
+            "onMessage": "object",
+            "onConnect": "object",
+            "onInstalled": "object",
+            "onStartup": "object",
+            "getContexts": "function",
+            "getPlatformInfo": "function",
+            "reload": "function",
+            "sendNativeMessage": "indefinido",
+            "connectNative": "indefinido",
+            "lastError": "indefinido",
+            "onSuspend": "object",
+            "setUninstallURL": "function",
+            "openOptionsPage": "function"
+          }
+        },
+        "scripting": {
+          "definido": true,
+          "membros": {
+            "executeScript": "function",
+            "insertCSS": "function",
+            "removeCSS": "function",
+            "registerContentScripts": "function",
+            "getRegisteredContentScripts": "function",
+            "unregisterContentScripts": "function",
+            "updateContentScripts": "function"
+          }
+        },
+        "sessions": {
+          "definido": false,
+          "membros": {}
+        },
+        "sidePanel": {
+          "definido": false,
+          "membros": {}
+        },
+        "storage": {
+          "definido": true,
+          "membros": {
+            "local": "object",
+            "sync": "object",
+            "session": "object",
+            "managed": "object",
+            "onChanged": "object"
+          }
+        },
+        "system": {
+          "definido": false,
+          "membros": {}
+        },
+        "tabs": {
+          "definido": true,
+          "membros": {
+            "query": "function",
+            "get": "function",
+            "getCurrent": "indefinido",
+            "create": "indefinido",
+            "update": "function",
+            "remove": "indefinido",
+            "reload": "function",
+            "sendMessage": "function",
+            "executeScript": "indefinido",
+            "captureVisibleTab": "indefinido",
+            "duplicate": "indefinido",
+            "group": "indefinido",
+            "ungroup": "indefinido",
+            "move": "indefinido",
+            "goBack": "indefinido",
+            "goForward": "indefinido",
+            "setZoom": "function",
+            "getZoom": "function",
+            "detectLanguage": "indefinido",
+            "onCreated": "object",
+            "onUpdated": "object",
+            "onRemoved": "object",
+            "onActivated": "object",
+            "onReplaced": "object",
+            "onHighlighted": "object",
+            "onMoved": "object"
+          }
+        },
+        "tabGroups": {
+          "definido": false,
+          "membros": {}
+        },
+        "topSites": {
+          "definido": false,
+          "membros": {}
+        },
+        "userScripts": {
+          "definido": false,
+          "membros": {}
+        },
+        "webNavigation": {
+          "definido": false,
+          "membros": {}
+        },
+        "webRequest": {
+          "definido": true,
+          "membros": {
+            "onBeforeRequest": "object",
+            "onBeforeSendHeaders": "object",
+            "onSendHeaders": "object",
+            "onHeadersReceived": "object",
+            "onAuthRequired": "object",
+            "onCompleted": "object",
+            "onErrorOccurred": "object",
+            "handlerBehaviorChanged": "function"
+          }
+        },
+        "windows": {
+          "definido": false,
+          "membros": {}
+        }
+      },
+      "usadasIndefinidas": [
+        "commands.getAll",
+        "commands.onCommand.addListener",
+        "contextMenus.create",
+        "cookies.getAll",
+        "notifications.create",
+        "permissions.getAll",
+        "sidePanel.setOptions",
+        "tabs.create",
+        "webNavigation.onCommitted.addListener",
+        "windows.getAll",
+        "windows.getCurrent"
+      ],
+      "usadasDefinidas": 31,
+      "extensaoId": "iehaoeheflelggancikipdhgkafjabnc",
+      "contexto": "pagina"
+    }
+  },
+  "passos": {
+    "servidor-local": {
+      "ok": true,
+      "ms": 4
+    },
+    "loadExtension": {
+      "ok": true,
+      "ms": 14
+    },
+    "site-about-blank": {
+      "ok": true,
+      "ms": 43
+    },
+    "debugger-runtime": {
+      "ok": true,
+      "ms": 26
+    },
+    "carregar-site": {
+      "ok": true,
+      "ms": 1938
+    },
+    "carregar-popup": {
+      "ok": true,
+      "ms": 1386
+    },
+    "service-worker": {
+      "ok": true,
+      "ms": 62
+    },
+    "popup": {
+      "ok": true,
+      "ms": 4
+    },
+    "content-script": {
+      "ok": true,
+      "ms": 6
+    },
+    "captura-site": {
+      "ok": true,
+      "ms": 31
+    },
+    "captura-popup": {
+      "ok": true,
+      "ms": 19
+    },
+    "teste-rede": {
+      "ok": true,
+      "ms": 4
+    }
+  },
+  "capturas": [
+    {
+      "arquivo": "capturas/probe-site.png",
+      "tamanho": {
+        "width": 1520,
+        "height": 1136
+      }
+    },
+    {
+      "arquivo": "capturas/probe-popup.png",
+      "tamanho": {
+        "width": 760,
+        "height": 1136
+      }
+    }
+  ],
+  "extensaoId": "iehaoeheflelggancikipdhgkafjabnc",
+  "extensaoNome": "Sonda de APIs",
+  "extensaoVersao": "1.0",
+  "manifestVersion": 3,
+  "extensaoUrl": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/",
+  "permissoesDeclaradas": {
+    "permissions": [
+      "activeTab",
+      "alarms",
+      "clipboardRead",
+      "clipboardWrite",
+      "contextMenus",
+      "idle",
+      "offscreen",
+      "scripting",
+      "sidePanel",
+      "storage",
+      "tabs",
+      "unlimitedStorage",
+      "webNavigation",
+      "webRequest",
+      "notifications",
+      "cookies",
+      "declarativeNetRequest",
+      "management",
+      "commands"
+    ],
+    "host_permissions": [
+      "http://*/*",
+      "https://*/*"
+    ]
+  },
+  "testeRede": {
+    "controle": "status 200",
+    "declarativeNetRequest": "bloqueado: Failed to fetch",
+    "webRequestBloqueante": "status 200"
+  },
+  "sonda": {
+    "existencia": {
+      "action": {
+        "definido": true,
+        "membros": {
+          "setBadgeText": "funcao",
+          "setBadgeBackgroundColor": "funcao",
+          "setIcon": "funcao",
+          "setTitle": "funcao",
+          "setPopup": "funcao",
+          "getPopup": "funcao",
+          "openPopup": "funcao",
+          "onClicked": "objeto",
+          "enable": "funcao",
+          "disable": "funcao"
+        }
+      },
+      "alarms": {
+        "definido": true,
+        "membros": {
+          "create": "funcao",
+          "get": "funcao",
+          "getAll": "funcao",
+          "clear": "funcao",
+          "clearAll": "funcao",
+          "onAlarm": "objeto"
+        }
+      },
+      "browsingData": {
+        "definido": false
+      },
+      "clipboard": {
+        "definido": true,
+        "membros": {}
+      },
+      "commands": {
+        "definido": false
+      },
+      "contextMenus": {
+        "definido": false
+      },
+      "cookies": {
+        "definido": false
+      },
+      "declarativeNetRequest": {
+        "definido": true,
+        "membros": {
+          "updateDynamicRules": "funcao",
+          "getDynamicRules": "funcao",
+          "updateEnabledRulesets": "funcao",
+          "getEnabledRulesets": "funcao",
+          "updateSessionRules": "funcao"
+        }
+      },
+      "dom": {
+        "definido": true,
+        "membros": {
+          "openOrClosedShadowRoot": "funcao"
+        }
+      },
+      "extension": {
+        "definido": true,
+        "membros": {
+          "getURL": "indefinido",
+          "getBackgroundPage": "indefinido",
+          "isAllowedFileSchemeAccess": "indefinido",
+          "isAllowedIncognitoAccess": "indefinido"
+        }
+      },
+      "fontSettings": {
+        "definido": false
+      },
+      "history": {
+        "definido": false
+      },
+      "i18n": {
+        "definido": true,
+        "membros": {
+          "getMessage": "funcao",
+          "getUILanguage": "funcao",
+          "detectLanguage": "funcao"
+        }
+      },
+      "identity": {
+        "definido": false
+      },
+      "idle": {
+        "definido": true,
+        "membros": {
+          "queryState": "funcao",
+          "setDetectionInterval": "funcao",
+          "onStateChanged": "objeto"
+        }
+      },
+      "management": {
+        "definido": true,
+        "membros": {
+          "getAll": "indefinido",
+          "getSelf": "funcao",
+          "get": "indefinido",
+          "onInstalled": "indefinido"
+        }
+      },
+      "notifications": {
+        "definido": false
+      },
+      "offscreen": {
+        "definido": true,
+        "membros": {
+          "createDocument": "funcao",
+          "closeDocument": "funcao",
+          "hasDocument": "funcao"
+        }
+      },
+      "permissions": {
+        "definido": false
+      },
+      "privacy": {
+        "definido": false
+      },
+      "runtime": {
+        "definido": true,
+        "membros": {
+          "id": "objeto",
+          "getURL": "funcao",
+          "getManifest": "funcao",
+          "sendMessage": "funcao",
+          "connect": "funcao",
+          "onMessage": "objeto",
+          "onConnect": "objeto",
+          "onInstalled": "objeto",
+          "onStartup": "objeto",
+          "getContexts": "funcao",
+          "getPlatformInfo": "funcao",
+          "reload": "funcao",
+          "sendNativeMessage": "indefinido",
+          "connectNative": "indefinido",
+          "lastError": "indefinido",
+          "onSuspend": "objeto",
+          "setUninstallURL": "funcao",
+          "openOptionsPage": "funcao"
+        }
+      },
+      "scripting": {
+        "definido": true,
+        "membros": {
+          "executeScript": "funcao",
+          "insertCSS": "funcao",
+          "removeCSS": "funcao",
+          "registerContentScripts": "funcao",
+          "getRegisteredContentScripts": "funcao",
+          "unregisterContentScripts": "funcao",
+          "updateContentScripts": "funcao"
+        }
+      },
+      "sessions": {
+        "definido": false
+      },
+      "sidePanel": {
+        "definido": false
+      },
+      "storage": {
+        "definido": true,
+        "membros": {
+          "local": "objeto",
+          "sync": "objeto",
+          "session": "objeto",
+          "managed": "objeto",
+          "onChanged": "objeto"
+        }
+      },
+      "system": {
+        "definido": false
+      },
+      "tabs": {
+        "definido": true,
+        "membros": {
+          "query": "funcao",
+          "get": "funcao",
+          "getCurrent": "indefinido",
+          "create": "indefinido",
+          "update": "funcao",
+          "remove": "indefinido",
+          "reload": "funcao",
+          "sendMessage": "funcao",
+          "executeScript": "indefinido",
+          "captureVisibleTab": "indefinido",
+          "duplicate": "indefinido",
+          "group": "indefinido",
+          "ungroup": "indefinido",
+          "move": "indefinido",
+          "goBack": "indefinido",
+          "goForward": "indefinido",
+          "setZoom": "funcao",
+          "getZoom": "funcao",
+          "detectLanguage": "indefinido",
+          "onCreated": "objeto",
+          "onUpdated": "objeto",
+          "onRemoved": "objeto",
+          "onActivated": "objeto",
+          "onReplaced": "objeto",
+          "onHighlighted": "objeto",
+          "onMoved": "objeto"
+        }
+      },
+      "tabGroups": {
+        "definido": false
+      },
+      "topSites": {
+        "definido": false
+      },
+      "userScripts": {
+        "definido": false
+      },
+      "webNavigation": {
+        "definido": false
+      },
+      "webRequest": {
+        "definido": true,
+        "membros": {
+          "onBeforeRequest": "objeto",
+          "onBeforeSendHeaders": "objeto",
+          "onSendHeaders": "objeto",
+          "onHeadersReceived": "objeto",
+          "onAuthRequired": "objeto",
+          "onCompleted": "objeto",
+          "onErrorOccurred": "objeto",
+          "handlerBehaviorChanged": "funcao"
+        }
+      },
+      "windows": {
+        "definido": false
+      }
+    },
+    "webRequestBloqueante": "listener aceito sem erro",
+    "storage.local": {
+      "ok": true,
+      "valor": {
+        "k": "v"
+      },
+      "ms": 6
+    },
+    "storage.session": {
+      "ok": true,
+      "valor": {
+        "k": "v"
+      },
+      "ms": 0
+    },
+    "storage.sync": {
+      "ok": false,
+      "erro": "\"sync\" is not available in this instance of Chrome"
+    },
+    "alarms.create": {
+      "ok": true,
+      "valor": [
+        {
+          "name": "rapido-1_2s",
+          "persistAcrossSessions": true,
+          "scheduledTime": 1792040755581.126
+        },
+        {
+          "name": "lento-30s",
+          "persistAcrossSessions": true,
+          "scheduledTime": 1792040784381.187
+        }
+      ],
+      "ms": 1
+    },
+    "runtime.getManifest": {
+      "ok": true,
+      "valor": "Sonda de APIs",
+      "ms": 0
+    },
+    "runtime.getPlatformInfo": {
+      "ok": true,
+      "valor": {
+        "arch": "arm64",
+        "os": "mac"
+      },
+      "ms": 0
+    },
+    "runtime.getContexts": {
+      "ok": true,
+      "valor": [
+        {
+          "contextId": "5f4c8d26-82f1-49c8-98b4-2e2637c3ad02",
+          "contextType": "BACKGROUND",
+          "frameId": -1,
+          "incognito": false,
+          "tabId": -1,
+          "windowId": -1
+        }
+      ],
+      "ms": 1
+    },
+    "i18n.getUILanguage": {
+      "ok": true,
+      "valor": "pt-BR",
+      "ms": 0
+    },
+    "tabs.query({})": {
+      "ok": true,
+      "valor": [
+        {
+          "id": 2,
+          "url": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html",
+          "active": false,
+          "windowId": 0
+        },
+        {
+          "id": 1,
+          "url": "http://127.0.0.1:28765/",
+          "active": true,
+          "windowId": 0
+        }
+      ],
+      "ms": 0
+    },
+    "tabs.query(active)": {
+      "ok": true,
+      "valor": [
+        "http://127.0.0.1:28765/"
+      ],
+      "ms": 0
+    },
+    "windows.getAll": {
+      "ok": false,
+      "erro": "Cannot read properties of undefined (reading 'getAll')"
+    },
+    "windows.getCurrent": {
+      "ok": false,
+      "erro": "Cannot read properties of undefined (reading 'getCurrent')"
+    },
+    "tabs.sendMessage": {
+      "ok": true,
+      "valor": {
+        "contentRecebeu": {
+          "tipo": "sw-ola"
+        }
+      },
+      "ms": 1
+    },
+    "scripting.executeScript": {
+      "ok": true,
+      "valor": [
+        {
+          "documentId": "373000010437DCBBCE22DF8AD992B40F",
+          "frameId": 0,
+          "result": "Login de teste local"
+        }
+      ],
+      "ms": 1
+    },
+    "scripting.registerContentScripts": {
+      "ok": true,
+      "valor": [
+        {
+          "allFrames": false,
+          "id": "sonda-reg",
+          "js": [
+            "content.js"
+          ],
+          "matchOriginAsFallback": false,
+          "matches": [
+            "http://127.0.0.1/*"
+          ],
+          "persistAcrossSessions": true,
+          "runAt": "document_start",
+          "world": "ISOLATED"
+        }
+      ],
+      "ms": 1
+    },
+    "cookies.getAll": {
+      "ok": false,
+      "erro": "Cannot read properties of undefined (reading 'getAll')"
+    },
+    "contextMenus.create": {
+      "ok": false,
+      "erro": "Cannot read properties of undefined (reading 'create')"
+    },
+    "action.setBadgeText": {
+      "ok": true,
+      "valor": "",
+      "ms": 0
+    },
+    "action.setIcon": {
+      "ok": true,
+      "valor": "chamado",
+      "ms": 0
+    },
+    "commands.getAll": {
+      "ok": false,
+      "erro": "Cannot read properties of undefined (reading 'getAll')"
+    },
+    "notifications.create": {
+      "ok": false,
+      "erro": "Cannot read properties of undefined (reading 'create')"
+    },
+    "idle.queryState": {
+      "ok": true,
+      "valor": "active",
+      "ms": 0
+    },
+    "management.getSelf": {
+      "ok": true,
+      "valor": {
+        "name": "Sonda de APIs",
+        "id": "iehaoeheflelggancikipdhgkafjabnc"
+      },
+      "ms": 1
+    },
+    "permissions.getAll": {
+      "ok": false,
+      "erro": "Cannot read properties of undefined (reading 'getAll')"
+    },
+    "offscreen.createDocument": {
+      "ok": true,
+      "valor": true,
+      "ms": 13
+    },
+    "sidePanel.setOptions": {
+      "ok": false,
+      "erro": "Cannot read properties of undefined (reading 'setOptions')"
+    },
+    "declarativeNetRequest.updateDynamicRules": {
+      "ok": true,
+      "valor": [
+        {
+          "action": {
+            "type": "block"
+          },
+          "condition": {
+            "resourceTypes": [
+              "xmlhttprequest",
+              "main_frame"
+            ],
+            "urlFilter": "bloquear-dnr"
+          },
+          "id": 1,
+          "priority": 1
+        }
+      ],
+      "ms": 4
+    },
+    "tabs.create": {
+      "ok": false,
+      "erro": "chrome.tabs.create is not a function"
+    },
+    "fetch (host_permissions)": {
+      "ok": true,
+      "valor": 200,
+      "ms": 2
+    },
+    "alarmeDisparouApos2500ms": false,
+    "mensagensRecebidas": [
+      {
+        "m": {
+          "tipo": "content-ola",
+          "url": "http://127.0.0.1:28765/"
+        },
+        "tab": "http://127.0.0.1:28765/",
+        "url": "http://127.0.0.1:28765/"
+      },
+      {
+        "m": {
+          "tipo": "popup-ola"
+        },
+        "tab": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html",
+        "url": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html"
+      },
+      {
+        "m": {
+          "tipo": "popup-ola"
+        },
+        "tab": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html",
+        "url": "chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html"
+      }
+    ],
+    "webRequestEventos": [],
+    "webNavigationEventos": []
+  },
+  "sondaAlarmes": [
+    {
+      "t": 5055,
+      "texto": "SONDA_ALARM criados em 1792040754381"
+    }
+  ],
+  "errosConsoleTotal": 2,
+  "duracaoMs": 49956
+}

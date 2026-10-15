@@ -1,0 +1,8 @@
+[
+  "Versão: o Zen se atualizou sozinho durante a bancada (1.21.16b, Gecko 154, para 1.23.2b, Gecko 157, às 02:25). Todas as rodadas gravadas aqui são da 1.23.2b; a atualização automática foi desligada no perfil temporário (app.update.auto=false). A 1.21.16b não pôde ser restaurada.",
+  "Antes da atualização, 2 rodadas na 1.21.16b (sem JSON, o script abortou quando o updater trocou o app): carregado em 12,4 s e 16,9 s, RSS 675 e 720 MB, footprint 2354 e 2341 MB com 38 processos. Ou seja, resultado muito próximo ao da 1.23.2b.",
+  "O updater relançou uma cópia do Zen sem perfil, fora da bancada; ela foi encerrada e a pasta vazia ~/Library/Application Support/zen, criada por ela, foi removida. O perfil real do usuário nunca foi tocado (o Zen não tinha perfil antes).",
+  "RAM com e sem o agente remoto ficou igual (footprint mediana 2510 MB com BiDi, 2504 MB sem): a tela de captcha do Google no lugar da busca não muda a RAM de forma relevante.",
+  "Zen bloqueia rastreadores por padrão e o BiDi funcionou de primeira (session.new + browsingContext.getTree + script.evaluate), então tempoCarregadoMs do Zen é medido igual ao do Chrome, não é o fallback de ociosidade.",
+  "Capturas: perfil temporário sem sessão restaurada (um perfil-base com sessão salva criava uma aba 'New Tab' extra). Nas capturas o semáforo da janela aparece cinza porque outro app tinha o foco no instante da captura."
+]

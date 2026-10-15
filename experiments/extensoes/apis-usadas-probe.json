@@ -1,0 +1,130 @@
+{
+ "action.getBadgeText": [
+  "sw.js"
+ ],
+ "action.setBadgeText": [
+  "sw.js"
+ ],
+ "action.setIcon": [
+  "sw.js"
+ ],
+ "alarms.create": [
+  "sw.js"
+ ],
+ "alarms.getAll": [
+  "sw.js"
+ ],
+ "alarms.onAlarm.addListener": [
+  "sw.js"
+ ],
+ "commands.getAll": [
+  "sw.js"
+ ],
+ "commands.onCommand.addListener": [
+  "sw.js"
+ ],
+ "contextMenus.create": [
+  "sw.js"
+ ],
+ "cookies.getAll": [
+  "sw.js"
+ ],
+ "declarativeNetRequest.getDynamicRules": [
+  "sw.js"
+ ],
+ "declarativeNetRequest.updateDynamicRules": [
+  "sw.js"
+ ],
+ "idle.queryState": [
+  "sw.js"
+ ],
+ "management.getSelf": [
+  "sw.js"
+ ],
+ "notifications.create": [
+  "sw.js"
+ ],
+ "offscreen.createDocument": [
+  "sw.js"
+ ],
+ "offscreen.hasDocument": [
+  "sw.js"
+ ],
+ "permissions.getAll": [
+  "sw.js"
+ ],
+ "runtime.getContexts": [
+  "sw.js"
+ ],
+ "runtime.getManifest": [
+  "sw.js"
+ ],
+ "runtime.getPlatformInfo": [
+  "sw.js"
+ ],
+ "runtime.id": [
+  "popup.js"
+ ],
+ "runtime.onInstalled.addListener": [
+  "sw.js"
+ ],
+ "runtime.onMessage.addListener": [
+  "sw.js"
+ ],
+ "runtime.sendMessage": [
+  "content.js",
+  "popup.js"
+ ],
+ "scripting.executeScript": [
+  "sw.js"
+ ],
+ "scripting.getRegisteredContentScripts": [
+  "sw.js"
+ ],
+ "scripting.registerContentScripts": [
+  "sw.js"
+ ],
+ "sidePanel.setOptions": [
+  "sw.js"
+ ],
+ "storage.local.get": [
+  "sw.js"
+ ],
+ "storage.local.set": [
+  "sw.js"
+ ],
+ "storage.session.get": [
+  "sw.js"
+ ],
+ "storage.session.set": [
+  "sw.js"
+ ],
+ "storage.sync.get": [
+  "sw.js"
+ ],
+ "storage.sync.set": [
+  "sw.js"
+ ],
+ "tabs.create": [
+  "sw.js"
+ ],
+ "tabs.query": [
+  "popup.js",
+  "sw.js"
+ ],
+ "tabs.sendMessage": [
+  "sw.js"
+ ],
+ "webNavigation.onCommitted.addListener": [
+  "sw.js"
+ ],
+ "webRequest.onBeforeRequest.addListener": [
+  "sw.js"
+ ],
+ "windows.getAll": [
+  "sw.js"
+ ],
+ "windows.getCurrent": [
+  "sw.js"
+ ]
+}

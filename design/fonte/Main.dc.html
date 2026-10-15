@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Janela principal</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#4352C4}a:hover{color:#2F3C9A}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; background: #E8E9F0; color: #17181C; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; overflow: hidden">
+  <div style="width: 260px; height: 900px; flex: none">
+    <dc-import name="Sidebar" space="pessoal" theme="claro" active="p1" domain="electronjs.org" path="/docs/latest/api/web-contents-view" blocked="12" hint-size="260px,900px"></dc-import>
+  </div>
+  <main style="flex: 1; min-width: 0; padding: 8px 8px 8px 0; display: flex">
+    <div aria-label="Conteúdo da página" style="flex: 1; background: #FFFFFF; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06); overflow: hidden; display: flex; flex-direction: column">
+      <div aria-hidden="true" style="height: 60px; flex: none; border-bottom: 1px solid #EEEEF2; display: flex; align-items: center; gap: 28px; padding: 0 56px">
+        <span style="width: 110px; height: 14px; border-radius: 4px; background: #DFE0E7"></span>
+        <span style="flex: 1"></span>
+        <span style="width: 56px; height: 10px; border-radius: 3px; background: #E8E9EF"></span>
+        <span style="width: 56px; height: 10px; border-radius: 3px; background: #E8E9EF"></span>
+        <span style="width: 56px; height: 10px; border-radius: 3px; background: #E8E9EF"></span>
+        <span style="width: 92px; height: 30px; border-radius: 8px; background: #DFE0E7"></span>
+      </div>
+      <div aria-hidden="true" style="flex: 1; display: flex; gap: 56px; padding: 64px 56px">
+        <div style="width: 200px; flex: none; display: flex; flex-direction: column; gap: 14px">
+          <span style="width: 70%; height: 11px; border-radius: 3px; background: #DFE0E7"></span>
+          <span style="width: 90%; height: 10px; border-radius: 3px; background: #EEEEF2"></span>
+          <span style="width: 80%; height: 10px; border-radius: 3px; background: #EEEEF2"></span>
+          <span style="width: 86%; height: 10px; border-radius: 3px; background: #EEEEF2"></span>
+          <span style="width: 60%; height: 10px; border-radius: 3px; background: #EEEEF2"></span>
+        </div>
+        <div style="flex: 1; max-width: 680px; display: flex; flex-direction: column; gap: 14px">
+          <span style="width: 64%; height: 32px; border-radius: 6px; background: #DFE0E7"></span>
+          <span style="height: 14px"></span>
+          <span style="width: 100%; height: 12px; border-radius: 3px; background: #EEEEF2"></span>
+          <span style="width: 96%; height: 12px; border-radius: 3px; background: #EEEEF2"></span>
+          <span style="width: 99%; height: 12px; border-radius: 3px; background: #EEEEF2"></span>
+          <span style="width: 58%; height: 12px; border-radius: 3px; background: #EEEEF2"></span>
+          <span style="height: 14px"></span>
+          <span style="width: 100%; height: 150px; border-radius: 10px; background: #F3F3F7"></span>
+          <span style="height: 14px"></span>
+          <span style="width: 100%; height: 12px; border-radius: 3px; background: #EEEEF2"></span>
+          <span style="width: 92%; height: 12px; border-radius: 3px; background: #EEEEF2"></span>
+          <span style="width: 77%; height: 12px; border-radius: 3px; background: #EEEEF2"></span>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

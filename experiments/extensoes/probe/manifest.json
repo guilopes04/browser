@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Sonda de APIs",
+  "version": "1.0",
+  "description": "Extensão MV3 mínima que testa, no service worker, quais APIs chrome.* existem e funcionam.",
+  "background": { "service_worker": "sw.js" },
+  "action": { "default_title": "Sonda", "default_popup": "popup.html" },
+  "permissions": [
+    "activeTab", "alarms", "clipboardRead", "clipboardWrite", "contextMenus", "idle", "offscreen",
+    "scripting", "sidePanel", "storage", "tabs", "unlimitedStorage", "webNavigation", "webRequest",
+    "notifications", "cookies", "declarativeNetRequest", "management", "commands"
+  ],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "commands": {
+    "_execute_action": { "suggested_key": { "default": "Ctrl+Shift+Y" }, "description": "Abrir popup" },
+    "teste": { "suggested_key": { "default": "Ctrl+Shift+L" }, "description": "Comando de teste" }
+  },
+  "content_scripts": [
+    { "matches": ["http://127.0.0.1/*"], "js": ["content.js"], "run_at": "document_start" }
+  ]
+}

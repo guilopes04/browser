@@ -1,0 +1,133 @@
+/* Sidebar compacta (ModoCompacto.dc.html) e a dica dos botões. */
+.compact {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 76px;
+  padding: 14px 10px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* linha dos semáforos nativos: arrasta a janela */
+.compact-lights {
+  width: 100%;
+  height: 28px;
+  flex: none;
+  -webkit-app-region: drag;
+}
+
+.compact-space {
+  width: 44px;
+  height: 44px;
+  margin-top: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.compact-space-tile {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.compact-hairline {
+  width: 40px;
+  height: 1px;
+  margin: 4px 0;
+  background: var(--hair);
+  flex: none;
+}
+
+.compact-item {
+  width: 44px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--sec);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.compact-item:hover {
+  background: var(--hover-bg);
+}
+
+.compact-item[data-active='true'] {
+  background: var(--active-bg);
+  box-shadow: var(--active-shadow);
+}
+
+.compact-toggle {
+  color: var(--icon);
+}
+
+/* abas: rolam quando passam da altura */
+.compact-scroll {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.compact-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* dica: invade o painel da página, por isso a shell sobe enquanto ela aparece */
+.tooltip {
+  position: absolute;
+  z-index: 2;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  background: #2a2b31;
+  color: #f1f1f4;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.root[data-theme='dark'] .tooltip {
+  background: color-mix(in srgb, var(--bg), white 12%);
+}
+
+.tooltip-label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.tooltip-keys {
+  font-size: 11.5px;
+  color: #c9c6bf;
+}

@@ -1,0 +1,47 @@
+# Empacotamento do Gilas Browser: assinatura Developer ID, hardened runtime e notarização.
+# A notarização usa o perfil da keychain (APPLE_KEYCHAIN_PROFILE=browser-notary, definido
+# no script "dist" do package.json). Sem essa variável o electron-builder só assina.
+# A pasta de saída é trocada pelos scripts "dist" (GILAS_DIST, padrão ~/Library/Caches/gilas-browser/dist):
+# dentro de ~/Documents (iCloud) o macOS põe FinderInfo no .app e o codesign recusa ("detritus not allowed").
+appId: com.gilas.browser
+productName: Gilas Browser
+copyright: Copyright © 2026 Guilherme Lopes
+artifactName: 'Gilas-Browser-${version}-${arch}.${ext}'
+asar: true
+npmRebuild: false
+# mantém só os idiomas usados (a interface é em português); o resto cai em inglês
+electronLanguages: [en, en_GB, pt_BR, pt_PT]
+
+directories:
+  output: dist
+  buildResources: build
+
+files:
+  - out/**
+  - package.json
+
+mac:
+  category: public.app-category.productivity
+  icon: build/icon.icns
+  target:
+    - target: dmg
+      arch: [arm64]
+    - target: zip
+      arch: [arm64]
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.inherit.plist
+  notarize: true
+  extendInfo:
+    NSHumanReadableCopyright: Copyright © 2026 Guilherme Lopes
+    NSCameraUsageDescription: Sites que você permitir podem usar a câmera.
+    NSMicrophoneUsageDescription: Sites que você permitir podem usar o microfone.
+    # registra o app como opção de navegador padrão (http e https)
+    CFBundleURLTypes:
+      - CFBundleURLName: com.gilas.browser.http
+        CFBundleURLSchemes: [http, https]
+        LSHandlerRank: Default
+
+dmg:
+  title: '${productName} ${version}'

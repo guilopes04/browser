@@ -1,0 +1,16 @@
+{
+  "nota": "As dez abas usadas em todas as medições e capturas (Zen, Chrome e o nosso). O Zen não estava instalado neste Mac, então não havia sessão dele para copiar; esta lista segue as abas do mockup (telas/Main.png) completada com páginas públicas pesadas e comuns.",
+  "janela": { "largura": 1440, "altura": 900, "x": 0, "y": 0 },
+  "abas": [
+    "https://www.electronjs.org/docs/latest/api/web-contents-view",
+    "https://github.com/electron/electron/pulls",
+    "https://www.youtube.com/watch?v=jfKfPfyJRdk",
+    "https://developer.mozilla.org/en-US/docs/Web/CSS/:has",
+    "https://en.wikipedia.org/wiki/Chromium_(web_browser)",
+    "https://news.ycombinator.com/",
+    "https://www.apple.com/br/macbook-air/",
+    "https://www.theverge.com/",
+    "https://zen-browser.app/",
+    "https://www.google.com/search?q=navegador+leve+para+mac"
+  ]
+}

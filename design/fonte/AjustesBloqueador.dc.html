@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Ajustes, Bloqueador</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#4352C4}a:hover{color:#2F3C9A}
+</style>
+</helmet>
+<div style="width: 760px; height: 640px; display: flex; flex-direction: column; background: #F4F4F7; color: #17181C; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; overflow: hidden">
+
+  <header style="flex: none; background: #ECECF0; border-bottom: 1px solid rgba(23,24,28,0.09)">
+    <div style="position: relative; height: 32px; display: flex; align-items: center; justify-content: center">
+      <div aria-hidden="true" style="position: absolute; left: 14px; top: 10px; display: flex; gap: 8px">
+        <span style="width: 12px; height: 12px; border-radius: 6px; background: #FF5F57"></span>
+        <span style="width: 12px; height: 12px; border-radius: 6px; background: #D3D3D8"></span>
+        <span style="width: 12px; height: 12px; border-radius: 6px; background: #D3D3D8"></span>
+      </div>
+      <h1 style="margin: 0; font-size: 13px; font-weight: 600">Bloqueador</h1>
+    </div>
+    <nav aria-label="Seções dos ajustes" style="display: flex; justify-content: center; gap: 2px; padding: 0 0 8px">
+      <sc-for list="{{panes}}" as="p" hint-placeholder-count="6">
+        <button type="button" aria-current="{{p.current}}" style="width: 84px; height: 54px; border: 0; border-radius: 8px; background: {{p.bg}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 0; font: inherit; color: {{p.color}}">
+          <span aria-hidden="true" style="width: 22px; height: 22px; border-radius: 6px; background: {{p.iconBg}}; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 11px; font-weight: 700">{{p.glyph}}</span>
+          <span style="font-size: 11.5px; font-weight: {{p.weight}}">{{p.name}}</span>
+        </button>
+      </sc-for>
+    </nav>
+  </header>
+
+  <div style="flex: 1; overflow: hidden; display: flex; justify-content: center; padding: 22px 0">
+    <div style="width: 600px; display: flex; flex-direction: column; gap: 20px">
+
+      <div style="background: #FFFFFF; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(23,24,28,0.14)">
+        <label style="position: relative; display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 14px">
+          <span style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 13px">Bloquear anúncios e rastreadores</span>
+            <span style="font-size: 12px; color: #565863">229 itens bloqueados hoje, somando todos os espaços</span>
+          </span>
+          <input type="checkbox" role="switch" checked style="position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0">
+          <span aria-hidden="true" style="flex: none; width: 34px; height: 20px; border-radius: 10px; background: #4352C4; display: flex; align-items: center; justify-content: flex-end; padding: 2px; box-sizing: border-box"><span style="width: 16px; height: 16px; border-radius: 8px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,0.25)"></span></span>
+        </label>
+      </div>
+
+      <section style="display: flex; flex-direction: column; gap: 8px">
+        <h2 style="margin: 0; padding-left: 4px; font-size: 13px; font-weight: 600; color: #3A3B42">Listas</h2>
+        <div style="background: #FFFFFF; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(23,24,28,0.14)">
+          <sc-for list="{{lists}}" as="l" hint-placeholder-count="4">
+            <label style="position: relative; display: flex; align-items: center; gap: 12px; min-height: 50px; padding: 0 14px; border-bottom: 1px solid rgba(23,24,28,0.07)">
+              <input type="checkbox" checked="{{l.on}}" style="position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0">
+              <span aria-hidden="true" style="flex: none; width: 16px; height: 16px; border-radius: 4px; background: {{l.boxBg}}; box-shadow: {{l.boxRing}}; display: flex; align-items: center; justify-content: center"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{l.checkOpacity}}"><path d="m3 8.5 3.5 3.5L13 4.5"></path></svg></span>
+              <span style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 13px">{{l.name}}</span>
+                <span style="font-size: 12px; color: #565863">{{l.desc}}</span>
+              </span>
+            </label>
+          </sc-for>
+          <div style="display: flex; align-items: center; gap: 12px; min-height: 42px; padding: 0 14px">
+            <span style="flex: 1; font-size: 12px; color: #565863">Listas atualizadas há 2 horas</span>
+            <button type="button" style="height: 26px; padding: 0 10px; border: 0; border-radius: 6px; background: rgba(23,24,28,0.07); font: inherit; font-size: 12.5px; color: #17181C">Atualizar agora</button>
+          </div>
+        </div>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 8px">
+        <h2 style="margin: 0; padding-left: 4px; font-size: 13px; font-weight: 600; color: #3A3B42">Sites liberados</h2>
+        <div style="background: #FFFFFF; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(23,24,28,0.14)">
+          <div style="display: flex; align-items: center; gap: 12px; min-height: 40px; padding: 0 6px 0 14px; border-bottom: 1px solid rgba(23,24,28,0.07)">
+            <span style="flex: 1; font-size: 13px">localhost:3000</span>
+            <button type="button" aria-label="Remover localhost:3000" style="width: 28px; height: 28px; border: 0; border-radius: 6px; background: transparent; color: #565863; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 8h9"></path></svg></button>
+          </div>
+          <button type="button" style="display: flex; align-items: center; gap: 8px; width: 100%; height: 38px; padding: 0 14px; border: 0; background: transparent; font: inherit; font-size: 13px; color: #4352C4; text-align: left"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3v10M3 8h10"></path></svg>Adicionar site</button>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":640}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var current = 'bloqueador';
+    var list = [
+      { id: 'geral', name: 'Geral', glyph: 'G', tint: '#6E7079' },
+      { id: 'espacos', name: 'Espaços', glyph: 'E', tint: '#4352C4' },
+      { id: 'bloqueador', name: 'Bloqueador', glyph: 'B', tint: '#2F7D5B' },
+      { id: 'privacidade', name: 'Privacidade', glyph: 'P', tint: '#3D4452' },
+      { id: 'atalhos', name: 'Atalhos', glyph: '⌘', tint: '#6A4FB3' },
+      { id: 'extensoes', name: 'Extensões', glyph: 'X', tint: '#A35A06' }
+    ];
+    var mk = function (name, desc, on) {
+      return {
+        name: name, desc: desc, on: on,
+        boxBg: on ? '#4352C4' : '#FFFFFF',
+        boxRing: on ? 'none' : 'inset 0 0 0 1px rgba(23,24,28,0.3)',
+        checkOpacity: on ? 1 : 0
+      };
+    };
+    return {
+      panes: list.map(function (p) {
+        var on = p.id === current;
+        return {
+          name: p.name, glyph: p.glyph, iconBg: p.tint,
+          bg: on ? 'rgba(23,24,28,0.08)' : 'transparent',
+          color: on ? '#17181C' : '#3A3B42',
+          weight: on ? 600 : 400,
+          current: on ? 'page' : 'false'
+        };
+      }),
+      lists: [
+        mk('Anúncios', 'EasyList', true),
+        mk('Rastreadores', 'EasyPrivacy', true),
+        mk('Malware e golpes', 'Avisa antes de abrir sites perigosos conhecidos', true),
+        mk('Avisos de cookies', 'Esconde banners de consentimento; pode quebrar alguns sites', false)
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

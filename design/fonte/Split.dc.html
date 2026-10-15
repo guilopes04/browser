@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Split view</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#4352C4}a:hover{color:#2F3C9A}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; background: #E8E9F0; color: #17181C; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; overflow: hidden">
+  <div style="width: 260px; height: 900px; flex: none">
+    <dc-import name="Sidebar" space="pessoal" theme="claro" active="p1" focus="p2" hint-size="260px,900px"></dc-import>
+  </div>
+  <main style="flex: 1; min-width: 0; padding: 8px 8px 8px 0; display: flex; align-items: stretch">
+
+    <section aria-label="Painel esquerdo: WebContentsView | Electron" style="flex: 1; min-width: 0; display: flex; flex-direction: column; background: #FFFFFF; border-radius: 10px; box-shadow: 0 0 0 2px rgba(67,82,196,0.55), 0 1px 3px rgba(0,0,0,0.06); overflow: hidden">
+      <div style="height: 38px; flex: none; display: flex; align-items: center; gap: 8px; padding: 0 6px 0 12px; border-bottom: 1px solid #EEEEF2">
+        <span aria-hidden="true" style="width: 16px; height: 16px; border-radius: 4px; background: #4352C4; color: #FFFFFF; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center">E</span>
+        <span style="flex: 1; font-size: 12.5px; font-weight: 600">electronjs.org</span>
+        <button type="button" aria-label="Abrir este painel como aba" style="width: 28px; height: 28px; border: 0; border-radius: 6px; background: transparent; color: #565863; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5h4v4M13.5 2.5 8.5 7.5M6.5 13.5h-4v-4M2.5 13.5l5-5"></path></svg></button>
+        <button type="button" aria-label="Fechar painel" style="width: 28px; height: 28px; border: 0; border-radius: 6px; background: transparent; color: #565863; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"></path></svg></button>
+      </div>
+      <div aria-hidden="true" style="flex: 1; display: flex; flex-direction: column; gap: 14px; padding: 48px 40px">
+        <span style="width: 72%; height: 28px; border-radius: 6px; background: #DFE0E7"></span>
+        <span style="height: 10px"></span>
+        <span style="width: 100%; height: 11px; border-radius: 3px; background: #EEEEF2"></span>
+        <span style="width: 94%; height: 11px; border-radius: 3px; background: #EEEEF2"></span>
+        <span style="width: 60%; height: 11px; border-radius: 3px; background: #EEEEF2"></span>
+        <span style="height: 10px"></span>
+        <span style="width: 100%; height: 170px; border-radius: 10px; background: #F3F3F7"></span>
+        <span style="height: 10px"></span>
+        <span style="width: 100%; height: 11px; border-radius: 3px; background: #EEEEF2"></span>
+        <span style="width: 88%; height: 11px; border-radius: 3px; background: #EEEEF2"></span>
+      </div>
+    </section>
+
+    <div style="width: 10px; flex: none; display: flex; align-items: center; justify-content: center">
+      <button type="button" aria-label="Redimensionar painéis" style="width: 6px; height: 44px; border: 0; border-radius: 3px; background: rgba(23,24,28,0.18); padding: 0"></button>
+    </div>
+
+    <section aria-label="Painel direito: Pull requests de gilas/navegador" style="flex: 1; min-width: 0; display: flex; flex-direction: column; background: #FFFFFF; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06); overflow: hidden">
+      <div style="height: 38px; flex: none; display: flex; align-items: center; gap: 8px; padding: 0 6px 0 12px; border-bottom: 1px solid #EEEEF2">
+        <span aria-hidden="true" style="width: 16px; height: 16px; border-radius: 4px; background: #3D4452; color: #FFFFFF; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center">G</span>
+        <span style="flex: 1; font-size: 12.5px; color: #565863">github.com</span>
+        <button type="button" aria-label="Abrir este painel como aba" style="width: 28px; height: 28px; border: 0; border-radius: 6px; background: transparent; color: #565863; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5h4v4M13.5 2.5 8.5 7.5M6.5 13.5h-4v-4M2.5 13.5l5-5"></path></svg></button>
+        <button type="button" aria-label="Fechar painel" style="width: 28px; height: 28px; border: 0; border-radius: 6px; background: transparent; color: #565863; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"></path></svg></button>
+      </div>
+      <div aria-hidden="true" style="flex: 1; display: flex; flex-direction: column; gap: 10px; padding: 32px 32px">
+        <span style="width: 54%; height: 22px; border-radius: 5px; background: #DFE0E7"></span>
+        <span style="height: 12px"></span>
+        <span style="height: 52px; border-radius: 8px; background: #F3F3F7"></span>
+        <span style="height: 52px; border-radius: 8px; background: #F3F3F7"></span>
+        <span style="height: 52px; border-radius: 8px; background: #F3F3F7"></span>
+        <span style="height: 52px; border-radius: 8px; background: #F3F3F7"></span>
+        <span style="height: 52px; border-radius: 8px; background: #F3F3F7"></span>
+      </div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,507 @@
+{
+  "extensao": "ublock",
+  "pasta": "/Users/guilhermelopes/Documents/Projects/navegador/experiments/extensoes/ublock-lite",
+  "electron": "44.7.2",
+  "chromium": "152.0.7977.149",
+  "node": "24.21.0",
+  "quando": "2026-10-15T05:26:38.825Z",
+  "carregou": true,
+  "erroCarregar": null,
+  "eventos": [
+    {
+      "t": 273,
+      "evento": "extension-loaded",
+      "id": "nbbjmikbgcmcfgohcpdlkhflllmeembb",
+      "nome": "uBlock Origin Lite",
+      "versao": "2026.1012.1545"
+    },
+    {
+      "t": 273,
+      "evento": "extension-ready",
+      "id": "nbbjmikbgcmcfgohcpdlkhflllmeembb",
+      "nome": "uBlock Origin Lite",
+      "versao": "2026.1012.1545"
+    }
+  ],
+  "serviceWorker": {
+    "registrado": false,
+    "iniciou": false,
+    "registros": [],
+    "status": [],
+    "alvosCdp": [
+      {
+        "type": "page",
+        "url": "chrome-extension://nbbjmikbgcmcfgohcpdlkhflllmeembb/popup.html",
+        "title": "uBlock Origin Lite"
+      },
+      {
+        "type": "page",
+        "url": "http://127.0.0.1:28765/",
+        "title": "Login de teste local"
+      }
+    ],
+    "emExecucao": {}
+  },
+  "logsConsole": [
+    {
+      "t": 44586,
+      "origem": "service-worker",
+      "nivel": "error",
+      "texto": "Uncaught TypeError: Cannot read properties of undefined (reading 'onRemoved')",
+      "url": "chrome-extension://nbbjmikbgcmcfgohcpdlkhflllmeembb/js/background.js",
+      "linha": 871
+    },
+    {
+      "t": 47479,
+      "origem": "wc:window",
+      "nivel": "warning",
+      "texto": "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged.",
+      "url": "node:electron/js2c/sandbox_bundle",
+      "linha": 2
+    }
+  ],
+  "errosConsole": [
+    {
+      "t": 44586,
+      "origem": "service-worker",
+      "nivel": "error",
+      "texto": "Uncaught TypeError: Cannot read properties of undefined (reading 'onRemoved')",
+      "url": "chrome-extension://nbbjmikbgcmcfgohcpdlkhflllmeembb/js/background.js",
+      "linha": 871
+    },
+    {
+      "t": 47479,
+      "origem": "wc:window",
+      "nivel": "warning",
+      "texto": "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged.",
+      "url": "node:electron/js2c/sandbox_bundle",
+      "linha": 2
+    }
+  ],
+  "popup": {
+    "url": "chrome-extension://nbbjmikbgcmcfgohcpdlkhflllmeembb/popup.html",
+    "urlFinal": "chrome-extension://nbbjmikbgcmcfgohcpdlkhflllmeembb/popup.html",
+    "titulo": "uBlock Origin Lite",
+    "innerTextLength": 0,
+    "innerTextAmostra": "",
+    "elementos": 67,
+    "readyState": "complete",
+    "inputs": [],
+    "botoes": [],
+    "renderizouAlemDeBranco": false,
+    "cliqueEmBotao": null,
+    "textoAposClique": "",
+    "campoFocado": null,
+    "aceitouDigitacao": null
+  },
+  "contentScript": {
+    "contextos": [
+      {
+        "id": 2,
+        "nome": "Electron Isolated Context",
+        "origem": "http://127.0.0.1:28765",
+        "tipo": "isolated",
+        "isDefault": false
+      },
+      {
+        "id": 1,
+        "nome": "",
+        "origem": "http://127.0.0.1:28765",
+        "tipo": "default",
+        "isDefault": true
+      }
+    ],
+    "contextosDaExtensao": [],
+    "avaliacoesNoMundoIsolado": [],
+    "injetou": false,
+    "pagina": {
+      "atributosHtml": [
+        "lang=pt-BR"
+      ],
+      "elementosAlemDoOriginal": [],
+      "elementosCustom": [],
+      "iframes": [],
+      "folhasDeEstilo": [
+        "inline:STYLE"
+      ],
+      "atributosDoInput": [
+        [
+          "id",
+          "name",
+          "type",
+          "placeholder",
+          "autocomplete"
+        ],
+        [
+          "id",
+          "name",
+          "type",
+          "placeholder",
+          "autocomplete"
+        ]
+      ],
+      "sombrasAbertas": 0,
+      "totalElementos": 11
+    },
+    "atributoSonda": null
+  },
+  "apis": {
+    "totalUsadasAnalisadas": 9,
+    "popup": {
+      "temChrome": true,
+      "chaves": [
+        "action",
+        "alarms",
+        "declarativeNetRequest",
+        "dom",
+        "extension",
+        "i18n",
+        "management",
+        "offscreen",
+        "runtime",
+        "scripting",
+        "storage",
+        "tabs"
+      ],
+      "lista": {
+        "action": {
+          "definido": true,
+          "membros": {
+            "setBadgeText": "function",
+            "setBadgeBackgroundColor": "function",
+            "setIcon": "function",
+            "setTitle": "function",
+            "setPopup": "function",
+            "getPopup": "function",
+            "openPopup": "function",
+            "onClicked": "object",
+            "enable": "function",
+            "disable": "function"
+          }
+        },
+        "alarms": {
+          "definido": true,
+          "membros": {
+            "create": "function",
+            "get": "function",
+            "getAll": "function",
+            "clear": "function",
+            "clearAll": "function",
+            "onAlarm": "object"
+          }
+        },
+        "browsingData": {
+          "definido": false,
+          "membros": {}
+        },
+        "clipboard": {
+          "definido": false,
+          "membros": {}
+        },
+        "commands": {
+          "definido": false,
+          "membros": {}
+        },
+        "contextMenus": {
+          "definido": false,
+          "membros": {}
+        },
+        "cookies": {
+          "definido": false,
+          "membros": {}
+        },
+        "declarativeNetRequest": {
+          "definido": true,
+          "membros": {
+            "updateDynamicRules": "function",
+            "getDynamicRules": "function",
+            "updateEnabledRulesets": "function",
+            "getEnabledRulesets": "function",
+            "updateSessionRules": "function"
+          }
+        },
+        "dom": {
+          "definido": true,
+          "membros": {
+            "openOrClosedShadowRoot": "function"
+          }
+        },
+        "extension": {
+          "definido": true,
+          "membros": {
+            "getURL": "indefinido",
+            "getBackgroundPage": "function",
+            "isAllowedFileSchemeAccess": "indefinido",
+            "isAllowedIncognitoAccess": "indefinido"
+          }
+        },
+        "fontSettings": {
+          "definido": false,
+          "membros": {}
+        },
+        "history": {
+          "definido": false,
+          "membros": {}
+        },
+        "i18n": {
+          "definido": true,
+          "membros": {
+            "getMessage": "function",
+            "getUILanguage": "function",
+            "detectLanguage": "function"
+          }
+        },
+        "identity": {
+          "definido": false,
+          "membros": {}
+        },
+        "idle": {
+          "definido": false,
+          "membros": {}
+        },
+        "management": {
+          "definido": true,
+          "membros": {
+            "getAll": "indefinido",
+            "getSelf": "function",
+            "get": "indefinido",
+            "onInstalled": "indefinido"
+          }
+        },
+        "notifications": {
+          "definido": false,
+          "membros": {}
+        },
+        "offscreen": {
+          "definido": true,
+          "membros": {
+            "createDocument": "function",
+            "closeDocument": "function",
+            "hasDocument": "function"
+          }
+        },
+        "permissions": {
+          "definido": false,
+          "membros": {}
+        },
+        "privacy": {
+          "definido": false,
+          "membros": {}
+        },
+        "runtime": {
+          "definido": true,
+          "membros": {
+            "id": "string",
+            "getURL": "function",
+            "getManifest": "function",
+            "sendMessage": "function",
+            "connect": "function",
+            "onMessage": "object",
+            "onConnect": "object",
+            "onInstalled": "object",
+            "onStartup": "object",
+            "getContexts": "function",
+            "getPlatformInfo": "function",
+            "reload": "function",
+            "sendNativeMessage": "indefinido",
+            "connectNative": "indefinido",
+            "lastError": "indefinido",
+            "onSuspend": "object",
+            "setUninstallURL": "function",
+            "openOptionsPage": "function"
+          }
+        },
+        "scripting": {
+          "definido": true,
+          "membros": {
+            "executeScript": "function",
+            "insertCSS": "function",
+            "removeCSS": "function",
+            "registerContentScripts": "function",
+            "getRegisteredContentScripts": "function",
+            "unregisterContentScripts": "function",
+            "updateContentScripts": "function"
+          }
+        },
+        "sessions": {
+          "definido": false,
+          "membros": {}
+        },
+        "sidePanel": {
+          "definido": false,
+          "membros": {}
+        },
+        "storage": {
+          "definido": true,
+          "membros": {
+            "local": "object",
+            "sync": "object",
+            "session": "object",
+            "managed": "object",
+            "onChanged": "object"
+          }
+        },
+        "system": {
+          "definido": false,
+          "membros": {}
+        },
+        "tabs": {
+          "definido": true,
+          "membros": {
+            "query": "function",
+            "get": "function",
+            "getCurrent": "indefinido",
+            "create": "indefinido",
+            "update": "function",
+            "remove": "indefinido",
+            "reload": "function",
+            "sendMessage": "function",
+            "executeScript": "indefinido",
+            "captureVisibleTab": "indefinido",
+            "duplicate": "indefinido",
+            "group": "indefinido",
+            "ungroup": "indefinido",
+            "move": "indefinido",
+            "goBack": "indefinido",
+            "goForward": "indefinido",
+            "setZoom": "function",
+            "getZoom": "function",
+            "detectLanguage": "indefinido",
+            "onCreated": "object",
+            "onUpdated": "object",
+            "onRemoved": "object",
+            "onActivated": "object",
+            "onReplaced": "object",
+            "onHighlighted": "object",
+            "onMoved": "object"
+          }
+        },
+        "tabGroups": {
+          "definido": false,
+          "membros": {}
+        },
+        "topSites": {
+          "definido": false,
+          "membros": {}
+        },
+        "userScripts": {
+          "definido": false,
+          "membros": {}
+        },
+        "webNavigation": {
+          "definido": false,
+          "membros": {}
+        },
+        "webRequest": {
+          "definido": false,
+          "membros": {}
+        },
+        "windows": {
+          "definido": false,
+          "membros": {}
+        }
+      },
+      "usadasIndefinidas": [
+        "com.cn",
+        "hl.cn"
+      ],
+      "usadasDefinidas": 7,
+      "extensaoId": "nbbjmikbgcmcfgohcpdlkhflllmeembb",
+      "contexto": "pagina"
+    }
+  },
+  "passos": {
+    "servidor-local": {
+      "ok": true,
+      "ms": 6
+    },
+    "loadExtension": {
+      "ok": true,
+      "ms": 35
+    },
+    "carregar-site": {
+      "ok": true,
+      "ms": 2924
+    },
+    "carregar-popup": {
+      "ok": true,
+      "ms": 181
+    },
+    "service-worker": {
+      "ok": true,
+      "ms": 52
+    },
+    "popup": {
+      "ok": true,
+      "ms": 30
+    },
+    "content-script": {
+      "ok": true,
+      "ms": 640
+    },
+    "captura-site": {
+      "ok": true,
+      "ms": 32
+    },
+    "captura-popup": {
+      "ok": true,
+      "ms": 11
+    },
+    "teste-rede": {
+      "ok": true,
+      "ms": 341
+    }
+  },
+  "capturas": [
+    {
+      "arquivo": "capturas/ublock-popup-inicial.png",
+      "tamanho": {
+        "width": 760,
+        "height": 1136
+      }
+    },
+    {
+      "arquivo": "capturas/ublock-site.png",
+      "tamanho": {
+        "width": 1520,
+        "height": 1136
+      }
+    },
+    {
+      "arquivo": "capturas/ublock-popup.png",
+      "tamanho": {
+        "width": 760,
+        "height": 1136
+      }
+    }
+  ],
+  "extensaoId": "nbbjmikbgcmcfgohcpdlkhflllmeembb",
+  "extensaoNome": "uBlock Origin Lite",
+  "extensaoVersao": "2026.1012.1545",
+  "manifestVersion": 3,
+  "extensaoUrl": "chrome-extension://nbbjmikbgcmcfgohcpdlkhflllmeembb/",
+  "permissoesDeclaradas": {
+    "permissions": [
+      "activeTab",
+      "alarms",
+      "declarativeNetRequest",
+      "offscreen",
+      "scripting",
+      "storage",
+      "unlimitedStorage",
+      "userScripts"
+    ],
+    "host_permissions": [
+      "<all_urls>"
+    ]
+  },
+  "testeRede": {
+    "controle": "status 200",
+    "declarativeNetRequest": "status 200",
+    "webRequestBloqueante": "status 200",
+    "anuncioDoubleclick": "resolveu (opaque)",
+    "controleExemploCom": "resolveu (opaque)"
+  },
+  "errosConsoleTotal": 2,
+  "duracaoMs": 56650
+}

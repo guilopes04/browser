@@ -1,0 +1,841 @@
+{
+  "extensao": "bitwarden",
+  "pasta": "/Users/guilhermelopes/Documents/Projects/navegador/experiments/extensoes/bitwarden",
+  "electron": "44.7.2",
+  "chromium": "152.0.7977.149",
+  "node": "24.21.0",
+  "quando": "2026-10-15T05:20:57.353Z",
+  "carregou": true,
+  "erroCarregar": null,
+  "eventos": [
+    {
+      "t": 400,
+      "evento": "extension-loaded",
+      "id": "ldlmmohhdkimgaaagmkmejnikmkopcgc",
+      "nome": "Bitwarden Password Manager",
+      "versao": "2026.9.3"
+    },
+    {
+      "t": 400,
+      "evento": "extension-ready",
+      "id": "ldlmmohhdkimgaaagmkmejnikmkopcgc",
+      "nome": "Bitwarden Password Manager",
+      "versao": "2026.9.3"
+    }
+  ],
+  "serviceWorker": {
+    "registrado": false,
+    "iniciou": false,
+    "registros": [],
+    "status": [],
+    "alvosCdp": [
+      {
+        "type": "page",
+        "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/index.html",
+        "title": "Bitwarden"
+      },
+      {
+        "type": "page",
+        "url": "http://127.0.0.1:28765/",
+        "title": "Login de teste local"
+      }
+    ],
+    "emExecucao": {}
+  },
+  "logsConsole": [
+    {
+      "t": 39443,
+      "origem": "wc:window",
+      "nivel": "warning",
+      "texto": "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged.",
+      "url": "node:electron/js2c/sandbox_bundle",
+      "linha": 2
+    },
+    {
+      "t": 39708,
+      "origem": "service-worker",
+      "nivel": "info",
+      "texto": "WebAssembly is supported in this environment",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/background.js",
+      "linha": 2
+    },
+    {
+      "t": 39770,
+      "origem": "service-worker",
+      "nivel": "error",
+      "texto": "Uncaught TypeError: Cannot read properties of undefined (reading 'onCommitted')",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/background.js",
+      "linha": 2
+    },
+    {
+      "t": 43252,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "WebAssembly is supported in this environment",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 575
+    },
+    {
+      "t": 43402,
+      "origem": "wc:window",
+      "nivel": "error",
+      "texto": "TypeError: chrome.tabs.getCurrent is not a function",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/polyfills.js",
+      "linha": 2
+    },
+    {
+      "t": 43453,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "WASM SDK loaded in 53ms",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43457,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "No state version found, assuming empty state.",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43460,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "No state version found, assuming empty state.",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43460,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "Waiting for migrations to finish, waiting for 4ms",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43466,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "No state version found, assuming empty state.",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43466,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "Waiting for migrations to finish, waiting for 8ms",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43476,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "No state version found, assuming empty state.",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43476,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "Waiting for migrations to finish, waiting for 16ms",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43494,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "No state version found, assuming empty state.",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43494,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "Waiting for migrations to finish, waiting for 32ms",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43529,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "No state version found, assuming empty state.",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43529,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "Waiting for migrations to finish, waiting for 64ms",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43601,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "No state version found, assuming empty state.",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43601,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "Waiting for migrations to finish, waiting for 128ms",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43732,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "No state version found, assuming empty state.",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43732,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "Waiting for migrations to finish, waiting for 256ms",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43990,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "No state version found, assuming empty state.",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 43990,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "Waiting for migrations to finish, waiting for 512ms",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 44506,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "No state version found, assuming empty state.",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 44506,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "Waiting for migrations to finish, waiting for 1024ms",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 45532,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "No state version found, assuming empty state.",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 45533,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "Waiting for migrations to finish, waiting for 2048ms",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 48213,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "No state version found, assuming empty state.",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 48214,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "Waiting for migrations to finish, waiting for 4096ms",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 52385,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "No state version found, assuming empty state.",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    },
+    {
+      "t": 52385,
+      "origem": "wc:window",
+      "nivel": "info",
+      "texto": "Waiting for migrations to finish, waiting for 8192ms",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/main.js",
+      "linha": 1
+    }
+  ],
+  "errosConsole": [
+    {
+      "t": 39443,
+      "origem": "wc:window",
+      "nivel": "warning",
+      "texto": "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged.",
+      "url": "node:electron/js2c/sandbox_bundle",
+      "linha": 2
+    },
+    {
+      "t": 39770,
+      "origem": "service-worker",
+      "nivel": "error",
+      "texto": "Uncaught TypeError: Cannot read properties of undefined (reading 'onCommitted')",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/background.js",
+      "linha": 2
+    },
+    {
+      "t": 43402,
+      "origem": "wc:window",
+      "nivel": "error",
+      "texto": "TypeError: chrome.tabs.getCurrent is not a function",
+      "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/polyfills.js",
+      "linha": 2
+    }
+  ],
+  "popup": {
+    "url": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/index.html",
+    "urlFinal": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/popup/index.html",
+    "titulo": "Bitwarden",
+    "innerTextLength": 0,
+    "innerTextAmostra": "",
+    "elementos": 16,
+    "readyState": "complete",
+    "inputs": [],
+    "botoes": [],
+    "renderizouAlemDeBranco": false,
+    "cliqueEmBotao": null,
+    "textoAposClique": "",
+    "campoFocado": null,
+    "aceitouDigitacao": null
+  },
+  "contentScript": {
+    "contextos": [
+      {
+        "id": 3,
+        "nome": "Bitwarden Password Manager",
+        "origem": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc",
+        "tipo": "isolated",
+        "isDefault": false
+      },
+      {
+        "id": 2,
+        "nome": "Electron Isolated Context",
+        "origem": "http://127.0.0.1:28765",
+        "tipo": "isolated",
+        "isDefault": false
+      },
+      {
+        "id": 1,
+        "nome": "",
+        "origem": "http://127.0.0.1:28765",
+        "tipo": "default",
+        "isDefault": true
+      }
+    ],
+    "contextosDaExtensao": [
+      {
+        "id": 3,
+        "nome": "Bitwarden Password Manager",
+        "origem": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc",
+        "tipo": "isolated",
+        "isDefault": false
+      }
+    ],
+    "avaliacoesNoMundoIsolado": [
+      {
+        "contexto": 3,
+        "valor": {
+          "chaves": [
+            "dom",
+            "i18n",
+            "runtime",
+            "scripting",
+            "storage"
+          ],
+          "runtimeId": "ldlmmohhdkimgaaagmkmejnikmkopcgc",
+          "atributosHtml": [
+            "lang"
+          ]
+        }
+      }
+    ],
+    "injetou": true,
+    "pagina": {
+      "atributosHtml": [
+        "lang=pt-BR"
+      ],
+      "elementosAlemDoOriginal": [],
+      "elementosCustom": [],
+      "iframes": [],
+      "folhasDeEstilo": [
+        "inline:STYLE"
+      ],
+      "atributosDoInput": [
+        [
+          "id",
+          "name",
+          "type",
+          "placeholder",
+          "autocomplete"
+        ],
+        [
+          "id",
+          "name",
+          "type",
+          "placeholder",
+          "autocomplete"
+        ]
+      ],
+      "sombrasAbertas": 0,
+      "totalElementos": 11
+    },
+    "atributoSonda": null
+  },
+  "apis": {
+    "totalUsadasAnalisadas": 105,
+    "popup": {
+      "temChrome": true,
+      "chaves": [
+        "action",
+        "alarms",
+        "clipboard",
+        "dom",
+        "extension",
+        "i18n",
+        "idle",
+        "management",
+        "offscreen",
+        "runtime",
+        "scripting",
+        "storage",
+        "tabs",
+        "webRequest"
+      ],
+      "lista": {
+        "action": {
+          "definido": true,
+          "membros": {
+            "setBadgeText": "function",
+            "setBadgeBackgroundColor": "function",
+            "setIcon": "function",
+            "setTitle": "function",
+            "setPopup": "function",
+            "getPopup": "function",
+            "openPopup": "function",
+            "onClicked": "object",
+            "enable": "function",
+            "disable": "function"
+          }
+        },
+        "alarms": {
+          "definido": true,
+          "membros": {
+            "create": "function",
+            "get": "function",
+            "getAll": "function",
+            "clear": "function",
+            "clearAll": "function",
+            "onAlarm": "object"
+          }
+        },
+        "browsingData": {
+          "definido": false,
+          "membros": {}
+        },
+        "clipboard": {
+          "definido": true,
+          "membros": {}
+        },
+        "commands": {
+          "definido": false,
+          "membros": {}
+        },
+        "contextMenus": {
+          "definido": false,
+          "membros": {}
+        },
+        "cookies": {
+          "definido": false,
+          "membros": {}
+        },
+        "declarativeNetRequest": {
+          "definido": false,
+          "membros": {}
+        },
+        "dom": {
+          "definido": true,
+          "membros": {
+            "openOrClosedShadowRoot": "function"
+          }
+        },
+        "extension": {
+          "definido": true,
+          "membros": {
+            "getURL": "indefinido",
+            "getBackgroundPage": "function",
+            "isAllowedFileSchemeAccess": "indefinido",
+            "isAllowedIncognitoAccess": "indefinido"
+          }
+        },
+        "fontSettings": {
+          "definido": false,
+          "membros": {}
+        },
+        "history": {
+          "definido": false,
+          "membros": {}
+        },
+        "i18n": {
+          "definido": true,
+          "membros": {
+            "getMessage": "function",
+            "getUILanguage": "function",
+            "detectLanguage": "function"
+          }
+        },
+        "identity": {
+          "definido": false,
+          "membros": {}
+        },
+        "idle": {
+          "definido": true,
+          "membros": {
+            "queryState": "function",
+            "setDetectionInterval": "function",
+            "onStateChanged": "object"
+          }
+        },
+        "management": {
+          "definido": true,
+          "membros": {
+            "getAll": "indefinido",
+            "getSelf": "function",
+            "get": "indefinido",
+            "onInstalled": "indefinido"
+          }
+        },
+        "notifications": {
+          "definido": false,
+          "membros": {}
+        },
+        "offscreen": {
+          "definido": true,
+          "membros": {
+            "createDocument": "function",
+            "closeDocument": "function",
+            "hasDocument": "function"
+          }
+        },
+        "permissions": {
+          "definido": false,
+          "membros": {}
+        },
+        "privacy": {
+          "definido": false,
+          "membros": {}
+        },
+        "runtime": {
+          "definido": true,
+          "membros": {
+            "id": "string",
+            "getURL": "function",
+            "getManifest": "function",
+            "sendMessage": "function",
+            "connect": "function",
+            "onMessage": "object",
+            "onConnect": "object",
+            "onInstalled": "object",
+            "onStartup": "object",
+            "getContexts": "function",
+            "getPlatformInfo": "function",
+            "reload": "function",
+            "sendNativeMessage": "indefinido",
+            "connectNative": "indefinido",
+            "lastError": "indefinido",
+            "onSuspend": "object",
+            "setUninstallURL": "function",
+            "openOptionsPage": "function"
+          }
+        },
+        "scripting": {
+          "definido": true,
+          "membros": {
+            "executeScript": "function",
+            "insertCSS": "function",
+            "removeCSS": "function",
+            "registerContentScripts": "function",
+            "getRegisteredContentScripts": "function",
+            "unregisterContentScripts": "function",
+            "updateContentScripts": "function"
+          }
+        },
+        "sessions": {
+          "definido": false,
+          "membros": {}
+        },
+        "sidePanel": {
+          "definido": false,
+          "membros": {}
+        },
+        "storage": {
+          "definido": true,
+          "membros": {
+            "local": "object",
+            "sync": "object",
+            "session": "object",
+            "managed": "object",
+            "onChanged": "object"
+          }
+        },
+        "system": {
+          "definido": false,
+          "membros": {}
+        },
+        "tabs": {
+          "definido": true,
+          "membros": {
+            "query": "function",
+            "get": "function",
+            "getCurrent": "indefinido",
+            "create": "indefinido",
+            "update": "function",
+            "remove": "indefinido",
+            "reload": "function",
+            "sendMessage": "function",
+            "executeScript": "indefinido",
+            "captureVisibleTab": "indefinido",
+            "duplicate": "indefinido",
+            "group": "indefinido",
+            "ungroup": "indefinido",
+            "move": "indefinido",
+            "goBack": "indefinido",
+            "goForward": "indefinido",
+            "setZoom": "function",
+            "getZoom": "function",
+            "detectLanguage": "indefinido",
+            "onCreated": "object",
+            "onUpdated": "object",
+            "onRemoved": "object",
+            "onActivated": "object",
+            "onReplaced": "object",
+            "onHighlighted": "object",
+            "onMoved": "object"
+          }
+        },
+        "tabGroups": {
+          "definido": false,
+          "membros": {}
+        },
+        "topSites": {
+          "definido": false,
+          "membros": {}
+        },
+        "userScripts": {
+          "definido": false,
+          "membros": {}
+        },
+        "webNavigation": {
+          "definido": false,
+          "membros": {}
+        },
+        "webRequest": {
+          "definido": true,
+          "membros": {
+            "onBeforeRequest": "object",
+            "onBeforeSendHeaders": "object",
+            "onSendHeaders": "object",
+            "onHeadersReceived": "object",
+            "onAuthRequired": "object",
+            "onCompleted": "object",
+            "onErrorOccurred": "object",
+            "handlerBehaviorChanged": "function"
+          }
+        },
+        "windows": {
+          "definido": false,
+          "membros": {}
+        }
+      },
+      "usadasIndefinidas": [
+        "commands.getAll",
+        "commands.onCommand.addListener",
+        "contextMenus.create",
+        "contextMenus.remove",
+        "contextMenus.removeAll",
+        "extension.getViews",
+        "notifications.clear",
+        "notifications.create",
+        "notifications.onButtonClicked",
+        "notifications.onClicked",
+        "permissions.contains",
+        "permissions.onAdded.addListener",
+        "permissions.request",
+        "privacy.services.autofillAddressEnabled",
+        "privacy.services.autofillCreditCardEnabled",
+        "privacy.services.passwordSavingEnabled",
+        "runtime.MessageSender",
+        "runtime.connectNative",
+        "sidePanel.open",
+        "sidePanel.setOptions",
+        "tabs.TAB_ID_NONE",
+        "tabs.Tab",
+        "tabs.captureVisibleTab",
+        "tabs.create",
+        "tabs.executeScript",
+        "tabs.getCurrent",
+        "tabs.remove",
+        "webNavigation.getAllFrames",
+        "webNavigation.getFrame",
+        "webNavigation.onCommitted",
+        "webNavigation.onCommitted.removeListener",
+        "webNavigation.onCompleted.addListener",
+        "webNavigation.onCompleted.removeListener",
+        "webNavigation.onErrorOccurred",
+        "windows.WINDOW_ID_CURRENT",
+        "windows.create",
+        "windows.get",
+        "windows.getAll",
+        "windows.getCurrent",
+        "windows.onCreated.addListener",
+        "windows.onFocusChanged.addListener",
+        "windows.onRemoved",
+        "windows.remove",
+        "windows.update"
+      ],
+      "usadasDefinidas": 61,
+      "extensaoId": "ldlmmohhdkimgaaagmkmejnikmkopcgc",
+      "contexto": "pagina"
+    }
+  },
+  "passos": {
+    "servidor-local": {
+      "ok": true,
+      "ms": 7
+    },
+    "loadExtension": {
+      "ok": true,
+      "ms": 45
+    },
+    "carregar-site": {
+      "ok": true,
+      "ms": 760
+    },
+    "carregar-popup": {
+      "ok": true,
+      "ms": 4096
+    },
+    "service-worker": {
+      "ok": true,
+      "ms": 106
+    },
+    "popup": {
+      "ok": true,
+      "ms": 124
+    },
+    "content-script": {
+      "ok": true,
+      "ms": 671
+    },
+    "captura-site": {
+      "ok": true,
+      "ms": 28
+    },
+    "captura-popup": {
+      "ok": true,
+      "ms": 12
+    },
+    "teste-rede": {
+      "ok": true,
+      "ms": 70
+    }
+  },
+  "capturas": [
+    {
+      "arquivo": "capturas/bitwarden-popup-inicial.png",
+      "tamanho": {
+        "width": 760,
+        "height": 1136
+      }
+    },
+    {
+      "arquivo": "capturas/bitwarden-site.png",
+      "tamanho": {
+        "width": 1520,
+        "height": 1136
+      }
+    },
+    {
+      "arquivo": "capturas/bitwarden-popup.png",
+      "tamanho": {
+        "width": 760,
+        "height": 1136
+      }
+    }
+  ],
+  "extensaoId": "ldlmmohhdkimgaaagmkmejnikmkopcgc",
+  "extensaoNome": "Bitwarden Password Manager",
+  "extensaoVersao": "2026.9.3",
+  "manifestVersion": 3,
+  "extensaoUrl": "chrome-extension://ldlmmohhdkimgaaagmkmejnikmkopcgc/",
+  "permissoesDeclaradas": {
+    "permissions": [
+      "activeTab",
+      "alarms",
+      "clipboardRead",
+      "clipboardWrite",
+      "contextMenus",
+      "idle",
+      "offscreen",
+      "scripting",
+      "sidePanel",
+      "storage",
+      "tabs",
+      "unlimitedStorage",
+      "webNavigation",
+      "webRequest",
+      "webRequestAuthProvider",
+      "notifications"
+    ],
+    "host_permissions": [
+      "https://*/*",
+      "http://*/*"
+    ],
+    "optional": [
+      "nativeMessaging",
+      "privacy"
+    ]
+  },
+  "testeRede": {
+    "controle": "status 200",
+    "declarativeNetRequest": "status 200",
+    "webRequestBloqueante": "status 200"
+  },
+  "errosConsoleTotal": 3,
+  "duracaoMs": 52454
+}

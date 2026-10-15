@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Sidebar</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<nav aria-label="Abas e navegação" style="width: 260px; height: 900px; box-sizing: border-box; padding: 14px 10px 12px; display: flex; flex-direction: column; gap: 10px; background: {{t.bg}}; color: {{t.text}}; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif">
+
+  <div style="display: flex; align-items: center; height: 28px; padding: 0 6px">
+    <div aria-hidden="true" style="display: flex; gap: 8px">
+      <span style="width: 12px; height: 12px; border-radius: 6px; background: #FF5F57"></span>
+      <span style="width: 12px; height: 12px; border-radius: 6px; background: #FEBC2E"></span>
+      <span style="width: 12px; height: 12px; border-radius: 6px; background: #28C840"></span>
+    </div>
+    <div style="flex: 1"></div>
+    <div style="display: flex; gap: 0">
+      <button type="button" aria-label="Ocultar sidebar (⌘S)" style="width: 28px; height: 28px; border: 0; border-radius: 7px; background: transparent; color: {{t.icon}}; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="2" y="3" width="12" height="10" rx="2"></rect><path d="M6 3v10"></path></svg></button>
+      <button type="button" aria-label="Voltar (⌘[)" style="width: 28px; height: 28px; border: 0; border-radius: 7px; background: transparent; color: {{t.icon}}; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3 5 8l5 5"></path></svg></button>
+      <button type="button" aria-label="Avançar (⌘])" style="width: 28px; height: 28px; border: 0; border-radius: 7px; background: transparent; color: {{t.iconOff}}; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"></path></svg></button>
+      <button type="button" aria-label="Recarregar (⌘R)" style="width: 28px; height: 28px; border: 0; border-radius: 7px; background: transparent; color: {{t.icon}}; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8a5 5 0 1 1-1.5-3.55"></path><path d="M13 2.5V5h-2.5"></path></svg></button>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 4px; padding: 0 2px">
+    <sc-if value="{{isAnon}}" hint-placeholder-val="{{ false }}">
+      <div style="flex: 1; display: flex; align-items: center; gap: 8px; height: 30px; padding: 0 8px">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8s2.2-4 6-4 6 4 6 4-2.2 4-6 4-6-4-6-4Z"></path><circle cx="8" cy="8" r="1.75"></circle><path d="m3 13 10-10"></path></svg>
+        <span style="font-size: 13px; font-weight: 600">Janela anônima</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{notAnon}}" hint-placeholder-val="{{ true }}">
+      <button type="button" aria-label="Espaço atual: {{spaceName}}. Trocar de espaço" style="display: flex; align-items: center; gap: 8px; height: 30px; padding: 0 8px; border: 0; border-radius: 8px; background: transparent; font: inherit; color: {{t.text}}">
+        <span aria-hidden="true" style="width: 10px; height: 10px; border-radius: 5px; background: {{t.accent}}"></span>
+        <span style="font-size: 13px; font-weight: 600">{{spaceName}}</span>
+        <svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="{{t.sec}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 6 4 4 4-4"></path></svg>
+      </button>
+      <div style="flex: 1"></div>
+      <sc-for list="{{otherSpaces}}" as="s" hint-placeholder-count="1">
+        <button type="button" aria-label="{{s.label}}" style="width: 28px; height: 28px; border: 0; border-radius: 7px; background: transparent; display: flex; align-items: center; justify-content: center; padding: 0"><span aria-hidden="true" style="width: 9px; height: 9px; border-radius: 5px; background: {{s.color}}; opacity: 0.75"></span></button>
+      </sc-for>
+    </sc-if>
+  </div>
+
+  <div style="display: flex; align-items: center; height: 36px; padding: 0 4px; border-radius: 10px; background: {{t.fill}}">
+    <sc-if value="{{hasBlocked}}" hint-placeholder-val="{{ true }}">
+      <button type="button" aria-label="Site e bloqueios: {{blocked}} itens bloqueados nesta página" style="flex: none; display: flex; align-items: center; gap: 4px; height: 28px; padding: 0 6px; border: 0; border-radius: 7px; background: {{shieldBg}}; color: {{t.accent}}; font: inherit; font-size: 11.5px; font-weight: 600">
+        <svg aria-hidden="true" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M8 1.75 2.75 3.75v4c0 3 2.25 5.25 5.25 6.5 3-1.25 5.25-3.5 5.25-6.5v-4Z"></path></svg>{{blocked}}
+      </button>
+    </sc-if>
+    <button type="button" aria-label="Endereço (⌘L)" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 1px; height: 28px; padding: 0 6px; border: 0; background: transparent; font: inherit; color: {{t.text}}; text-align: left">
+      <span style="flex: none; font-size: 13px; font-weight: 600">{{domain}}</span>
+      <span style="min-width: 0; font-size: 13px; color: {{t.sec}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{path}}</span>
+    </button>
+  </div>
+
+  <sc-if value="{{hasEssentials}}" hint-placeholder-val="{{ true }}">
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px">
+      <sc-for list="{{essentials}}" as="e" hint-placeholder-count="4">
+        <button type="button" aria-label="{{e.name}}" style="height: 44px; border: 0; border-radius: 10px; background: {{t.fill}}; display: flex; align-items: center; justify-content: center; padding: 0"><span aria-hidden="true" style="width: 22px; height: 22px; border-radius: 6px; background: {{e.tile}}; color: #FFFFFF; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{e.letter}}</span></button>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <div style="height: 1px; background: {{t.hair}}; margin: 2px 6px"></div>
+
+  <div style="display: flex; flex-direction: column; gap: 2px">
+    <sc-for list="{{tabs}}" as="tab" hint-placeholder-count="6">
+      <div style="display: flex; align-items: center; gap: 2px; height: 34px; padding: 0 4px 0 8px; box-sizing: border-box; border-radius: 8px; background: {{tab.bg}}; box-shadow: {{tab.shadow}}">
+        <button type="button" style="flex: 1; min-width: 0; height: 34px; display: flex; align-items: center; gap: 10px; border: 0; background: transparent; padding: 0; font: inherit; color: {{tab.color}}; text-align: left">
+          <span aria-hidden="true" style="flex: none; width: 18px; height: 18px; border-radius: 5px; background: {{tab.tile}}; opacity: {{tab.tileOpacity}}; color: #FFFFFF; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{tab.letter}}</span>
+          <span style="font-size: 13px; font-weight: {{tab.weight}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{tab.title}}</span>
+        </button>
+        <sc-if value="{{tab.audio}}" hint-placeholder-val="{{ false }}">
+          <button type="button" aria-label="Silenciar aba" style="flex: none; width: 26px; height: 26px; border: 0; border-radius: 6px; background: transparent; color: {{t.accent}}; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6h2.5L8.5 3v10L5 10H2.5Z"></path><path d="M11 5.5a3.5 3.5 0 0 1 0 5"></path><path d="M12.75 3.75a6 6 0 0 1 0 8.5"></path></svg></button>
+        </sc-if>
+        <sc-if value="{{tab.dormant}}" hint-placeholder-val="{{ false }}">
+          <span title="Suspensa para liberar memória" style="flex: none; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; color: {{t.sec}}"><svg role="img" aria-label="Suspensa" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M13 9.5A5.5 5.5 0 1 1 6.5 3a4.5 4.5 0 0 0 6.5 6.5Z"></path></svg></span>
+        </sc-if>
+        <sc-if value="{{tab.showClose}}" hint-placeholder-val="{{ false }}">
+          <button type="button" aria-label="Fechar aba (⌘W)" style="flex: none; width: 26px; height: 26px; border: 0; border-radius: 6px; background: transparent; color: {{t.sec}}; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"></path></svg></button>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+
+  <button type="button" style="display: flex; align-items: center; gap: 10px; width: 100%; height: 34px; padding: 0 8px; box-sizing: border-box; border: 0; border-radius: 8px; background: transparent; font: inherit; color: {{t.sec}}; text-align: left">
+    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M8 3v10M3 8h10"></path></svg>
+    <span style="flex: 1; font-size: 13px">Nova aba</span>
+    <span style="font-size: 11.5px">⌘T</span>
+  </button>
+
+  <div style="flex: 1"></div>
+
+  <div style="height: 1px; background: {{t.hair}}; margin: 0 6px"></div>
+
+  <div style="display: flex; align-items: center; gap: 2px; padding: 0 2px">
+    <button type="button" aria-label="Downloads" style="height: 30px; border: 0; border-radius: 7px; background: {{dlBg}}; color: {{t.icon}}; display: flex; align-items: center; gap: 6px; padding: 0 8px; font: inherit; font-size: 11.5px">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5V10M4.75 7 8 10.25 11.25 7"></path><path d="M3 13h10"></path></svg>
+      <sc-if value="{{downloading}}" hint-placeholder-val="{{ false }}"><span style="font-weight: 600; color: {{t.accent}}">68%</span></sc-if>
+    </button>
+    <button type="button" aria-label="Extensões" style="height: 30px; width: 34px; border: 0; border-radius: 7px; background: {{extBg}}; color: {{t.icon}}; display: flex; align-items: center; justify-content: center; padding: 0">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M3 4.5h3v-.75a1.5 1.5 0 0 1 3 0v.75h3v3h-.75a1.5 1.5 0 0 0 0 3H12v3H3v-3h.75a1.5 1.5 0 0 0 0-3H3Z"></path></svg>
+    </button>
+    <div style="flex: 1"></div>
+    <span title="{{blockedToday}} anúncios e rastreadores bloqueados hoje" style="display: flex; align-items: center; gap: 5px; padding-right: 6px; font-size: 11.5px; color: {{t.sec}}; white-space: nowrap"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M8 1.75 2.75 3.75v4c0 3 2.25 5.25 5.25 6.5 3-1.25 5.25-3.5 5.25-6.5v-4Z"></path></svg>{{blockedToday}} bloqueados</span>
+  </div>
+</nav>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"space":{"editor":"enum","options":["pessoal","trabalho","anonima"],"default":"pessoal"},"theme":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"active":{"editor":"text","default":"p1"},"domain":{"editor":"text","default":"electronjs.org"},"path":{"editor":"text","default":"/docs/latest/api/web-contents-view"},"blocked":{"editor":"text","default":"12"},"focus":{"editor":null},"panel":{"editor":null},"downloading":{"editor":"boolean","default":false},"$preview":{"width":260,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var p = this.props;
+    var space = p.space || 'pessoal';
+    var theme = space === 'anonima' ? 'escuro' : (p.theme || 'claro');
+    var dark = theme === 'escuro';
+
+    var accents = {
+      pessoal: dark ? '#8E9BF2' : '#4352C4',
+      trabalho: dark ? '#E0A04E' : '#A35A06',
+      anonima: '#B8B9C2'
+    };
+    var bgs = {
+      pessoal: dark ? '#1A1B22' : '#E8E9F0',
+      trabalho: dark ? '#1F1C17' : '#EFEAE1',
+      anonima: '#26262B'
+    };
+    var t = dark ? {
+      bg: bgs[space], text: '#F1F1F4', sec: '#A3A4AD', icon: '#C9CAD2', iconOff: '#6B6C75',
+      fill: 'rgba(255,255,255,0.07)', hair: 'rgba(255,255,255,0.09)',
+      activeBg: 'rgba(255,255,255,0.11)', activeShadow: '0 0 0 0.5px rgba(255,255,255,0.08)', hoverBg: 'rgba(255,255,255,0.06)',
+      accent: accents[space]
+    } : {
+      bg: bgs[space], text: '#17181C', sec: '#565863', icon: '#3A3B42', iconOff: '#9A9BA3',
+      fill: 'rgba(23,24,28,0.06)', hair: 'rgba(23,24,28,0.08)',
+      activeBg: '#FFFFFF', activeShadow: '0 1px 2px rgba(0,0,0,0.08), 0 0 0 0.5px rgba(0,0,0,0.06)', hoverBg: 'rgba(23,24,28,0.06)',
+      accent: accents[space]
+    };
+
+    var essentials = {
+      pessoal: [
+        { letter: 'M', tile: '#B03A63', name: 'Gmail' },
+        { letter: 'C', tile: '#4352C4', name: 'Calendário' },
+        { letter: 'G', tile: '#3D4452', name: 'GitHub' },
+        { letter: 'S', tile: '#2F7D5B', name: 'Spotify' }
+      ],
+      trabalho: [
+        { letter: 'L', tile: '#6A4FB3', name: 'Linear' },
+        { letter: 'G', tile: '#3D4452', name: 'GitHub' },
+        { letter: 'A', tile: '#A35A06', name: 'AWS Console' },
+        { letter: 'C', tile: '#4352C4', name: 'Calendário' }
+      ],
+      anonima: []
+    };
+    var sets = {
+      pessoal: [
+        { id: 'p1', letter: 'E', tile: '#4352C4', title: 'WebContentsView | Electron' },
+        { id: 'p2', letter: 'G', tile: '#3D4452', title: 'Pull requests de gilas/navegador' },
+        { id: 'p3', letter: 'Y', tile: '#B03A63', title: 'Lo-fi para programar', audio: true },
+        { id: 'p4', letter: 'M', tile: '#6A4FB3', title: 'CSS :has() na MDN' },
+        { id: 'p5', letter: 'A', tile: '#A35A06', title: 'Anotações do navegador', dormant: true },
+        { id: 'p6', letter: 'W', tile: '#3D4452', title: 'Chromium na Wikipédia', dormant: true }
+      ],
+      trabalho: [
+        { id: 't0', letter: 'V', tile: '#2F7D5B', title: 'Daily do time (chamada)' },
+        { id: 't1', letter: 'L', tile: '#6A4FB3', title: 'Minhas issues no Linear' },
+        { id: 't2', letter: 'A', tile: '#A35A06', title: 'CloudWatch, logs de produção' },
+        { id: 't3', letter: 'G', tile: '#3D4452', title: 'Revisão do PR 48' },
+        { id: 't4', letter: 'C', tile: '#2F7D5B', title: 'Chat do time', dormant: true },
+        { id: 't5', letter: 'D', tile: '#4352C4', title: 'Documentação da API interna', dormant: true }
+      ],
+      anonima: [
+        { id: 'a1', letter: 'P', tile: '#3D4452', title: 'Comparar preços de passagens' },
+        { id: 'a2', letter: 'B', tile: '#4352C4', title: 'Busca: presente de aniversário' }
+      ]
+    };
+
+    var active = p.active || sets[space][0].id;
+    var focus = p.focus || '';
+    var list = sets[space].slice();
+    if (active === 'nova') {
+      list.unshift({ id: 'nova', letter: '+', tile: '#6E7079', title: 'Nova aba' });
+    }
+    var tabs = list.map(function (x) {
+      var isActive = x.id === active;
+      var isFocus = x.id === focus;
+      return {
+        letter: x.letter, tile: x.tile, title: x.title,
+        bg: isActive ? t.activeBg : (isFocus ? t.hoverBg : 'transparent'),
+        shadow: isActive ? t.activeShadow : 'none',
+        color: x.dormant ? t.sec : t.text,
+        weight: isActive ? 600 : 400,
+        tileOpacity: x.dormant ? 0.45 : 1,
+        audio: !!x.audio,
+        dormant: !!x.dormant,
+        showClose: isActive
+      };
+    });
+
+    var names = { pessoal: 'Pessoal', trabalho: 'Trabalho', anonima: 'Janela anônima' };
+    var otherSpaces = ['pessoal', 'trabalho'].filter(function (s) { return s !== space; }).map(function (s, i) {
+      return { color: accents[s], label: 'Trocar para ' + names[s] + ' (⌃' + (s === 'pessoal' ? 1 : 2) + ')' };
+    });
+
+    var panel = p.panel || '';
+    var blocked = p.blocked === undefined ? '12' : p.blocked;
+    return {
+      t: t,
+      isAnon: space === 'anonima',
+      notAnon: space !== 'anonima',
+      spaceName: names[space],
+      otherSpaces: otherSpaces,
+      domain: p.domain === undefined ? 'electronjs.org' : p.domain,
+      path: p.path === undefined ? '/docs/latest/api/web-contents-view' : p.path,
+      blocked: blocked,
+      hasBlocked: blocked !== '' && blocked !== '0',
+      shieldBg: panel === 'site' ? t.hoverBg : 'transparent',
+      dlBg: panel === 'downloads' ? t.hoverBg : 'transparent',
+      extBg: panel === 'extensoes' ? t.hoverBg : 'transparent',
+      hasEssentials: essentials[space].length > 0,
+      essentials: essentials[space],
+      tabs: tabs,
+      downloading: p.downloading === true || p.downloading === 'true',
+      blockedToday: space === 'trabalho' ? '87' : (space === 'anonima' ? '31' : '142')
+    };
+  }
+}
+</script>
+</body>
+</html>

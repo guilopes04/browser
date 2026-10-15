@@ -1,0 +1,60 @@
+{
+  "v": 3,
+  "createdOnFiles": {"v": 1, "at": "2026-10-15T03:40:00Z"},
+  "title": "Navegador — mockup",
+  "launch": {"view": "canvas", "page": "navegacao"},
+  "pages": [
+    {"id": "navegacao", "name": "Navegação"},
+    {"id": "paineis", "name": "Painéis e estados"},
+    {"id": "ajustes", "name": "Ajustes"},
+    {"id": "inicio", "name": "Primeira abertura"},
+    {"id": "componentes", "name": "Componentes"}
+  ],
+  "boards": {
+    "Main.dc.html": {"x": 0, "y": 0, "w": 1440, "h": 900, "title": "Janela principal", "radius": 12, "page": "navegacao"},
+    "MenuAba.dc.html": {"x": 1520, "y": 0, "w": 1440, "h": 900, "title": "Menu da aba", "radius": 12, "page": "navegacao"},
+    "ModoCompacto.dc.html": {"x": 3040, "y": 0, "w": 1440, "h": 900, "title": "Modo compacto, escuro", "radius": 12, "page": "navegacao"},
+    "SidebarOculta.dc.html": {"x": 0, "y": 1020, "w": 1440, "h": 900, "title": "Sidebar oculta, revelada pela borda", "radius": 12, "page": "navegacao"},
+    "PaletaVazia.dc.html": {"x": 1520, "y": 1020, "w": 1440, "h": 900, "title": "⌘K ao abrir", "radius": 12, "page": "navegacao"},
+    "Paleta.dc.html": {"x": 3040, "y": 1020, "w": 1440, "h": 900, "title": "⌘K com resultados", "radius": 12, "page": "navegacao"},
+    "NovaAba.dc.html": {"x": 0, "y": 2040, "w": 1440, "h": 900, "title": "Nova aba", "radius": 12, "page": "navegacao"},
+    "Split.dc.html": {"x": 1520, "y": 2040, "w": 1440, "h": 900, "title": "Split view", "radius": 12, "page": "navegacao"},
+    "Anonima.dc.html": {"x": 3040, "y": 2040, "w": 1440, "h": 900, "title": "Janela anônima", "radius": 12, "page": "navegacao"},
+    "Leitura.dc.html": {"x": 0, "y": 3060, "w": 1440, "h": 900, "title": "Modo leitura", "radius": 12, "page": "navegacao"},
+
+    "PainelSite.dc.html": {"x": 0, "y": 0, "w": 1440, "h": 900, "title": "Painel do site", "radius": 12, "page": "paineis"},
+    "Permissao.dc.html": {"x": 1520, "y": 0, "w": 1440, "h": 900, "title": "Pedido de permissão", "radius": 12, "page": "paineis"},
+    "Busca.dc.html": {"x": 3040, "y": 0, "w": 1440, "h": 900, "title": "Buscar na página", "radius": 12, "page": "paineis"},
+    "Downloads.dc.html": {"x": 0, "y": 1020, "w": 1440, "h": 900, "title": "Downloads", "radius": 12, "page": "paineis"},
+    "Extensoes.dc.html": {"x": 1520, "y": 1020, "w": 1440, "h": 900, "title": "Extensões", "radius": 12, "page": "paineis"},
+    "Captura.dc.html": {"x": 3040, "y": 1020, "w": 1440, "h": 900, "title": "Captura da página", "radius": 12, "page": "paineis"},
+    "Erro.dc.html": {"x": 0, "y": 2040, "w": 1440, "h": 900, "title": "Sem conexão", "radius": 12, "page": "paineis"},
+
+    "AjustesGeral.dc.html": {"x": 0, "y": 0, "w": 760, "h": 640, "title": "Ajustes: Geral", "radius": 12, "page": "ajustes"},
+    "AjustesEspacos.dc.html": {"x": 840, "y": 0, "w": 760, "h": 640, "title": "Ajustes: Espaços", "radius": 12, "page": "ajustes"},
+    "AjustesBloqueador.dc.html": {"x": 1680, "y": 0, "w": 760, "h": 640, "title": "Ajustes: Bloqueador", "radius": 12, "page": "ajustes"},
+    "AjustesPrivacidade.dc.html": {"x": 0, "y": 760, "w": 760, "h": 640, "title": "Ajustes: Privacidade", "radius": 12, "page": "ajustes"},
+    "AjustesAtalhos.dc.html": {"x": 840, "y": 760, "w": 760, "h": 640, "title": "Ajustes: Atalhos", "radius": 12, "page": "ajustes"},
+    "AjustesExtensoes.dc.html": {"x": 1680, "y": 760, "w": 760, "h": 640, "title": "Ajustes: Extensões", "radius": 12, "page": "ajustes"},
+
+    "Onboarding1.dc.html": {"x": 0, "y": 0, "w": 720, "h": 600, "title": "Passo 1: criar espaços", "radius": 12, "page": "inicio"},
+    "Onboarding2.dc.html": {"x": 800, "y": 0, "w": 720, "h": 600, "title": "Passo 2: importar do Chrome", "radius": 12, "page": "inicio"},
+
+    "Sidebar.dc.html": {"x": 0, "y": 0, "w": 260, "h": 900, "title": "Sidebar (componente)", "page": "componentes"}
+  },
+  "order": [
+    "Main.dc.html", "MenuAba.dc.html", "ModoCompacto.dc.html", "SidebarOculta.dc.html", "PaletaVazia.dc.html", "Paleta.dc.html", "NovaAba.dc.html", "Split.dc.html", "Anonima.dc.html", "Leitura.dc.html",
+    "PainelSite.dc.html", "Permissao.dc.html", "Busca.dc.html", "Downloads.dc.html", "Extensoes.dc.html", "Captura.dc.html", "Erro.dc.html",
+    "AjustesGeral.dc.html", "AjustesEspacos.dc.html", "AjustesBloqueador.dc.html", "AjustesPrivacidade.dc.html", "AjustesAtalhos.dc.html", "AjustesExtensoes.dc.html",
+    "Onboarding1.dc.html", "Onboarding2.dc.html",
+    "Sidebar.dc.html"
+  ],
+  "notes": {
+    "tNav": {"x": 0, "y": -300, "text": "Navegação", "kind": "title1", "maxW": 4480, "page": "navegacao"},
+    "tPaineis": {"x": 0, "y": -300, "text": "Painéis e estados", "kind": "title1", "maxW": 4480, "page": "paineis"},
+    "tAjustes": {"x": 0, "y": -300, "text": "Ajustes (⌘,)", "kind": "title1", "maxW": 2440, "page": "ajustes"},
+    "tInicio": {"x": 0, "y": -300, "text": "Primeira abertura", "kind": "title1", "maxW": 1520, "page": "inicio"},
+    "tComp": {"x": 0, "y": -300, "text": "Componentes", "kind": "title1", "maxW": 1200, "page": "componentes"}
+  },
+  "designSystems": []
+}

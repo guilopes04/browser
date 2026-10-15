@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Login de teste local</title>
+  <style>
+    body { font-family: -apple-system, sans-serif; background: #f4f4f6; display: grid; place-items: center; height: 100vh; margin: 0 }
+    form { background: #fff; padding: 28px; border-radius: 12px; width: 300px; box-shadow: 0 4px 24px #0002; display: grid; gap: 12px }
+    input, button { font-size: 15px; padding: 9px 10px; border: 1px solid #bbb; border-radius: 8px }
+    button { background: #2563eb; color: #fff; border: 0 }
+  </style>
+</head>
+<body>
+  <form id="login" action="/entrar" method="post" autocomplete="on">
+    <h1 style="margin:0;font-size:20px">Entrar (site de teste)</h1>
+    <input id="username" name="username" type="text" placeholder="Usuário" autocomplete="username">
+    <input id="password" name="password" type="password" placeholder="Senha" autocomplete="current-password">
+    <button type="submit">Entrar</button>
+  </form>
+</body>
+</html>

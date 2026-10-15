@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Modo compacto escuro</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#E0A04E}a:hover{color:#F0BE7A}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; background: #1F1C17; color: #F1F1F4; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; overflow: hidden">
+
+  <nav aria-label="Abas (compacto)" style="width: 76px; flex: none; box-sizing: border-box; padding: 14px 10px 12px; display: flex; flex-direction: column; align-items: center; gap: 6px">
+    <div aria-hidden="true" style="display: flex; gap: 8px; height: 28px; align-items: center">
+      <span style="width: 12px; height: 12px; border-radius: 6px; background: #FF5F57"></span>
+      <span style="width: 12px; height: 12px; border-radius: 6px; background: #FEBC2E"></span>
+      <span style="width: 12px; height: 12px; border-radius: 6px; background: #28C840"></span>
+    </div>
+
+    <button type="button" aria-label="Espaço atual: Trabalho. Trocar de espaço" style="width: 44px; height: 44px; border: 0; border-radius: 12px; background: rgba(224,160,78,0.14); display: flex; align-items: center; justify-content: center; padding: 0; margin-top: 6px">
+      <span aria-hidden="true" style="width: 26px; height: 26px; border-radius: 8px; background: #A35A06; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">T</span>
+    </button>
+
+    <button type="button" aria-label="Site e bloqueios: 9 itens bloqueados" style="width: 44px; height: 32px; border: 0; border-radius: 8px; background: rgba(255,255,255,0.07); color: #E0A04E; display: flex; align-items: center; justify-content: center; gap: 3px; padding: 0; font: inherit; font-size: 11px; font-weight: 600"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M8 1.75 2.75 3.75v4c0 3 2.25 5.25 5.25 6.5 3-1.25 5.25-3.5 5.25-6.5v-4Z"></path></svg>9</button>
+
+    <div style="width: 40px; height: 1px; background: rgba(255,255,255,0.09); margin: 4px 0"></div>
+
+    <button type="button" aria-label="Linear (favorito)" style="width: 44px; height: 38px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; justify-content: center; padding: 0"><span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 6px; background: #6A4FB3; color: #FFFFFF; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">L</span></button>
+    <button type="button" aria-label="GitHub (favorito)" style="width: 44px; height: 38px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; justify-content: center; padding: 0"><span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 6px; background: #3D4452; color: #FFFFFF; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">G</span></button>
+
+    <div style="width: 40px; height: 1px; background: rgba(255,255,255,0.09); margin: 4px 0"></div>
+
+    <button type="button" aria-label="CloudWatch, logs de produção (aba atual)" style="width: 44px; height: 38px; border: 0; border-radius: 10px; background: rgba(255,255,255,0.11); box-shadow: 0 0 0 0.5px rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; padding: 0"><span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 6px; background: #A35A06; color: #FFFFFF; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">A</span></button>
+
+    <div style="position: relative">
+      <button type="button" aria-label="Minhas issues no Linear" style="width: 44px; height: 38px; border: 0; border-radius: 10px; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; padding: 0"><span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 6px; background: #6A4FB3; color: #FFFFFF; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">L</span></button>
+      <div role="tooltip" style="position: absolute; left: 56px; top: 3px; display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 10px; border-radius: 8px; background: #3A3833; box-shadow: 0 8px 24px rgba(0,0,0,0.45); white-space: nowrap; z-index: 2">
+        <span style="font-size: 13px; font-weight: 500">Minhas issues no Linear</span>
+        <span style="font-size: 11.5px; color: #C9C6BF">⌘2</span>
+      </div>
+    </div>
+
+    <button type="button" aria-label="Revisão do PR 48" style="width: 44px; height: 38px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; justify-content: center; padding: 0"><span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 6px; background: #3D4452; color: #FFFFFF; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">G</span></button>
+    <button type="button" aria-label="Chat do time (suspensa)" style="width: 44px; height: 38px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; justify-content: center; padding: 0"><span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 6px; background: #2F7D5B; color: #FFFFFF; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; opacity: 0.4">C</span></button>
+    <button type="button" aria-label="Documentação da API interna (suspensa)" style="width: 44px; height: 38px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; justify-content: center; padding: 0"><span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 6px; background: #4352C4; color: #FFFFFF; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; opacity: 0.4">D</span></button>
+    <button type="button" aria-label="Nova aba (⌘T)" style="width: 44px; height: 38px; border: 0; border-radius: 10px; background: transparent; color: #A3A4AD; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M8 3v10M3 8h10"></path></svg></button>
+
+    <div style="flex: 1"></div>
+
+    <button type="button" aria-label="Mostrar sidebar completa (⌘S)" style="width: 44px; height: 38px; border: 0; border-radius: 10px; background: transparent; color: #C9CAD2; display: flex; align-items: center; justify-content: center; padding: 0"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="2" y="3" width="12" height="10" rx="2"></rect><path d="M6 3v10"></path></svg></button>
+  </nav>
+
+  <main style="flex: 1; min-width: 0; padding: 8px 8px 8px 0; display: flex">
+    <div aria-label="Conteúdo da página" style="flex: 1; background: #212126; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(255,255,255,0.08); overflow: hidden; display: flex">
+      <div aria-hidden="true" style="width: 220px; flex: none; border-right: 1px solid #2C2C32; padding: 28px 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px">
+        <span style="width: 120px; height: 14px; border-radius: 4px; background: #34343B"></span>
+        <span style="height: 10px"></span>
+        <span style="width: 80%; height: 10px; border-radius: 3px; background: #2D2D33"></span>
+        <span style="width: 70%; height: 10px; border-radius: 3px; background: #2D2D33"></span>
+        <span style="width: 86%; height: 10px; border-radius: 3px; background: #2D2D33"></span>
+        <span style="width: 64%; height: 10px; border-radius: 3px; background: #2D2D33"></span>
+      </div>
+      <div aria-hidden="true" style="flex: 1; padding: 36px 40px; display: flex; flex-direction: column; gap: 20px">
+        <span style="width: 280px; height: 24px; border-radius: 5px; background: #34343B"></span>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+          <span style="height: 120px; border-radius: 10px; background: #29292F"></span>
+          <span style="height: 120px; border-radius: 10px; background: #29292F"></span>
+          <span style="height: 120px; border-radius: 10px; background: #29292F"></span>
+        </div>
+        <span style="flex: 1; border-radius: 10px; background: #26262B"></span>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

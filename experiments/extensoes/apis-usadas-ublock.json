@@ -1,0 +1,36 @@
+{
+ "com.cn": [
+  "rulesets/scripting/popup/ublock-badware.js"
+ ],
+ "dom.openOrClosedShadowRoot": [
+  "js/resources/utils.js",
+  "js/scripting/css-procedural-api.js",
+  "rulesets/scripting/scriptlet/isolated/scriptlet-begin.js"
+ ],
+ "hl.cn": [
+  "rulesets/scripting/popup/ublock-badware.js"
+ ],
+ "offscreen.closeDocument": [
+  "js/ext-offscreen.js"
+ ],
+ "offscreen.createDocument": [
+  "js/ext-offscreen.js"
+ ],
+ "runtime.sendMessage": [
+  "js/scripting/css-api.js",
+  "js/scripting/css-procedural-api.js",
+  "js/scripting/css-specific.js",
+  "js/scripting/css-user-terminate.js",
+  "js/scripting/css-user.js",
+  "js/scripting/toolbar-icon.js"
+ ],
+ "storage.local.get": [
+  "js/scripting/css-specific.js"
+ ],
+ "storage.session.get": [
+  "js/scripting/css-specific.js"
+ ],
+ "storage.session.set": [
+  "js/scripting/css-specific.js"
+ ]
+}

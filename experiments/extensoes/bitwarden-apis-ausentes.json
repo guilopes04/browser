@@ -1,0 +1,135 @@
+{
+ "namespacesAusentes": {
+  "commands": [
+   "commands.getAll",
+   "commands.onCommand.addListener"
+  ],
+  "contextMenus": [
+   "contextMenus.create",
+   "contextMenus.remove",
+   "contextMenus.removeAll"
+  ],
+  "notifications": [
+   "notifications.clear",
+   "notifications.create",
+   "notifications.onButtonClicked",
+   "notifications.onClicked"
+  ],
+  "permissions": [
+   "permissions.contains",
+   "permissions.onAdded.addListener",
+   "permissions.request"
+  ],
+  "privacy": [
+   "privacy.services.autofillAddressEnabled",
+   "privacy.services.autofillCreditCardEnabled",
+   "privacy.services.passwordSavingEnabled"
+  ],
+  "sidePanel": [
+   "sidePanel.open",
+   "sidePanel.setOptions"
+  ],
+  "webNavigation": [
+   "webNavigation.getAllFrames",
+   "webNavigation.getFrame",
+   "webNavigation.onCommitted",
+   "webNavigation.onCommitted.removeListener",
+   "webNavigation.onCompleted.addListener",
+   "webNavigation.onCompleted.removeListener",
+   "webNavigation.onErrorOccurred"
+  ],
+  "windows": [
+   "windows.WINDOW_ID_CURRENT",
+   "windows.create",
+   "windows.get",
+   "windows.getAll",
+   "windows.getCurrent",
+   "windows.onCreated.addListener",
+   "windows.onFocusChanged.addListener",
+   "windows.onRemoved",
+   "windows.remove",
+   "windows.update"
+  ]
+ },
+ "membrosAusentes": {
+  "extension": [
+   "extension.getBackgroundPage"
+  ],
+  "runtime": [
+   "runtime.connectNative"
+  ],
+  "tabs": [
+   "tabs.captureVisibleTab",
+   "tabs.create",
+   "tabs.executeScript",
+   "tabs.getCurrent",
+   "tabs.remove"
+  ]
+ },
+ "presentesOuNaoVerificados": [
+  "alarms.clear",
+  "alarms.clearAll",
+  "alarms.create",
+  "alarms.get",
+  "alarms.onAlarm",
+  "dom.openOrClosedShadowRoot",
+  "extension.getViews",
+  "management.getSelf",
+  "offscreen.Reason.CLIPBOARD",
+  "offscreen.Reason.LOCAL_STORAGE",
+  "offscreen.closeDocument",
+  "offscreen.createDocument",
+  "offscreen.hasDocument",
+  "runtime.MessageSender",
+  "runtime.connect",
+  "runtime.getContexts",
+  "runtime.getManifest",
+  "runtime.getPlatformInfo",
+  "runtime.getURL",
+  "runtime.id",
+  "runtime.onConnect",
+  "runtime.onInstalled.addListener",
+  "runtime.onMessage",
+  "runtime.onMessage.addListener",
+  "runtime.onMessage.removeListener",
+  "runtime.reload",
+  "runtime.sendMessage",
+  "scripting.ExecutionWorld.ISOLATED",
+  "scripting.ExecutionWorld.MAIN",
+  "scripting.executeScript",
+  "scripting.insertCSS",
+  "scripting.registerContentScripts",
+  "scripting.unregisterContentScripts",
+  "storage.local",
+  "storage.local.get",
+  "storage.managed",
+  "storage.managed.get",
+  "storage.onChanged",
+  "storage.session",
+  "storage.sync",
+  "tabs.TAB_ID_NONE",
+  "tabs.Tab",
+  "tabs.get",
+  "tabs.onActivated",
+  "tabs.onActivated.addListener",
+  "tabs.onActivated.removeListener",
+  "tabs.onCreated",
+  "tabs.onRemoved",
+  "tabs.onRemoved.addListener",
+  "tabs.onRemoved.removeListener",
+  "tabs.onReplaced.addListener",
+  "tabs.onUpdated",
+  "tabs.onUpdated.addListener",
+  "tabs.onUpdated.removeListener",
+  "tabs.query",
+  "tabs.sendMessage",
+  "tabs.update",
+  "webRequest.onAuthRequired",
+  "webRequest.onBeforeRedirect.addListener",
+  "webRequest.onBeforeRedirect.removeListener",
+  "webRequest.onBeforeRequest.addListener",
+  "webRequest.onBeforeRequest.removeListener",
+  "webRequest.onCompleted.addListener",
+  "webRequest.onCompleted.removeListener"
+ ]
+}

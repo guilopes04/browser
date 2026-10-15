@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Primeira abertura, importar</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#4352C4}a:hover{color:#2F3C9A}
+</style>
+</helmet>
+<div style="position: relative; width: 720px; height: 600px; box-sizing: border-box; padding: 64px 56px 32px; display: flex; flex-direction: column; background: #F4F4F7; color: #17181C; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; overflow: hidden">
+  <div aria-hidden="true" style="position: absolute; left: 14px; top: 14px; display: flex; gap: 8px">
+    <span style="width: 12px; height: 12px; border-radius: 6px; background: #FF5F57"></span>
+    <span style="width: 12px; height: 12px; border-radius: 6px; background: #D3D3D8"></span>
+    <span style="width: 12px; height: 12px; border-radius: 6px; background: #D3D3D8"></span>
+  </div>
+
+  <p style="margin: 0 0 10px; font-size: 13px; color: #565863">Passo 2 de 2</p>
+  <h1 style="margin: 0 0 12px; font-size: 30px; line-height: 1.15; font-weight: 700; letter-spacing: -0.015em">Trazer o que está no Chrome</h1>
+  <p style="margin: 0 0 22px; max-width: 520px; font-size: 15px; line-height: 1.5; color: #3A3B42; text-wrap: pretty">Escolha para qual espaço vai cada perfil do Chrome. Nada é apagado de lá.</p>
+
+  <div style="background: #FFFFFF; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(23,24,28,0.14); margin-bottom: 16px">
+    <sc-for list="{{profiles}}" as="p" hint-placeholder-count="2">
+      <div style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 14px; border-bottom: {{p.border}}">
+        <span style="flex: 1; font-size: 13px">Perfil do Chrome “{{p.name}}”</span>
+        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#565863" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9.5 4.5 13 8l-3.5 3.5"></path></svg>
+        <button type="button" aria-label="Espaço de destino do perfil {{p.name}}: {{p.target}}" style="width: 150px; display: flex; align-items: center; gap: 8px; height: 26px; padding: 0 8px 0 10px; border: 0; border-radius: 6px; background: rgba(23,24,28,0.06); font: inherit; font-size: 13px; color: #17181C; text-align: left"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 4px; background: {{p.color}}"></span><span style="flex: 1">{{p.target}}</span><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="#565863" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 6 3.5-3.5L11.5 6M4.5 10l3.5 3.5 3.5-3.5"></path></svg></button>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 20px; padding: 0 4px">
+    <sc-for list="{{items}}" as="i" hint-placeholder-count="4">
+      <label style="position: relative; display: flex; align-items: center; gap: 10px; min-height: 34px; font-size: 13px">
+        <input type="checkbox" checked style="position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0">
+        <span aria-hidden="true" style="flex: none; width: 16px; height: 16px; border-radius: 4px; background: #4352C4; display: flex; align-items: center; justify-content: center"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8.5 3.5 3.5L13 4.5"></path></svg></span>
+        <span style="display: flex; flex-direction: column; gap: 1px"><span>{{i.name}}</span><span style="font-size: 12px; color: #565863">{{i.desc}}</span></span>
+      </label>
+    </sc-for>
+  </div>
+
+  <p style="margin: 18px 0 0; padding: 0 4px; font-size: 12.5px; line-height: 1.45; color: #565863">Senhas não são copiadas: elas continuam no app Senhas do Mac.</p>
+
+  <div style="flex: 1"></div>
+  <div style="display: flex; justify-content: flex-end; gap: 8px">
+    <button type="button" style="height: 32px; padding: 0 14px; border: 0; border-radius: 8px; background: rgba(23,24,28,0.07); font: inherit; font-size: 13px; color: #17181C">Pular</button>
+    <button type="button" style="height: 32px; padding: 0 16px; border: 0; border-radius: 8px; background: #4352C4; font: inherit; font-size: 13px; font-weight: 600; color: #FFFFFF">Importar</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":720,"height":600}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      profiles: [
+        { name: 'Pessoa 1', target: 'Pessoal', color: '#4352C4', border: '1px solid rgba(23,24,28,0.07)' },
+        { name: 'Trabalho', target: 'Trabalho', color: '#A35A06', border: 'none' }
+      ],
+      items: [
+        { name: 'Favoritos', desc: 'Viram favoritos do espaço' },
+        { name: 'Histórico', desc: 'Últimos 90 dias' },
+        { name: 'Abas abertas agora', desc: 'Entram suspensas, sem pesar' },
+        { name: 'Extensões', desc: 'Reinstaladas pela Chrome Web Store' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

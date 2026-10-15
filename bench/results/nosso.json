@@ -1,0 +1,179 @@
+{
+  "navegador": "nosso",
+  "versao": "electron v44.7.2",
+  "quando": "2026-10-15T11:44:42.345Z",
+  "maquina": {
+    "modelo": "MacBook Air M2",
+    "ram": "8 GB",
+    "so": "macOS 27.0.0"
+  },
+  "janela": {
+    "largura": 1440,
+    "altura": 900,
+    "x": 0,
+    "y": 0
+  },
+  "abas": [
+    "https://www.electronjs.org/docs/latest/api/web-contents-view",
+    "https://github.com/electron/electron/pulls",
+    "https://www.youtube.com/watch?v=jfKfPfyJRdk",
+    "https://developer.mozilla.org/en-US/docs/Web/CSS/:has",
+    "https://en.wikipedia.org/wiki/Chromium_(web_browser)",
+    "https://news.ycombinator.com/",
+    "https://www.apple.com/br/macbook-air/",
+    "https://www.theverge.com/",
+    "https://zen-browser.app/",
+    "https://www.google.com/search?q=navegador+leve+para+mac"
+  ],
+  "rodadas": [
+    {
+      "rodada": 1,
+      "porta": 61506,
+      "cargaAntes": {
+        "loadavg": [
+          3.67,
+          3.69,
+          3.39
+        ],
+        "cpu": "CPU usage: 10.32% user, 12.82% sys, 76.84% idle"
+      },
+      "tempoCarregadoMs": 2331,
+      "paginasCompletasMs": [
+        {
+          "pagina": "www.electronjs.org/docs/latest/api/web-contents-view",
+          "ms": 2331
+        }
+      ],
+      "tempoNovePaginasMs": null,
+      "processos": 5,
+      "rssMB": 339.9,
+      "footprintMB": 261.7,
+      "footprintDetalhe": {
+        "medidos": 5,
+        "pedidos": 5,
+        "erros": 0
+      },
+      "maioresProcessos": [
+        "91 MB Electron .",
+        "90 MB Electron Helper (Renderer)",
+        "73 MB Electron Helper (Renderer)",
+        "44 MB Electron Helper",
+        "42 MB Electron Helper"
+      ],
+      "paginas": [
+        {
+          "url": "https://www.electronjs.org/docs/latest/api/web-contents-view",
+          "titulo": "WebContentsView | Electron",
+          "estado": "complete"
+        }
+      ],
+      "tempoJanelaMs": 1625,
+      "janelaPrimeira": {
+        "x": 11,
+        "y": 39,
+        "largura": 1418,
+        "altura": 830
+      },
+      "primeiraAbaAtivada": true,
+      "janela": {
+        "id": 7234,
+        "dono": "Electron",
+        "titulo": "Gilas Browser",
+        "x": 0,
+        "y": 33,
+        "largura": 1440,
+        "altura": 842
+      },
+      "captura": "bench/results/nosso-rodada1.png",
+      "tempoOciosoMs": 5007,
+      "tempoOciosoPosCargaMs": 5007,
+      "cpuRepousoPct": 1.3,
+      "sobraramProcessos": 0
+    },
+    {
+      "rodada": 2,
+      "porta": 61541,
+      "cargaAntes": {
+        "loadavg": [
+          3.71,
+          3.66,
+          3.39
+        ],
+        "cpu": "CPU usage: 10.99% user, 12.60% sys, 76.40% idle"
+      },
+      "tempoCarregadoMs": 1819,
+      "paginasCompletasMs": [
+        {
+          "pagina": "www.electronjs.org/docs/latest/api/web-contents-view",
+          "ms": 1819
+        }
+      ],
+      "tempoNovePaginasMs": null,
+      "processos": 5,
+      "rssMB": 349.9,
+      "footprintMB": 257.3,
+      "footprintDetalhe": {
+        "medidos": 5,
+        "pedidos": 5,
+        "erros": 0
+      },
+      "maioresProcessos": [
+        "95 MB Electron .",
+        "91 MB Electron Helper (Renderer)",
+        "70 MB Electron Helper (Renderer)",
+        "49 MB Electron Helper",
+        "45 MB Electron Helper"
+      ],
+      "paginas": [
+        {
+          "url": "https://www.electronjs.org/docs/latest/api/web-contents-view",
+          "titulo": "WebContentsView | Electron",
+          "estado": "complete"
+        }
+      ],
+      "tempoJanelaMs": 933,
+      "janelaPrimeira": {
+        "x": 8,
+        "y": 38,
+        "largura": 1424,
+        "altura": 832
+      },
+      "primeiraAbaAtivada": true,
+      "janela": {
+        "id": 7242,
+        "dono": "Electron",
+        "titulo": "Gilas Browser",
+        "x": 0,
+        "y": 33,
+        "largura": 1440,
+        "altura": 842
+      },
+      "captura": "bench/results/nosso-rodada2.png",
+      "tempoOciosoMs": 4007,
+      "tempoOciosoPosCargaMs": 4007,
+      "cpuRepousoPct": 1.9,
+      "sobraramProcessos": 0
+    }
+  ],
+  "mediana": {
+    "tempoCarregadoMs": 2075,
+    "tempoJanelaMs": 1279,
+    "tempoOciosoMs": 4507,
+    "tempoNovePaginasMs": null,
+    "cpuRepousoPct": 1.6,
+    "rssMB": 344.9,
+    "footprintMB": 259.5
+  },
+  "capturas": [
+    "bench/results/nosso-rodada1.png",
+    "bench/results/nosso-rodada2.png"
+  ],
+  "notas": [
+    "Janela pedida: 1440x900 em (0,0). O macOS limita à área útil (abaixo da barra de menus e acima do Dock): janela real 1440x842 em (0,33).",
+    "O macOS está no tema escuro (não alterado, é configuração do sistema); o tema claro foi forçado nas preferências do perfil temporário de cada navegador.",
+    "footprintMB = soma do phys_footprint (/usr/bin/footprint) de toda a árvore; rssMB = soma do RSS do ps. Com a máquina em pressão de memória (swap quase cheio) o RSS cai muito porque o macOS comprime/troca páginas; o footprint conta o comprimido e é o número estável.",
+    "tempoCarregadoMs: de antes do spawn até todas as 1 páginas com document.readyState === 'complete' no mesmo instante de consulta (CDP). tempoJanelaMs: primeira janela da árvore com pelo menos 400x300 no CGWindowList (vigia a 25 ms). tempoOciosoMs: início do primeiro trecho de 3 s com CPU da árvore abaixo de 10% (um núcleo = 100%, medida pela variação do tempo de CPU do ps a cada 500 ms), depois da janela aparecer; null = não ficou ocioso em até 120 s após carregar.",
+    "Máquina com outros processos ativos (outros agentes, apps abertos); CPU antes de cada rodada: CPU usage: 10.32% user, 12.82% sys, 76.84% idle | CPU usage: 10.99% user, 12.60% sys, 76.40% idle.",
+    "Modo nosso: espera 1 página(s) completas (só a aba ativa; as outras ficam suspensas)."
+  ]
+}

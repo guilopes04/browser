@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Primeira abertura, espaços</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#4352C4}a:hover{color:#2F3C9A}
+</style>
+</helmet>
+<div style="position: relative; width: 720px; height: 600px; box-sizing: border-box; padding: 64px 56px 32px; display: flex; flex-direction: column; background: #F4F4F7; color: #17181C; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; overflow: hidden">
+  <div aria-hidden="true" style="position: absolute; left: 14px; top: 14px; display: flex; gap: 8px">
+    <span style="width: 12px; height: 12px; border-radius: 6px; background: #FF5F57"></span>
+    <span style="width: 12px; height: 12px; border-radius: 6px; background: #D3D3D8"></span>
+    <span style="width: 12px; height: 12px; border-radius: 6px; background: #D3D3D8"></span>
+  </div>
+
+  <p style="margin: 0 0 10px; font-size: 13px; color: #565863">Passo 1 de 2</p>
+  <h1 style="margin: 0 0 12px; font-size: 30px; line-height: 1.15; font-weight: 700; letter-spacing: -0.015em">Separe o pessoal do trabalho</h1>
+  <p style="margin: 0 0 28px; max-width: 520px; font-size: 15px; line-height: 1.5; color: #3A3B42; text-wrap: pretty">Cada espaço tem as próprias abas, favoritos, logins e cookies. A cor da janela muda junto, para você saber onde está. Dá para criar mais depois nos Ajustes.</p>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px">
+    <div style="display: flex; flex-direction: column; gap: 14px; padding: 16px; border-radius: 12px; background: #E8E9F0; box-shadow: 0 0 0 0.5px rgba(23,24,28,0.1)">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <span aria-hidden="true" style="width: 12px; height: 12px; border-radius: 6px; background: #4352C4"></span>
+        <label for="ob-espaco-1" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Nome do primeiro espaço</label>
+        <input id="ob-espaco-1" type="text" value="Pessoal" style="flex: 1; min-width: 0; height: 30px; box-sizing: border-box; padding: 0 8px; border: 0; border-radius: 7px; background: rgba(255,255,255,0.7); font: inherit; font-size: 14px; font-weight: 600; color: #17181C; outline: none">
+      </div>
+      <div role="radiogroup" aria-label="Cor do espaço Pessoal" style="display: flex; gap: 8px">
+        <button type="button" role="radio" aria-checked="true" aria-label="Índigo" style="width: 20px; height: 20px; border: 0; border-radius: 10px; background: #4352C4; box-shadow: 0 0 0 2px #E8E9F0, 0 0 0 3.5px #4352C4; padding: 0"></button>
+        <button type="button" role="radio" aria-checked="false" aria-label="Âmbar" style="width: 20px; height: 20px; border: 0; border-radius: 10px; background: #A35A06; padding: 0"></button>
+        <button type="button" role="radio" aria-checked="false" aria-label="Verde" style="width: 20px; height: 20px; border: 0; border-radius: 10px; background: #2F7D5B; padding: 0"></button>
+        <button type="button" role="radio" aria-checked="false" aria-label="Roxo" style="width: 20px; height: 20px; border: 0; border-radius: 10px; background: #6A4FB3; padding: 0"></button>
+        <button type="button" role="radio" aria-checked="false" aria-label="Rosa" style="width: 20px; height: 20px; border: 0; border-radius: 10px; background: #B03A63; padding: 0"></button>
+        <button type="button" role="radio" aria-checked="false" aria-label="Grafite" style="width: 20px; height: 20px; border: 0; border-radius: 10px; background: #3D4452; padding: 0"></button>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px; padding: 16px; border-radius: 12px; background: #EFEAE1; box-shadow: 0 0 0 0.5px rgba(23,24,28,0.1)">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <span aria-hidden="true" style="width: 12px; height: 12px; border-radius: 6px; background: #A35A06"></span>
+        <label for="ob-espaco-2" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Nome do segundo espaço</label>
+        <input id="ob-espaco-2" type="text" value="Trabalho" style="flex: 1; min-width: 0; height: 30px; box-sizing: border-box; padding: 0 8px; border: 0; border-radius: 7px; background: rgba(255,255,255,0.7); font: inherit; font-size: 14px; font-weight: 600; color: #17181C; outline: none">
+      </div>
+      <div role="radiogroup" aria-label="Cor do espaço Trabalho" style="display: flex; gap: 8px">
+        <button type="button" role="radio" aria-checked="false" aria-label="Índigo" style="width: 20px; height: 20px; border: 0; border-radius: 10px; background: #4352C4; padding: 0"></button>
+        <button type="button" role="radio" aria-checked="true" aria-label="Âmbar" style="width: 20px; height: 20px; border: 0; border-radius: 10px; background: #A35A06; box-shadow: 0 0 0 2px #EFEAE1, 0 0 0 3.5px #A35A06; padding: 0"></button>
+        <button type="button" role="radio" aria-checked="false" aria-label="Verde" style="width: 20px; height: 20px; border: 0; border-radius: 10px; background: #2F7D5B; padding: 0"></button>
+        <button type="button" role="radio" aria-checked="false" aria-label="Roxo" style="width: 20px; height: 20px; border: 0; border-radius: 10px; background: #6A4FB3; padding: 0"></button>
+        <button type="button" role="radio" aria-checked="false" aria-label="Rosa" style="width: 20px; height: 20px; border: 0; border-radius: 10px; background: #B03A63; padding: 0"></button>
+        <button type="button" role="radio" aria-checked="false" aria-label="Grafite" style="width: 20px; height: 20px; border: 0; border-radius: 10px; background: #3D4452; padding: 0"></button>
+      </div>
+    </div>
+  </div>
+
+  <button type="button" style="align-self: flex-start; display: flex; align-items: center; gap: 8px; height: 30px; margin-top: 12px; padding: 0 10px; border: 0; border-radius: 7px; background: transparent; font: inherit; font-size: 13px; color: #4352C4"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3v10M3 8h10"></path></svg>Adicionar espaço</button>
+
+  <div style="flex: 1"></div>
+  <div style="display: flex; justify-content: flex-end; gap: 8px">
+    <button type="button" style="height: 32px; padding: 0 16px; border: 0; border-radius: 8px; background: #4352C4; font: inherit; font-size: 13px; font-weight: 600; color: #FFFFFF">Continuar</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":720,"height":600}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

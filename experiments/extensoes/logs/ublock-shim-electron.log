@@ -1,0 +1,8 @@
+
+DevTools listening on ws://127.0.0.1:29339/devtools/browser/260a1651-f375-4f3c-9f70-9b9525e7de38
+[harness] 225ms app pronto
+[harness] 284ms passo servidor-local: início
+[harness] 290ms passo servidor-local: ok
+[harness] 290ms passo loadExtension: início
+[harness] 338ms passo loadExtension: ok
+/Users/guilhermelopes/Documents/Projects/navegador/app/node_modules/electron/dist/Electron.app/Contents/MacOS/Electron exited with signal SIGKILL

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Paleta ao abrir</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#4352C4}a:hover{color:#2F3C9A}
+</style>
+</helmet>
+<div style="position: relative; width: 1440px; height: 900px; display: flex; background: #E8E9F0; color: #17181C; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; overflow: hidden">
+  <div style="width: 260px; height: 900px; flex: none">
+    <dc-import name="Sidebar" space="pessoal" theme="claro" active="p1" hint-size="260px,900px"></dc-import>
+  </div>
+  <main style="flex: 1; min-width: 0; padding: 8px 8px 8px 0; display: flex">
+    <div aria-hidden="true" style="flex: 1; background: #FFFFFF; border-radius: 10px; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.08); display: flex; flex-direction: column; gap: 14px; padding: 124px 256px 0">
+      <span style="width: 64%; height: 32px; border-radius: 6px; background: #DFE0E7"></span>
+      <span style="height: 14px"></span>
+      <span style="width: 100%; height: 12px; border-radius: 3px; background: #EEEEF2"></span>
+      <span style="width: 96%; height: 12px; border-radius: 3px; background: #EEEEF2"></span>
+      <span style="width: 58%; height: 12px; border-radius: 3px; background: #EEEEF2"></span>
+    </div>
+  </main>
+
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(23,24,28,0.18)"></div>
+
+  <div role="dialog" aria-label="Paleta de comandos" style="position: absolute; left: 400px; top: 120px; width: 640px; box-sizing: border-box; background: #FFFFFF; border-radius: 14px; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.14), 0 24px 64px rgba(0,0,0,0.26); overflow: hidden">
+    <div style="display: flex; align-items: center; gap: 12px; height: 58px; padding: 0 18px; border-bottom: 1px solid #EEEEF2">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="#565863" stroke-width="1.6" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"></circle><path d="m10.5 10.5 3 3"></path></svg>
+      <label for="paleta-vazia-busca" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Buscar abas, favoritos, histórico ou digitar endereço</label>
+      <input id="paleta-vazia-busca" type="text" placeholder="Buscar abas, favoritos, histórico ou digitar endereço" style="flex: 1; min-width: 0; border: 0; outline: none; background: transparent; font: inherit; font-size: 18px; color: #17181C; padding: 0">
+    </div>
+
+    <div style="padding: 4px 8px 8px">
+      <div style="font-size: 12px; font-weight: 600; color: #565863; padding: 10px 10px 6px">Abas recentes</div>
+      <sc-for list="{{recent}}" as="r" hint-placeholder-count="3">
+        <div style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 10px; border-radius: 10px; background: {{r.bg}}">
+          <span aria-hidden="true" style="flex: none; width: 24px; height: 24px; border-radius: 6px; background: {{r.tile}}; color: #FFFFFF; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{r.letter}}</span>
+          <span style="flex: 1; font-size: 14px">{{r.title}}</span>
+          <span style="font-size: 12px; color: #565863">{{r.where}}</span>
+        </div>
+      </sc-for>
+
+      <div style="font-size: 12px; font-weight: 600; color: #565863; padding: 12px 10px 6px">Ações</div>
+      <sc-for list="{{actions}}" as="a" hint-placeholder-count="6">
+        <div style="display: flex; align-items: center; gap: 12px; height: 40px; padding: 0 10px; border-radius: 10px">
+          <span style="flex: 1; font-size: 14px; padding-left: 36px">{{a.label}}</span>
+          <span style="font-size: 11.5px; padding: 2px 6px; border-radius: 5px; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.12); background: #F5F5F8; color: #3A3B42">{{a.keys}}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 18px; height: 40px; padding: 0 18px; border-top: 1px solid #EEEEF2; background: #F8F8FA; font-size: 12px; color: #565863">
+      <span>↑↓ para navegar</span>
+      <span>↵ para abrir</span>
+      <span style="flex: 1"></span>
+      <span>Digite um endereço ou termo para buscar</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      recent: [
+        { letter: 'G', tile: '#3D4452', title: 'Pull requests de gilas/navegador', where: 'Pessoal', bg: '#E9EBF8' },
+        { letter: 'A', tile: '#A35A06', title: 'CloudWatch, logs de produção', where: 'Trabalho', bg: 'transparent' },
+        { letter: 'M', tile: '#6A4FB3', title: 'CSS :has() na MDN', where: 'Pessoal', bg: 'transparent' }
+      ],
+      actions: [
+        { label: 'Abrir em split view com outra aba', keys: '⌃⌘N' },
+        { label: 'Modo leitura', keys: '⇧⌘R' },
+        { label: 'Copiar URL limpa', keys: '⇧⌘C' },
+        { label: 'Capturar página', keys: '⌥⌘S' },
+        { label: 'Nova janela anônima', keys: '⇧⌘N' },
+        { label: 'Trocar para Trabalho', keys: '⌃2' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

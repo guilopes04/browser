@@ -1,0 +1,489 @@
+{
+  "navegador": "chrome",
+  "versao": "152.0.7977.77",
+  "quando": "2026-10-15T05:22:07.602Z",
+  "maquina": {
+    "modelo": "MacBook Air M2",
+    "ram": "8 GB",
+    "so": "macOS 27.0.0"
+  },
+  "janela": {
+    "largura": 1440,
+    "altura": 900,
+    "x": 0,
+    "y": 0
+  },
+  "abas": [
+    "https://www.electronjs.org/docs/latest/api/web-contents-view",
+    "https://github.com/electron/electron/pulls",
+    "https://www.youtube.com/watch?v=jfKfPfyJRdk",
+    "https://developer.mozilla.org/en-US/docs/Web/CSS/:has",
+    "https://en.wikipedia.org/wiki/Chromium_(web_browser)",
+    "https://news.ycombinator.com/",
+    "https://www.apple.com/br/macbook-air/",
+    "https://www.theverge.com/",
+    "https://zen-browser.app/",
+    "https://www.google.com/search?q=navegador+leve+para+mac"
+  ],
+  "rodadas": [
+    {
+      "rodada": 1,
+      "porta": 63805,
+      "cargaAntes": {
+        "loadavg": [
+          7.08,
+          8.17,
+          8.35
+        ],
+        "cpu": "CPU usage: 11.60% user, 15.8% sys, 73.31% idle"
+      },
+      "tempoCarregadoMs": 14012,
+      "paginasCompletasMs": [
+        {
+          "pagina": "www.electronjs.org/docs/latest/api/web-contents-view",
+          "ms": 4406
+        },
+        {
+          "pagina": "news.ycombinator.com/",
+          "ms": 4540
+        },
+        {
+          "pagina": "en.wikipedia.org/wiki/Chromium_(web_browser)",
+          "ms": 4540
+        },
+        {
+          "pagina": "zen-browser.app/",
+          "ms": 5081
+        },
+        {
+          "pagina": "www.youtube.com/watch",
+          "ms": 5550
+        },
+        {
+          "pagina": "www.google.com/search",
+          "ms": 7356
+        },
+        {
+          "pagina": "developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors",
+          "ms": 7356
+        },
+        {
+          "pagina": "www.apple.com/br/macbook-air/",
+          "ms": 9204
+        },
+        {
+          "pagina": "github.com/electron/electron/pulls",
+          "ms": 10770
+        },
+        {
+          "pagina": "www.theverge.com/",
+          "ms": 14012
+        }
+      ],
+      "tempoNovePaginasMs": 10770,
+      "processos": 50,
+      "rssMB": 1280.8,
+      "footprintMB": 2544,
+      "footprintDetalhe": {
+        "medidos": 49,
+        "pedidos": 50,
+        "erros": 0
+      },
+      "maioresProcessos": [
+        "100 MB Google Chrome",
+        "74 MB Google Chrome Helper (Renderer)",
+        "54 MB Google Chrome Helper (Renderer)",
+        "48 MB Google Chrome Helper (Renderer)",
+        "47 MB Google Chrome Helper (Renderer)"
+      ],
+      "paginas": [
+        {
+          "url": "https://www.google.com/search?q=navegador+leve+para+mac&sei=QmLQasmFNtG45OUPyIecmAk",
+          "titulo": "navegador leve para mac - Pesquisa Google",
+          "estado": "complete"
+        },
+        {
+          "url": "https://zen-browser.app/",
+          "titulo": "Zen Browser",
+          "estado": "complete"
+        },
+        {
+          "url": "https://www.theverge.com/",
+          "titulo": "The Verge",
+          "estado": "complete"
+        },
+        {
+          "url": "https://www.apple.com/br/macbook-air/",
+          "titulo": "MacBook Air de 13 pol. e MacBook Air de 15 pol. - Apple (BR)",
+          "estado": "complete"
+        },
+        {
+          "url": "https://news.ycombinator.com/",
+          "titulo": "Hacker News",
+          "estado": "complete"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Chromium_(web_browser)",
+          "titulo": "Chromium (web browser) - Wikipedia",
+          "estado": "complete"
+        },
+        {
+          "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:has",
+          "titulo": ":has() CSS pseudo-class - CSS | MDN",
+          "estado": "complete"
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=jfKfPfyJRdk",
+          "titulo": "Rádio Lo-Fi Hip Hop 📚 Batidas para relaxar/estudar - YouTube",
+          "estado": "complete"
+        },
+        {
+          "url": "https://github.com/electron/electron/pulls",
+          "titulo": "Pull requests · electron/electron · GitHub",
+          "estado": "complete"
+        },
+        {
+          "url": "https://www.electronjs.org/docs/latest/api/web-contents-view",
+          "titulo": "WebContentsView | Electron",
+          "estado": "complete"
+        }
+      ],
+      "tempoJanelaMs": 1456,
+      "janelaPrimeira": {
+        "x": 0,
+        "y": 33,
+        "largura": 1440,
+        "altura": 842
+      },
+      "primeiraAbaAtivada": true,
+      "janela": {
+        "id": 1867,
+        "dono": "Google Chrome",
+        "titulo": "WebContentsView | Electron",
+        "x": 0,
+        "y": 33,
+        "largura": 1440,
+        "altura": 842
+      },
+      "captura": "bench/results/chrome-rodada1.png",
+      "tempoOciosoMs": 49778,
+      "tempoOciosoPosCargaMs": 49778,
+      "cpuRepousoPct": 25.5,
+      "sobraramProcessos": 0
+    },
+    {
+      "rodada": 2,
+      "porta": 64154,
+      "cargaAntes": {
+        "loadavg": [
+          6.88,
+          8.12,
+          8.33
+        ],
+        "cpu": "CPU usage: 23.26% user, 28.26% sys, 48.46% idle"
+      },
+      "tempoCarregadoMs": 12150,
+      "paginasCompletasMs": [
+        {
+          "pagina": "news.ycombinator.com/",
+          "ms": 3682
+        },
+        {
+          "pagina": "www.electronjs.org/docs/latest/api/web-contents-view",
+          "ms": 3682
+        },
+        {
+          "pagina": "www.youtube.com/watch",
+          "ms": 4123
+        },
+        {
+          "pagina": "en.wikipedia.org/wiki/Chromium_(web_browser)",
+          "ms": 4235
+        },
+        {
+          "pagina": "zen-browser.app/",
+          "ms": 4343
+        },
+        {
+          "pagina": "developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors",
+          "ms": 5313
+        },
+        {
+          "pagina": "www.google.com/search",
+          "ms": 5423
+        },
+        {
+          "pagina": "github.com/electron/electron/pulls",
+          "ms": 8611
+        },
+        {
+          "pagina": "www.apple.com/br/macbook-air/",
+          "ms": 9163
+        },
+        {
+          "pagina": "www.theverge.com/",
+          "ms": 12150
+        }
+      ],
+      "tempoNovePaginasMs": 9163,
+      "processos": 49,
+      "rssMB": 898,
+      "footprintMB": 2555.5,
+      "footprintDetalhe": {
+        "medidos": 48,
+        "pedidos": 49,
+        "erros": 0
+      },
+      "maioresProcessos": [
+        "86 MB Google Chrome",
+        "52 MB Google Chrome Helper (Renderer)",
+        "43 MB Google Chrome Helper (Renderer)",
+        "42 MB Google Chrome Helper (Renderer)",
+        "37 MB Google Chrome Helper"
+      ],
+      "paginas": [
+        {
+          "url": "https://www.google.com/search?q=navegador+leve+para+mac&sei=gWLQao2dFanj5OUP-tbZiQ0",
+          "titulo": "navegador leve para mac - Pesquisa Google",
+          "estado": "complete"
+        },
+        {
+          "url": "https://zen-browser.app/",
+          "titulo": "Zen Browser",
+          "estado": "complete"
+        },
+        {
+          "url": "https://www.theverge.com/",
+          "titulo": "The Verge",
+          "estado": "complete"
+        },
+        {
+          "url": "https://www.apple.com/br/macbook-air/",
+          "titulo": "MacBook Air de 13 pol. e MacBook Air de 15 pol. - Apple (BR)",
+          "estado": "complete"
+        },
+        {
+          "url": "https://news.ycombinator.com/",
+          "titulo": "Hacker News",
+          "estado": "complete"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Chromium_(web_browser)",
+          "titulo": "Chromium (web browser) - Wikipedia",
+          "estado": "complete"
+        },
+        {
+          "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:has",
+          "titulo": ":has() CSS pseudo-class - CSS | MDN",
+          "estado": "complete"
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=jfKfPfyJRdk",
+          "titulo": "Rádio Lo-Fi Hip Hop 📚 Batidas para relaxar/estudar - YouTube",
+          "estado": "complete"
+        },
+        {
+          "url": "https://github.com/electron/electron/pulls",
+          "titulo": "Pull requests · electron/electron · GitHub",
+          "estado": "complete"
+        },
+        {
+          "url": "https://www.electronjs.org/docs/latest/api/web-contents-view",
+          "titulo": "WebContentsView | Electron",
+          "estado": "complete"
+        }
+      ],
+      "tempoJanelaMs": 1148,
+      "janelaPrimeira": {
+        "x": 0,
+        "y": 33,
+        "largura": 1440,
+        "altura": 842
+      },
+      "primeiraAbaAtivada": true,
+      "janela": {
+        "id": 1885,
+        "dono": "Google Chrome",
+        "titulo": "WebContentsView | Electron",
+        "x": 0,
+        "y": 33,
+        "largura": 1440,
+        "altura": 842
+      },
+      "captura": "bench/results/chrome-rodada2.png",
+      "tempoOciosoMs": 56014,
+      "tempoOciosoPosCargaMs": 56014,
+      "cpuRepousoPct": 34.1,
+      "sobraramProcessos": 0
+    },
+    {
+      "rodada": 3,
+      "porta": 64597,
+      "cargaAntes": {
+        "loadavg": [
+          7.78,
+          8.23,
+          8.36
+        ],
+        "cpu": "CPU usage: 21.70% user, 15.47% sys, 62.81% idle"
+      },
+      "tempoCarregadoMs": 15477,
+      "paginasCompletasMs": [
+        {
+          "pagina": "news.ycombinator.com/",
+          "ms": 3727
+        },
+        {
+          "pagina": "www.electronjs.org/docs/latest/api/web-contents-view",
+          "ms": 3876
+        },
+        {
+          "pagina": "www.youtube.com/watch",
+          "ms": 4476
+        },
+        {
+          "pagina": "zen-browser.app/",
+          "ms": 4634
+        },
+        {
+          "pagina": "www.google.com/search",
+          "ms": 6076
+        },
+        {
+          "pagina": "developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors",
+          "ms": 6076
+        },
+        {
+          "pagina": "en.wikipedia.org/wiki/Chromium_(web_browser)",
+          "ms": 6694
+        },
+        {
+          "pagina": "www.apple.com/br/macbook-air/",
+          "ms": 9177
+        },
+        {
+          "pagina": "github.com/electron/electron/pulls",
+          "ms": 11402
+        },
+        {
+          "pagina": "www.theverge.com/",
+          "ms": 15477
+        }
+      ],
+      "tempoNovePaginasMs": 11402,
+      "processos": 48,
+      "rssMB": 529.6,
+      "footprintMB": 2489.7,
+      "footprintDetalhe": {
+        "medidos": 47,
+        "pedidos": 48,
+        "erros": 0
+      },
+      "maioresProcessos": [
+        "26 MB Google Chrome Helper (Renderer)",
+        "21 MB Google Chrome Helper (Renderer)",
+        "20 MB Google Chrome",
+        "17 MB Google Chrome Helper",
+        "16 MB Google Chrome Helper (Renderer)"
+      ],
+      "paginas": [
+        {
+          "url": "https://www.google.com/search?q=navegador+leve+para+mac&sei=x2LQav7fBbK8p84P0NC9oAk",
+          "titulo": "navegador leve para mac - Pesquisa Google",
+          "estado": "complete"
+        },
+        {
+          "url": "https://zen-browser.app/",
+          "titulo": "Zen Browser",
+          "estado": "complete"
+        },
+        {
+          "url": "https://www.theverge.com/",
+          "titulo": "The Verge",
+          "estado": "complete"
+        },
+        {
+          "url": "https://www.apple.com/br/macbook-air/",
+          "titulo": "MacBook Air de 13 pol. e MacBook Air de 15 pol. - Apple (BR)",
+          "estado": "complete"
+        },
+        {
+          "url": "https://news.ycombinator.com/",
+          "titulo": "Hacker News",
+          "estado": "complete"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Chromium_(web_browser)",
+          "titulo": "Chromium (web browser) - Wikipedia",
+          "estado": "complete"
+        },
+        {
+          "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:has",
+          "titulo": ":has() CSS pseudo-class - CSS | MDN",
+          "estado": "complete"
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=jfKfPfyJRdk",
+          "titulo": "Rádio Lo-Fi Hip Hop 📚 Batidas para relaxar/estudar - YouTube",
+          "estado": "complete"
+        },
+        {
+          "url": "https://github.com/electron/electron/pulls",
+          "titulo": "Pull requests · electron/electron · GitHub",
+          "estado": "complete"
+        },
+        {
+          "url": "https://www.electronjs.org/docs/latest/api/web-contents-view",
+          "titulo": "WebContentsView | Electron",
+          "estado": "complete"
+        }
+      ],
+      "tempoJanelaMs": 1246,
+      "janelaPrimeira": {
+        "x": 0,
+        "y": 33,
+        "largura": 1440,
+        "altura": 842
+      },
+      "primeiraAbaAtivada": true,
+      "janela": {
+        "id": 1932,
+        "dono": "Google Chrome",
+        "titulo": "WebContentsView | Electron",
+        "x": 0,
+        "y": 33,
+        "largura": 1440,
+        "altura": 842
+      },
+      "captura": "bench/results/chrome-rodada3.png",
+      "tempoOciosoMs": 38218,
+      "tempoOciosoPosCargaMs": 38218,
+      "cpuRepousoPct": 10.9,
+      "sobraramProcessos": 0
+    }
+  ],
+  "mediana": {
+    "tempoCarregadoMs": 14012,
+    "tempoJanelaMs": 1246,
+    "tempoOciosoMs": 49778,
+    "tempoNovePaginasMs": 10770,
+    "cpuRepousoPct": 25.5,
+    "rssMB": 898,
+    "footprintMB": 2544
+  },
+  "capturas": [
+    "bench/results/chrome-rodada1.png",
+    "bench/results/chrome-rodada2.png",
+    "bench/results/chrome-rodada3.png"
+  ],
+  "notas": [
+    "Janela pedida: 1440x900 em (0,0). O macOS limita à área útil (abaixo da barra de menus e acima do Dock): janela real 1440x842 em (0,33).",
+    "O macOS está no tema escuro (não alterado, é configuração do sistema); o tema claro foi forçado nas preferências do perfil temporário de cada navegador.",
+    "footprintMB = soma do phys_footprint (/usr/bin/footprint) de toda a árvore; rssMB = soma do RSS do ps. Com a máquina em pressão de memória (swap quase cheio) o RSS cai muito porque o macOS comprime/troca páginas; o footprint conta o comprimido e é o número estável.",
+    "tempoCarregadoMs: de antes do spawn até todas as 10 páginas com document.readyState === 'complete' no mesmo instante de consulta (CDP). tempoJanelaMs: primeira janela da árvore com pelo menos 400x300 no CGWindowList (vigia a 25 ms). tempoOciosoMs: início do primeiro trecho de 3 s com CPU da árvore abaixo de 10% (um núcleo = 100%, medida pela variação do tempo de CPU do ps a cada 500 ms), depois da janela aparecer; null = não ficou ocioso em até 120 s após carregar.",
+    "Máquina com outros processos ativos (outros agentes, apps abertos); CPU antes de cada rodada: CPU usage: 11.60% user, 15.8% sys, 73.31% idle | CPU usage: 23.26% user, 28.26% sys, 48.46% idle | CPU usage: 21.70% user, 15.47% sys, 62.81% idle.",
+    "A busca do Google carregou normal no Chrome nas 3 rodadas (sem captcha), ao contrário do Zen com agente remoto.",
+    "Rodadas de teste iniciais (descartadas): o tempo saiu 1,4 a 2 s porque o alvo CDP já listava a URL da navegação enquanto o documento ainda era o about:blank inicial (que diz 'complete'); corrigido lendo location.href dentro da página. Nessas rodadas de teste o The Verge só completou o load em 150 a 170 s (carga que não termina); nas 3 rodadas finais completou em 12 a 15 s, e 9 das 10 abas ficaram prontas em 9 a 11 s. Se o Verge pendurar de novo, tempoCarregadoMs sobe para ~150 s (veja paginasCompletasMs e tempoNovePaginasMs).",
+    "Nas rodadas 2 e 3 o semáforo da janela aparece cinza na captura: outro app (outros agentes) tinha o foco naquele instante. O conteúdo da janela é o mesmo."
+  ]
+}

@@ -1,0 +1,5 @@
+[
+  "A busca do Google carregou normal no Chrome nas 3 rodadas (sem captcha), ao contrário do Zen com agente remoto.",
+  "Rodadas de teste iniciais (descartadas): o tempo saiu 1,4 a 2 s porque o alvo CDP já listava a URL da navegação enquanto o documento ainda era o about:blank inicial (que diz 'complete'); corrigido lendo location.href dentro da página. Nessas rodadas de teste o The Verge só completou o load em 150 a 170 s (carga que não termina); nas 3 rodadas finais completou em 12 a 15 s, e 9 das 10 abas ficaram prontas em 9 a 11 s. Se o Verge pendurar de novo, tempoCarregadoMs sobe para ~150 s (veja paginasCompletasMs e tempoNovePaginasMs).",
+  "Nas rodadas 2 e 3 o semáforo da janela aparece cinza na captura: outro app (outros agentes) tinha o foco naquele instante. O conteúdo da janela é o mesmo."
+]

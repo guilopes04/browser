@@ -1,0 +1,66 @@
+
+DevTools listening on ws://127.0.0.1:29339/devtools/browser/83b9c0a9-3bc4-47b9-9dbc-8c133b15894a
+[harness] 126ms app pronto
+[harness] 209ms passo servidor-local: início
+[harness] 218ms passo servidor-local: ok
+[harness] 219ms passo loadExtension: início
+(node:48766) ExtensionLoadWarning: Warnings loading extension at /Users/guilhermelopes/Documents/Projects/navegador/experiments/extensoes/probe:
+  Permission 'contextMenus' is unknown.
+  Permission 'sidePanel' is unknown.
+  Permission 'webNavigation' is unknown.
+  Permission 'notifications' is unknown.
+  Permission 'cookies' is unknown.
+  Permission 'commands' is unknown.
+
+(Use `Electron --trace-warnings ...` to show where the warning was created)
+[harness] 237ms passo loadExtension: ok
+[harness] 369ms passo site-about-blank: início
+[harness] 468ms passo site-about-blank: ok
+[harness] 468ms passo debugger-runtime: início
+[48766:1015/020658.205885:INFO:CONSOLE:2] "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security
+  Policy set or a policy with "unsafe-eval" enabled. This exposes users of
+  this app to unnecessary security risks.
+
+For more information and help, consult
+https://electronjs.org/docs/tutorial/security.
+This warning will not show up
+once the app is packaged.", source: node:electron/js2c/sandbox_bundle (2)
+[harness] 17022ms passo debugger-runtime: FALHOU timeout de 6000ms no passo debugger-runtime
+[harness] 17026ms passo carregar-site: início
+[48766:1015/020714.990246:INFO:CONSOLE:3] "SONDA sw iniciou", source: chrome-extension://iehaoeheflelggancikipdhgkafjabnc/sw.js (3)
+[48766:1015/020716.691490:INFO:CONSOLE:3] "SONDA install", source: chrome-extension://iehaoeheflelggancikipdhgkafjabnc/sw.js (3)
+[harness] 18963ms passo carregar-site: ok
+[harness] 19016ms passo carregar-popup: início
+[48766:1015/020716.855474:INFO:CONSOLE:2] "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security
+  Policy set or a policy with "unsafe-eval" enabled. This exposes users of
+  this app to unnecessary security risks.
+
+For more information and help, consult
+https://electronjs.org/docs/tutorial/security.
+This warning will not show up
+once the app is packaged.", source: node:electron/js2c/sandbox_bundle (2)
+[48766:1015/020716.863256:INFO:CONSOLE:5] "SONDA content recebeu resposta {"eco":{"tipo":"content-ola","url":"http://127.0.0.1:28765/"},"sw":true}", source: chrome-extension://iehaoeheflelggancikipdhgkafjabnc/content.js (5)
+[48766:1015/020716.864685:INFO:CONSOLE:3] "SONDA activate", source: chrome-extension://iehaoeheflelggancikipdhgkafjabnc/sw.js (3)
+[harness] 19198ms passo carregar-popup: ok
+[harness] 19198ms extensão Sonda de APIs 1.0 id=iehaoeheflelggancikipdhgkafjabnc; aguardando 6000ms
+[48766:1015/020716.931660:INFO:CONSOLE:9] "SONDA popup {"id":"iehaoeheflelggancikipdhgkafjabnc","sw":{"eco":{"tipo":"popup-ola"},"sw":true},"tabs":[{"id":2,"url":"chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html","active":false},{"id":1,"url":"http://127.0.0.1:28765/","active":true}],"tabAtiva":["http://127.0.0.1:28765/"]}", source: chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.js (9)
+[48766:1015/020717.504340:INFO:CONSOLE:50] "SONDA_ALARM criados em 1792040837503", source: chrome-extension://iehaoeheflelggancikipdhgkafjabnc/sw.js (50)
+[48766:1015/020717.505304:ERROR:extensions/browser/api/runtime/runtime_api.cc:945] NOTREACHED hit. Unexpected view type found: 0, Extension ID: iehaoeheflelggancikipdhgkafjabnc
+[48766:1015/020717.511949:INFO:electron/shell/browser/extensions/api/extension_action/extension_action_api.cc:115] chrome.action.setBadgeText is not supported in Electron
+[48766:1015/020717.512009:INFO:electron/shell/browser/extensions/api/extension_action/extension_action_api.cc:151] chrome.action.getBadgeText is not supported in Electron
+[48766:1015/020717.512067:INFO:electron/shell/browser/extensions/api/extension_action/extension_action_api.cc:87] chrome.action.setIcon is not supported in Electron
+[48766:1015/020717.523059:INFO:CONSOLE:9] "SONDA popup {"id":"iehaoeheflelggancikipdhgkafjabnc","sw":{"eco":{"tipo":"popup-ola"},"sw":true},"tabsErro":"TypeError: Cannot read properties of undefined (reading 'query')","tabAtivaErro":"TypeError: Cannot read properties of undefined (reading 'query')"}", source: chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.js (9)
+[48766:1015/020720.041302:INFO:CONSOLE:97] "SONDA_RESULT {"existencia":{"action":{"definido":true,"membros":{"setBadgeText":"funcao","setBadgeBackgroundColor":"funcao","setIcon":"funcao","setTitle":"funcao","setPopup":"funcao","getPopup":"funcao","openPopup":"funcao","onClicked":"objeto","enable":"funcao","disable":"funcao"}},"alarms":{"definido":true,"membros":{"create":"funcao","get":"funcao","getAll":"funcao","clear":"funcao","clearAll":"funcao","onAlarm":"objeto"}},"browsingData":{"definido":false},"clipboard":{"definido":true,"membros":{}},"commands":{"definido":false},"contextMenus":{"definido":false},"cookies":{"definido":false},"declarativeNetRequest":{"definido":true,"membros":{"updateDynamicRules":"funcao","getDynamicRules":"funcao","updateEnabledRulesets":"funcao","getEnabledRulesets":"funcao","updateSessionRules":"funcao"}},"dom":{"definido":true,"membros":{"openOrClosedShadowRoot":"funcao"}},"extension":{"definido":true,"membros":{"getURL":"indefinido","getBackgroundPage":"indefinido","isAllowedFileSchemeAccess":"indefinido","isAllowedIncognitoAccess":"indefinido"}},"fontSettings":{"definido":false},"history":{"definido":false},"i18n":{"definido":true,"membros":{"getMessage":"funcao","getUILanguage":"funcao","detectLanguage":"funcao"}},"identity":{"definido":false},"idle":{"definido":true,"membros":{"queryState":"funcao","setDetectionInterval":"funcao","onStateChanged":"objeto"}},"management":{"definido":true,"membros":{"getAll":"indefinido","getSelf":"funcao","get":"indefinido","onInstalled":"indefinido"}},"notifications":{"definido":false},"offscreen":{"definido":true,"membros":{"createDocument":"funcao","closeDocument":"funcao","hasDocument":"funcao"}},"permissions":{"definido":false},"privacy":{"definido":false},"runtime":{"definido":true,"membros":{"id":"objeto","getURL":"funcao","getManifest":"funcao","sendMessage":"funcao","connect":"funcao","onMessage":"objeto","onConnect":"objeto","onInstalled":"objeto","onStartup":"objeto","getContexts":"funcao","getPlatformInfo":"funcao","reload":"funcao","sendNativeMessage":"indefinido","connectNative":"indefinido","lastError":"indefinido","onSuspend":"objeto","setUninstallURL":"funcao","openOptionsPage":"funcao"}},"scripting":{"definido":true,"membros":{"executeScript":"funcao","insertCSS":"funcao","removeCSS":"funcao","registerContentScripts":"funcao","getRegisteredContentScripts":"funcao","unregisterContentScripts":"funcao","updateContentScripts":"funcao"}},"sessions":{"definido":false},"sidePanel":{"definido":false},"storage":{"definido":true,"membros":{"local":"objeto","sync":"objeto","session":"objeto","managed":"objeto","onChanged":"objeto"}},"system":{"definido":false},"tabs":{"definido":true,"membros":{"query":"funcao","get":"funcao","getCurrent":"indefinido","create":"indefinido","update":"funcao","remove":"indefinido","reload":"funcao","sendMessage":"funcao","executeScript":"indefinido","captureVisibleTab":"indefinido","duplicate":"indefinido","group":"indefinido","ungroup":"indefinido","move":"indefinido","goBack":"indefinido","goForward":"indefinido","setZoom":"funcao","getZoom":"funcao","detectLanguage":"indefinido","onCreated":"objeto","onUpdated":"objeto","onRemoved":"objeto","onActivated":"objeto","onReplaced":"objeto","onHighlighted":"objeto","onMoved":"objeto"}},"tabGroups":{"definido":false},"topSites":{"definido":false},"userScripts":{"definido":false},"webNavigation":{"definido":false},"webRequest":{"definido":true,"membros":{"onBeforeRequest":"objeto","onBeforeSendHeaders":"objeto","onSendHeaders":"objeto","onHeadersReceived":"objeto","onAuthRequired":"objeto","onCompleted":"objeto","onErrorOccurred":"objeto","handlerBehaviorChanged":"funcao"}},"windows":{"definido":false}},"webRequestBloqueante":"listener aceito sem erro","storage.local":{"ok":true,"valor":{"k":"v"},"ms":9},"storage.session":{"ok":true,"valor":{"k":"v"},"ms":0},"storage.sync":{"ok":false,"erro":"\"sync\" is not available in this instance of Chrome"},"alarms.create":{"ok":true,"valor":[{"name":"rapido-1_2s","persistAcrossSessions":true,"scheduledTime":1792040838704.292},{"name":"lento-30s","persistAcrossSessions":true,"scheduledTime":1792040867504.397},{"name":"um-minuto","persistAcrossSessions":true,"scheduledTime":1792040897504.42}],"ms":1},"runtime.getManifest":{"ok":true,"valor":"Sonda de APIs","ms":0},"runtime.getPlatformInfo":{"ok":true,"valor":{"arch":"arm64","os":"mac"},"ms":1},"runtime.getContexts":{"ok":true,"valor":[{"contextId":"885a6b4a-5e22-4894-9d28-857d91cdb750","contextType":"BACKGROUND","frameId":-1,"incognito":false,"tabId":-1,"windowId":-1}],"ms":0},"i18n.getUILanguage":{"ok":true,"valor":"pt-BR","ms":0},"tabs.query({})":{"ok":true,"valor":[{"id":2,"url":"chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html","active":false,"windowId":0},{"id":1,"url":"http://127.0.0.1:28765/","active":true,"windowId":0}],"ms":0},"tabs.query(active)":{"ok":true,"valor":["http://127.0.0.1:28765/"],"ms":0},"windows.getAll":{"ok":false,"erro":"Cannot read properties of undefined (reading 'getAll')"},"windows.getCurrent":{"ok":false,"erro":"Cannot read properties of undefined (reading 'getCurrent')"},"tabs.sendMessage":{"ok":true,"valor":{"contentRecebeu":{"tipo":"sw-ola"}},"ms":1},"scripting.executeScript":{"ok":true,"valor":[{"documentId":"8E4C9978639CAC270350A2EE3B30A373","frameId":0,"result":"Login de teste local"}],"ms":2},"scripting.registerContentScripts":{"ok":true,"valor":[{"allFrames":false,"id":"sonda-reg","js":["content.js"],"matchOriginAsFallback":false,"matches":["http://127.0.0.1/*"],"persistAcrossSessions":true,"runAt":"document_start","world":"ISOLATED"}],"ms":2},"cookies.getAll":{"ok":false,"erro":"Cannot read properties of undefined (reading 'getAll')"},"contextMenus.create":{"ok":false,"erro":"Cannot read properties of undefined (reading 'create')"},"action.setBadgeText":{"ok":true,"valor":"","ms":1},"action.setIcon":{"ok":true,"valor":"chamado","ms":0},"commands.getAll":{"ok":false,"erro":"Cannot read properties of undefined (reading 'getAll')"},"notifications.create":{"ok":false,"erro":"Cannot read properties of undefined (reading 'create')"},"idle.queryState":{"ok":true,"valor":"active","ms":0},"management.getSelf":{"ok":true,"valor":{"name":"Sonda de APIs","id":"iehaoeheflelggancikipdhgkafjabnc"},"ms":0},"permissions.getAll":{"ok":false,"erro":"Cannot read properties of undefined (reading 'getAll')"},"offscreen.createDocument":{"ok":true,"valor":true,"ms":11},"sidePanel.setOptions":{"ok":false,"erro":"Cannot read properties of undefined (reading 'setOptions')"},"declarativeNetRequest.updateDynamicRules":{"ok":true,"valor":[{"action":{"type":"block"},"condition":{"resourceTypes":["xmlhttprequest","main_frame"],"urlFilter":"bloquear-dnr"},"id":1,"priority":1}],"ms":5},"tabs.create":{"ok":false,"erro":"chrome.tabs.create is not a function"},"fetch (host_permissions)":{"ok":true,"valor":200,"ms":6},"alarmeDisparouApos2500ms":false,"mensagensRecebidas":[{"m":{"tipo":"content-ola","url":"http://127.0.0.1:28765/"},"tab":"http://127.0.0.1:28765/","url":"http://127.0.0.1:28765/"},{"m":{"tipo":"popup-ola"},"tab":"chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html","url":"chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html"},{"m":{"tipo":"popup-ola"},"tab":"chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html","url":"chrome-extension://iehaoeheflelggancikipdhgkafjabnc/popup.html"}],"webRequestEventos":[],"webNavigationEventos":[]}", source: chrome-extension://iehaoeheflelggancikipdhgkafjabnc/sw.js (97)
+[harness] 25216ms passo service-worker: início
+[harness] 25405ms passo service-worker: ok
+[harness] 25405ms passo popup: início
+[harness] 25430ms passo popup: ok
+[harness] 25430ms passo content-script: início
+[harness] 25450ms passo content-script: ok
+[harness] 25450ms passo captura-site: início
+[harness] 25520ms passo captura-site: ok
+[harness] 25520ms passo captura-popup: início
+[harness] 25537ms passo captura-popup: ok
+[harness] 25537ms passo teste-rede: início
+[harness] 25571ms passo teste-rede: ok
+/Users/guilhermelopes/Documents/Projects/navegador/app/node_modules/electron/dist/Electron.app/Contents/MacOS/Electron exited with signal SIGKILL

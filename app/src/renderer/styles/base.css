@@ -1,0 +1,75 @@
+/* Base da shell: o body é transparente, só os elementos pintam. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  margin: 0;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+}
+
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  cursor: default;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: default;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+input:focus,
+input:focus-visible {
+  outline: none;
+}
+
+.root {
+  position: absolute;
+  inset: 0;
+  color: var(--text);
+}
+
+.grow {
+  flex: 1;
+}
+
+/* faixa de 8 px acima do painel: arrasta a janela */
+.drag-strip {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 8px;
+  -webkit-app-region: drag;
+}
+
+/* sombra e hairline do painel da página (Main.dc.html). Na sombra externa o miolo não é pintado */
+.page-panel {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
+  border-radius: 10px;
+  background: var(--panel-bg);
+  box-shadow: var(--panel-shadow);
+  overflow: hidden;
+}
+
+/* shell por cima da página: o painel deixa a página aparecer */
+.page-panel[data-through='true'] {
+  background: transparent;
+}

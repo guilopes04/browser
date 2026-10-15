@@ -1,0 +1,691 @@
+{
+ "alarms.clear": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "alarms.clearAll": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "alarms.create": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "alarms.get": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "alarms.onAlarm": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "commands.getAll": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "commands.onCommand.addListener": [
+  "background.js"
+ ],
+ "contextMenus.create": [
+  "background.js"
+ ],
+ "contextMenus.remove": [
+  "background.js"
+ ],
+ "contextMenus.removeAll": [
+  "background.js"
+ ],
+ "dom.openOrClosedShadowRoot": [
+  "content/auto-submit-login.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "content/bootstrap-autofill.js"
+ ],
+ "extension.getBackgroundPage": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "extension.getViews": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "management.getSelf": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "notifications.clear": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "notifications.create": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "notifications.onButtonClicked": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "notifications.onClicked": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "offscreen.Reason.CLIPBOARD": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "offscreen.Reason.LOCAL_STORAGE": [
+  "background.js"
+ ],
+ "offscreen.closeDocument": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "offscreen.createDocument": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "offscreen.hasDocument": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "permissions.contains": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "permissions.onAdded.addListener": [
+  "background.js"
+ ],
+ "permissions.request": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "privacy.services.autofillAddressEnabled": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "privacy.services.autofillCreditCardEnabled": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "privacy.services.passwordSavingEnabled": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "runtime.MessageSender": [
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js"
+ ],
+ "runtime.connect": [
+  "content/auto-submit-login.js",
+  "content/autofiller.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "content/bootstrap-autofill.js",
+  "content/content-message-handler.js",
+  "content/fido2-content-script.js",
+  "content/fido2-page-script.js",
+  "content/ipc-content-script.js",
+  "overlay/menu-button.js",
+  "overlay/menu-list.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "runtime.connectNative": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "runtime.getContexts": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "runtime.getManifest": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "runtime.getPlatformInfo": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "runtime.getURL": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "runtime.id": [
+  "background.js",
+  "content/contextMenuHandler.js"
+ ],
+ "runtime.onConnect": [
+  "background.js"
+ ],
+ "runtime.onInstalled.addListener": [
+  "background.js"
+ ],
+ "runtime.onMessage": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "runtime.onMessage.addListener": [
+  "content/auto-submit-login.js",
+  "content/autofiller.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "content/bootstrap-autofill.js",
+  "content/content-message-handler.js",
+  "content/contextMenuHandler.js",
+  "content/ipc-content-script.js"
+ ],
+ "runtime.onMessage.removeListener": [
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "content/bootstrap-autofill.js",
+  "content/content-message-handler.js",
+  "content/ipc-content-script.js"
+ ],
+ "runtime.reload": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "content/ipc-content-script.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "runtime.sendMessage": [
+  "background.js",
+  "content/auto-submit-login.js",
+  "content/autofiller.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "content/bootstrap-autofill.js",
+  "content/content-message-handler.js",
+  "content/contextMenuHandler.js",
+  "content/fido2-content-script.js",
+  "content/fido2-page-script.js",
+  "content/ipc-content-script.js",
+  "content/trigger-autofill-script-injection.js",
+  "notification/bar.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu-button.js",
+  "overlay/menu-list.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "scripting.ExecutionWorld.ISOLATED": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "scripting.ExecutionWorld.MAIN": [
+  "background.js"
+ ],
+ "scripting.executeScript": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "scripting.insertCSS": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "scripting.registerContentScripts": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "scripting.unregisterContentScripts": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "sidePanel.open": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "sidePanel.setOptions": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "storage.local": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "popup/main.js"
+ ],
+ "storage.local.get": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "popup/main.js"
+ ],
+ "storage.managed": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "storage.managed.get": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "storage.onChanged": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "storage.session": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "storage.sync": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "tabs.TAB_ID_NONE": [
+  "background.js"
+ ],
+ "tabs.Tab": [
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js"
+ ],
+ "tabs.captureVisibleTab": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "tabs.create": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "tabs.executeScript": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "tabs.get": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "tabs.getCurrent": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "tabs.onActivated": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "tabs.onActivated.addListener": [
+  "background.js"
+ ],
+ "tabs.onActivated.removeListener": [
+  "background.js"
+ ],
+ "tabs.onCreated": [
+  "background.js"
+ ],
+ "tabs.onRemoved": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "tabs.onRemoved.addListener": [
+  "background.js"
+ ],
+ "tabs.onRemoved.removeListener": [
+  "background.js"
+ ],
+ "tabs.onReplaced.addListener": [
+  "background.js"
+ ],
+ "tabs.onUpdated": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "tabs.onUpdated.addListener": [
+  "background.js"
+ ],
+ "tabs.onUpdated.removeListener": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "tabs.query": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "tabs.remove": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "tabs.sendMessage": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "tabs.update": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "webNavigation.getAllFrames": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "webNavigation.getFrame": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "webNavigation.onCommitted": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "webNavigation.onCommitted.removeListener": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "webNavigation.onCompleted.addListener": [
+  "background.js"
+ ],
+ "webNavigation.onCompleted.removeListener": [
+  "background.js"
+ ],
+ "webNavigation.onErrorOccurred": [
+  "background.js"
+ ],
+ "webRequest.onAuthRequired": [
+  "background.js"
+ ],
+ "webRequest.onBeforeRedirect.addListener": [
+  "background.js"
+ ],
+ "webRequest.onBeforeRedirect.removeListener": [
+  "background.js"
+ ],
+ "webRequest.onBeforeRequest.addListener": [
+  "background.js"
+ ],
+ "webRequest.onBeforeRequest.removeListener": [
+  "background.js"
+ ],
+ "webRequest.onCompleted.addListener": [
+  "background.js"
+ ],
+ "webRequest.onCompleted.removeListener": [
+  "background.js"
+ ],
+ "windows.WINDOW_ID_CURRENT": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "windows.create": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "windows.get": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "windows.getAll": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "windows.getCurrent": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "windows.onCreated.addListener": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "windows.onFocusChanged.addListener": [
+  "background.js"
+ ],
+ "windows.onRemoved": [
+  "background.js",
+  "popup/main.js"
+ ],
+ "windows.remove": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ],
+ "windows.update": [
+  "background.js",
+  "content/bootstrap-autofill-overlay-menu.js",
+  "content/bootstrap-autofill-overlay-notifications.js",
+  "content/bootstrap-autofill-overlay.js",
+  "offscreen-document/offscreen-document.js",
+  "overlay/menu.js",
+  "popup/main.js"
+ ]
+}
