@@ -136,7 +136,9 @@ test('paleta: título de aba, favorito e histórico chega limpo', () => {
     loading: false,
     canGoBack: false,
     canGoForward: false,
-    error: null
+    error: null,
+    blockedPopups: 0,
+    dialogBlocked: false
   })
   const history: HistoryEntry[] = [
     {

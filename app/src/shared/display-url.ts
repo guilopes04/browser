@@ -24,7 +24,7 @@ const HIDDEN_RANGES: [number, number][] = [
   [0xfff9, 0xfffd]
 ]
 
-function hasHidden(text: string): boolean {
+export function hasHiddenChars(text: string): boolean {
   for (const char of text) {
     const code = char.codePointAt(0) ?? 0
     if (HIDDEN_RANGES.some(([from, to]) => code >= from && code <= to))
@@ -38,7 +38,7 @@ export function displayUrl(url: string): string {
   return url.replace(HIGH_BYTES, run => {
     try {
       const decoded = decodeURIComponent(run)
-      return hasHidden(decoded) ? run : decoded
+      return hasHiddenChars(decoded) ? run : decoded
     } catch {
       // bytes que não formam UTF-8 válido
       return run

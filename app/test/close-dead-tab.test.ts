@@ -26,8 +26,10 @@ test('getLiveContents: undefined depois de destruído, nunca lança', () => {
   assert.equal(getLiveContents(undefined), null)
 })
 
-test('página que se fecha (window.close): a aba sai da sidebar e a vizinha assume', () => {
+test('pop-up que se fecha (window.close): a aba sai da sidebar e a vizinha assume', () => {
   const { ctx, store, a, b, c, makeLive } = setup()
+  // aberta por window.open: pode se fechar por script
+  ctx.guard.scriptOpened.add(a.id)
   const popup = makeLive(a)
   makeLive(b)
   store.setActiveTab('personal', a.id)
@@ -43,8 +45,9 @@ test('página que se fecha (window.close): a aba sai da sidebar e a vizinha assu
   assert.equal(store.getActiveTabId('personal'), b.id)
   assert.equal(ctx.attached.tabId, b.id)
   assert.ok(store.getTab(c.id))
-  // fechada pela página: não entra no ⇧⌘T
-  assert.equal(store.closed.length, 0)
+  // fechada por script também entra no ⇧⌘T: o usuário recupera o que um site fechou
+  assert.equal(store.closed.length, 1)
+  assert.equal(store.closed[0].url, 'https://a.com')
 })
 
 test('suspensão destrói a view mas não remove a aba', () => {
@@ -71,6 +74,7 @@ test('evento atrasado de uma view antiga não derruba a aba que acordou', () => 
 test('fechar o último tab do espaço abre uma Nova aba', () => {
   const env = fakeContext(['https://a.com'])
   const [a] = env.store.getTabsOfSpace('personal')
+  env.ctx.guard.scriptOpened.add(a.id)
   const live = env.makeLive(a)
   env.ctx.attached.tabId = a.id
   env.ctx.attached.view = live.view as never
@@ -82,7 +86,7 @@ test('fechar o último tab do espaço abre uma Nova aba', () => {
   assert.equal(env.store.getActiveTabId('personal'), rest[0].id)
 })
 
-test('o timer de suspensão não lança com views mortas e remove as abas', () => {
+test('o timer de suspensão não lança com views mortas e deixa as abas dormentes', () => {
   const { ctx, store, a, b, c, makeLive } = setup()
   const deadA = makeLive(a)
   const deadB = makeLive(b)
@@ -94,9 +98,10 @@ test('o timer de suspensão não lança com views mortas e remove as abas', () =
   ctx.attached.tabId = c.id
 
   assert.doesNotThrow(() => runSuspensionTick(ctx, 60_000))
-  // as duas, uma ao lado da outra: remover a primeira não pode pular a segunda
-  assert.equal(store.getTab(a.id), undefined)
-  assert.equal(store.getTab(b.id), undefined)
+  // as duas, uma ao lado da outra: tratar a primeira não pode pular a segunda. Não foram abertas
+  // por script, então não saem da sidebar: voltam dormentes e recarregam quando forem abertas
+  assert.equal(store.getTab(a.id)?.dormant, true)
+  assert.equal(store.getTab(b.id)?.dormant, true)
   assert.equal(ctx.views.has(a.id), false)
   assert.equal(ctx.views.has(b.id), false)
   assert.ok(store.getTab(c.id))

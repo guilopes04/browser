@@ -25,6 +25,8 @@ export function activateTab(ctx: MainContext, tabId: TabId): void {
     store.setCurrentSpace(tab.spaceId)
   store.setActiveTab(tab.spaceId, tabId)
   store.touchTab(tabId)
+  // a aba está à vista: o marcador de diálogo descartado cumpriu o papel
+  if (tab.dialogBlocked) store.patchTab(tabId, { dialogBlocked: false })
 
   const view = wakeTab(ctx, tabId)
   if (view) {

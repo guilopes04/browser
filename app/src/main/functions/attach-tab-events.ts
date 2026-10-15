@@ -1,20 +1,23 @@
 // Liga os eventos do webContents de uma aba ao store (título, favicon, áudio, navegação).
 import type { WebContents } from 'electron'
-import { sanitizeTitle } from '@shared/sanitize-title'
-import { stripFragmentFromTitle } from '@shared/strip-fragment'
 import type { Tab, TabId } from '@shared/types'
-import { getHostname } from '@shared/url-parts'
-import { closeFind } from '../actions/close-find'
 import type { MainContext } from '../context'
-import { applyLayout } from './apply-layout'
 import { attachFindEvents } from './attach-find-events'
+import { takeBlockedPopups } from './blocked-popups'
 import { closeFindOnEscape } from './close-find-on-escape'
 import { destroyTabView } from './destroy-tab-view'
 import { faviconToDataUrl } from './favicon-to-data-url'
 import { forwardEarlyKey } from './forward-early-key'
 import { handleEarlyShortcut } from './handle-early-shortcut'
 import { shouldFallbackToHttp } from './http-fallback-errors'
+import { pageTitle } from './page-title'
+import { showTabError } from './show-tab-error'
 import { readNavigation } from './stash-navigation'
+import {
+  isActivationKey,
+  isActivationPointer,
+  markGesture
+} from './user-gesture'
 
 // códigos de rede do Chromium
 const ERR_ABORTED = -3
@@ -25,12 +28,6 @@ function sameUrl(a: string, b: string): boolean {
   } catch {
     return a === b
   }
-}
-
-// título da página para guardar: sem controles nem marcas bidi e sem o #fragmento que o Chromium
-// copia do endereço quando a página não tem <title>
-function pageTitle(title: string, url: string): string {
-  return stripFragmentFromTitle(sanitizeTitle(title), url)
 }
 
 // um renderer que cai é recarregado uma vez; se cair de novo logo em seguida, fica como está
@@ -69,6 +66,14 @@ export function attachTabEvents(
     closeFindOnEscape(ctx, tabId, input)
     // com a paleta (ou a Nova aba) abrindo, as teclas seguem para a shell em vez de cair na página
     forwardEarlyKey(ctx, event, input)
+    // só é gesto da página a tecla que chegou a ela
+    if (!event.defaultPrevented && isActivationKey(input))
+      markGesture(ctx.guard, tabId)
+  })
+
+  // clique do usuário na página (a página não forja input-event); libera download, pop-up e afins
+  wc.on('input-event', (_event, inputEvent) => {
+    if (isActivationPointer(inputEvent.type)) markGesture(ctx.guard, tabId)
   })
   attachFindEvents(ctx, tabId, wc)
 
@@ -104,25 +109,17 @@ export function attachTabEvents(
   // então um did-navigate é sempre uma página que carregou de verdade
   // na página de erro a aba deixa de se parecer com o site que falhou: o título vira o host e o
   // favicon volta ao padrão (letra e cor)
-  const setError = (error: Tab['error'], failedUrl = '') => {
-    store.patchTab(tabId, {
-      error,
-      ...(error
-        ? { title: getHostname(failedUrl) || failedUrl, favicon: null }
-        : // a página voltou: o título que o erro tinha trocado volta a ser o dela (o evento de
-          // título nem sempre chega de novo, como num recarregamento da mesma página)
-          { title: pageTitle(wc.getTitle(), wc.getURL()) })
-    })
-    if (ctx.attached.tabId !== tabId) return
-    // a página de erro é da shell: a barra de busca não tem mais o que buscar
-    if (error && ctx.find?.tabId === tabId) closeFind(ctx, false)
-    applyLayout(ctx)
-    if (error) ctx.shell.webContents.focus()
-    else wc.focus()
-  }
+  const setError = (error: Tab['error'], failedUrl = '') =>
+    showTabError(ctx, tabId, error, failedUrl)
 
   wc.on('did-navigate', () => {
     ctx.httpFallbacks.delete(tabId)
+    // página nova: o aviso de pop-up bloqueado, a contagem de diálogos e o "bloquear mais" eram
+    // da anterior (o bloqueio de diálogos vale "até recarregar")
+    if (ctx.guard.blockedPopups.has(tabId)) takeBlockedPopups(ctx, tabId)
+    ctx.guard.dialogs.delete(tabId)
+    if (store.getTab(tabId)?.dialogBlocked)
+      store.patchTab(tabId, { dialogBlocked: false })
     syncNavigation()
     recordVisit()
     if (store.getTab(tabId)?.error) setError(null)
@@ -189,7 +186,9 @@ export function attachTabEvents(
       audible: false,
       canGoBack: false,
       canGoForward: false,
-      error: null
+      error: null,
+      blockedPopups: 0,
+      dialogBlocked: false
     })
   })
 }

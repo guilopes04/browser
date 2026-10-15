@@ -18,6 +18,7 @@ import {
 import { attachTabEvents } from '../src/main/functions/attach-tab-events'
 import { guardTabNavigation } from '../src/main/functions/guard-tab-navigation'
 import { isBlockedNavigation } from '../src/main/functions/is-blocked-navigation'
+import { markGesture } from '../src/main/functions/user-gesture'
 import { installWindowOpenHandler } from '../src/main/functions/window-open'
 import { buildInitialState } from '../src/main/store/build-initial-state'
 import { hydrateTab } from '../src/main/store/hydrate-tab'
@@ -231,6 +232,9 @@ test('window.open e target=_blank só abrem http, https, about:blank e blob', ()
     tab.id,
     wc as unknown as WebContents
   )
+  // o bloqueador de pop-ups só deixa abrir com gesto recente: aqui o gesto existe, o que se
+  // confere é o esquema da URL
+  markGesture(ctx.guard, tab.id)
   const decide = (url: string) =>
     (handler as NonNullable<typeof handler>)({
       url,

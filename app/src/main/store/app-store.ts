@@ -111,7 +111,9 @@ export class AppStore {
       loading: false,
       canGoBack: false,
       canGoForward: false,
-      error: null
+      error: null,
+      blockedPopups: 0,
+      dialogBlocked: false
     })
     this.addTab(tab, 'top')
   }

@@ -1,17 +1,42 @@
 // Sessão persistente de cada espaço, configurada uma única vez.
 import { session, type Session } from 'electron'
+import type { MainContext } from '../context'
 import { cleanUserAgent } from './clean-user-agent'
 import { getPartitionName } from './get-partition-name'
+import { requestExternalOpen } from './handle-external-open'
 import { hardenSession } from './harden-session'
 import { installLocalNetworkGuard } from './local-network-guard'
-import { PAGE_PERMISSIONS } from './permission-policy'
+import { isPermissionAllowed, PAGE_PERMISSIONS } from './permission-policy'
 
 const configured = new Set<string>()
+
+// o contexto do app: a permissão "openExternal" é respondida por um diálogo, que precisa dele
+let boundContext: MainContext | null = null
+
+export function bindSessionContext(ctx: MainContext): void {
+  boundContext = ctx
+}
 
 function configureSession(ses: Session): void {
   ses.setUserAgent(cleanUserAgent(ses.getUserAgent()))
   // o padrão do Electron concede tudo; até a peça de Permissão existir, só PAGE_PERMISSIONS passa
   hardenSession(ses, PAGE_PERMISSIONS)
+  // mailto:, tel: e afins: o usuário decide num diálogo (nunca abre em silêncio); o resto segue a
+  // política de permissões de página
+  ses.setPermissionRequestHandler((contents, permission, callback, details) => {
+    if (permission === 'openExternal') {
+      if (boundContext)
+        requestExternalOpen(
+          boundContext,
+          contents,
+          (details as { externalURL?: string }).externalURL,
+          callback
+        )
+      else callback(false)
+      return
+    }
+    callback(isPermissionAllowed(permission, PAGE_PERMISSIONS))
+  })
   // página da internet não alcança a rede local (roteador, serviços em localhost)
   installLocalNetworkGuard(ses)
 }

@@ -7,6 +7,7 @@ import type { MainContext } from './context'
 import { parseFlags } from './flags'
 import {
   applyLayout,
+  bindSessionContext,
   cleanUserAgent,
   exitVideoFullscreen,
   findRefusedDebugFlags,
@@ -31,6 +32,7 @@ import {
   installErrorLog,
   readTheme,
   registerAppScheme,
+  registerScriptDialogs,
   scheduleCapture,
   startMetaFill,
   startSuspensionTimer,
@@ -44,6 +46,7 @@ import { protectDataFiles } from './store/private-files'
 import { readSessionFile } from './store/read-session-file'
 import { getSessionPath } from './store/session-path'
 import { startSessionWriter } from './store/session-writer'
+import { createWebGuard } from './web-guard'
 
 // o primeiro de tudo: erro sem tratamento vai para o log, nunca para um diálogo modal
 installErrorLog()
@@ -95,6 +98,8 @@ registerAppScheme()
 app.userAgentFallback = cleanUserAgent(app.userAgentFallback)
 
 if (flags.theme) nativeTheme.themeSource = flags.theme
+// testes: os downloads vão para uma pasta de teste, nunca para a do usuário
+if (flags.downloadsDir) app.setPath('downloads', flags.downloadsDir)
 
 // uma instância por userData (partições e session.json não toleram duas)
 const hasLock = !startupRefused && app.requestSingleInstanceLock()
@@ -177,11 +182,14 @@ async function bootstrap(): Promise<void> {
     find: null,
     findMatchCase: false,
     keyGate: null,
+    guard: createWebGuard(),
     metaFilled: Promise.resolve(),
     quitting: false
   }
 
   installClientCertificateDialog(() => (win.isDestroyed() ? null : win))
+  // as sessões dos espaços respondem a mailto: e afins com um diálogo (precisam do contexto)
+  bindSessionContext(ctx)
   const shellUrl = getShellUrl()
   guardShell(ctx, shellUrl)
   shell.webContents.on('before-input-event', (event, input) => {
@@ -209,6 +217,7 @@ async function bootstrap(): Promise<void> {
     stateServed = true
     showWhenReady()
   })
+  registerScriptDialogs(ctx)
 
   store.subscribe(change => {
     if (change.kind === 'structure' || change.kind === 'view')

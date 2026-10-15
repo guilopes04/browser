@@ -6,9 +6,11 @@ import {
   getTileColor,
   getTileLetter
 } from '@shared/tile-appearance'
+import { isInsecureUrl } from '@shared/address-display'
 import { getSiteName } from '@shared/url-parts'
 import { snapshot } from '../../state'
 import { getTabTile } from '../../tab-tile'
+import { InsecureMark } from '../guard/insecure-mark'
 import { Tile } from '../tile'
 import { Kbd } from './kbd'
 import { SpaceChip } from './space-chip'
@@ -40,6 +42,7 @@ export function TabRow({ item, compact, selected }: PaletteRowProps) {
           favicon={tab?.favicon ?? null}
         />
         <span class="pal-title">{sanitizeTitle(item.title)}</span>
+        {isInsecureUrl(item.url) && <InsecureMark small />}
         <span class="pal-right">{spaceName}</span>
       </>
     )
@@ -57,7 +60,10 @@ export function TabRow({ item, compact, selected }: PaletteRowProps) {
           {sanitizeTitle(item.title)}
         </span>
         <span class="pal-sub">
-          {displayUrl(stripScheme(item.url)).replace(/\/$/, '')}
+          {isInsecureUrl(item.url) && <InsecureMark small />}
+          <span class="pal-sub-url">
+            {displayUrl(stripScheme(item.url)).replace(/\/$/, '')}
+          </span>
         </span>
       </div>
       <SpaceChip spaceId={item.spaceId} />

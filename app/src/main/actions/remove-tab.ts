@@ -2,6 +2,7 @@
 import type { TabId } from '@shared/types'
 import type { MainContext } from '../context'
 import { destroyTabView } from '../functions/destroy-tab-view'
+import { forgetTab } from '../web-guard'
 import { pickNextTab } from './pick-next-tab'
 
 // remember: vai para a pilha do ⇧⌘T (fechada pelo usuário). Uma página que fecha a si mesma
@@ -26,6 +27,7 @@ export function removeTab(
 
   destroyTabView(ctx, tabId)
   ctx.stash.delete(tabId)
+  forgetTab(ctx.guard, tabId)
   store.removeTab(tabId)
 
   if (wasActive) pickNextTab(ctx, tab.spaceId, index)

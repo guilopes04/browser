@@ -1,9 +1,11 @@
+import { isInsecureUrl } from '@shared/address-display'
 import { displayUrl } from '@shared/display-url'
 import { sanitizeTitle } from '@shared/sanitize-title'
 import { stripScheme } from '@shared/url-key'
 import { getTileColor } from '@shared/tile-appearance'
 import { getFavoriteLetter } from '../../favorite-letter'
 import { snapshot } from '../../state'
+import { InsecureMark } from '../guard/insecure-mark'
 import { Tile } from '../tile'
 import { SpaceChip } from './space-chip'
 import type { PaletteRowProps } from './types'
@@ -23,7 +25,10 @@ export function FavoriteRow({ item }: PaletteRowProps) {
       <span class="pal-title">{sanitizeTitle(item.title)}</span>
       <SpaceChip spaceId={item.spaceId} />
       <span class="pal-right">
-        {displayUrl(stripScheme(item.url)).replace(/\/$/, '')}
+        {isInsecureUrl(item.url) && <InsecureMark small />}
+        <span class="pal-sub-url">
+          {displayUrl(stripScheme(item.url)).replace(/\/$/, '')}
+        </span>
       </span>
     </>
   )

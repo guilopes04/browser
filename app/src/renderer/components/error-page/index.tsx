@@ -14,7 +14,10 @@ interface ErrorPageProps {
 export function ErrorPage({ tab }: ErrorPageProps) {
   const { error } = tab
   const text = error
-    ? describeLoadError(error.code, getHostname(tab.url) || tab.url)
+    ? describeLoadError(
+        error.code,
+        error.target ?? (getHostname(tab.url) || tab.url)
+      )
     : null
   const offline = text?.offline === true
 

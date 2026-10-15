@@ -22,6 +22,8 @@ export interface Flags {
   // texto que a barra de busca procura na captura (padrão: "a")
   findQuery: string
   dev: boolean
+  // pasta de downloads trocada (testes: nunca escrever em ~/Downloads). null = a do sistema
+  downloadsDir: string | null
 }
 
 const DEFAULT_FIND_QUERY = 'a'
@@ -115,6 +117,7 @@ export function parseFlags(argv: string[]): Flags {
     captureDelayMs: delay ?? 1500,
     paletteQuery: readValue(argv, 'paleta-consulta') ?? '',
     findQuery: readValue(argv, 'busca-consulta') || DEFAULT_FIND_QUERY,
-    dev: hasFlag(argv, 'dev')
+    dev: hasFlag(argv, 'dev'),
+    downloadsDir: readValue(argv, 'pasta-downloads') || null
   }
 }

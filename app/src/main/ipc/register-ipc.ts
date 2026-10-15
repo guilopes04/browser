@@ -13,12 +13,14 @@ import {
   closePalette,
   closeTab,
   createTab,
+  dismissBlockedPopups,
   goBack,
   goForward,
   markFindReady,
   moveTab,
   moveTabToSpace,
   navigateTab,
+  openBlockedPopups,
   openDownloads,
   openNetworkSettings,
   openPalette,
@@ -180,6 +182,14 @@ const handlers: { [K in keyof Commands]: Handler } = {
   'find:pointer': (ctx, payload) => {
     const pointer = readFindPointer(payload)
     if (pointer) passFindPointer(ctx, pointer)
+  },
+  'popup:open-blocked': (ctx, payload) => {
+    const tabId = readTabId(ctx, payload)
+    if (tabId) openBlockedPopups(ctx, tabId)
+  },
+  'popup:dismiss-blocked': (ctx, payload) => {
+    const tabId = readTabId(ctx, payload)
+    if (tabId) dismissBlockedPopups(ctx, tabId)
   },
   'command:run': (ctx, payload) => {
     const command = isRecord(payload) ? readCommand(payload.command) : null

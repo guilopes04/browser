@@ -8,7 +8,16 @@ export default defineConfig({
     resolve: { alias }
   },
   preload: {
-    resolve: { alias }
+    resolve: { alias },
+    build: {
+      // dois preloads, cada um um arquivo só (o de sandbox não carrega pedaços): a shell e as abas
+      rollupOptions: {
+        input: {
+          index: resolve('src/preload/index.ts'),
+          'tab-guard': resolve('src/preload/tab-guard.ts')
+        }
+      }
+    }
   },
   renderer: {
     root: resolve('src/renderer'),

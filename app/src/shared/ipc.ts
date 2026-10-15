@@ -62,6 +62,9 @@ export interface Commands {
   'find:close': Record<string, never>
   // o mouse na margem transparente da view da barra (a da sombra): é da página
   'find:pointer': FindPointer
+  // aviso "Pop-up bloqueado": abre o que a página tentou abrir, ou dispensa o aviso
+  'popup:open-blocked': { tabId: TabId }
+  'popup:dismiss-blocked': { tabId: TabId }
 }
 
 // shell -> main com resposta: invoke / handle
@@ -124,7 +127,9 @@ export const COMMAND_CHANNELS = [
   'find:step',
   'find:case',
   'find:close',
-  'find:pointer'
+  'find:pointer',
+  'popup:open-blocked',
+  'popup:dismiss-blocked'
 ] as const satisfies readonly (keyof Commands)[]
 
 export const REQUEST_CHANNELS = [

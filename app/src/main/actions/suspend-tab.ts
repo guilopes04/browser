@@ -38,7 +38,9 @@ export async function suspendTab(
       audible: false,
       canGoBack: false,
       canGoForward: false,
-      error: null
+      error: null,
+      blockedPopups: 0,
+      dialogBlocked: false
     })
     return true
   } finally {

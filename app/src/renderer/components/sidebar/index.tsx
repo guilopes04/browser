@@ -1,3 +1,4 @@
+import { PopupNotice } from '../guard/popup-notice'
 import { AddressField } from './address-field'
 import { EssentialsGrid } from './essentials-grid'
 import { Footer } from './footer'
@@ -11,6 +12,7 @@ export function Sidebar() {
       <TopBar />
       <SpaceSwitcher />
       <AddressField />
+      <PopupNotice />
       <EssentialsGrid />
       <div class="hairline" />
       <TabList />

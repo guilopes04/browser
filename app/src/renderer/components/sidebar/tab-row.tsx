@@ -3,6 +3,7 @@ import { api } from '../../api'
 import { snapshot } from '../../state'
 import { getTabTile } from '../../tab-tile'
 import { CloseIcon, MoonIcon, SpeakerIcon, SpeakerMutedIcon } from '../icons'
+import { DialogBlockedIcon } from '../guard/icons'
 import { Tile } from '../tile'
 
 interface TabRowProps {
@@ -53,6 +54,14 @@ export function TabRow({ tab, active }: TabRowProps) {
         >
           {tab.muted ? <SpeakerMutedIcon /> : <SpeakerIcon />}
         </button>
+      )}
+      {tab.dialogBlocked && (
+        <span
+          class="slot-dialog"
+          title="Esta aba tentou abrir um diálogo em segundo plano e ele foi descartado"
+        >
+          <DialogBlockedIcon />
+        </span>
       )}
       {tab.dormant && (
         <span

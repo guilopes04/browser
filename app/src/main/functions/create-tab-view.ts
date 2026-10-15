@@ -12,6 +12,7 @@ import { attachTabEvents } from './attach-tab-events'
 import { attachUnloadGuard } from './attach-unload-guard'
 import { getSpaceSession } from './get-space-session'
 import { guardTabNavigation } from './guard-tab-navigation'
+import { getTabPreloadPath } from './tab-preload-path'
 import { installWindowOpenHandler } from './window-open'
 
 export function createTabView(
@@ -19,6 +20,7 @@ export function createTabView(
   tab: Tab,
   adopted?: WebContents
 ): WebContentsView {
+  const preload = getTabPreloadPath()
   const view = adopted
     ? new WebContentsView({ webContents: adopted })
     : new WebContentsView({
@@ -26,7 +28,16 @@ export function createTabView(
           session: getSpaceSession(tab.spaceId),
           sandbox: true,
           contextIsolation: true,
-          nodeIntegration: false
+          nodeIntegration: false,
+          // alert/confirm/prompt passam pelo main (preload/tab-guard.ts); os diálogos nativos do
+          // Electron, que não mostram a origem nem se calam, ficam desligados
+          ...(preload
+            ? {
+                preload,
+                nodeIntegrationInSubFrames: true,
+                disableDialogs: true
+              }
+            : {})
         }
       })
   view.setBackgroundColor(PAGE_CANVAS)
