@@ -1,6 +1,6 @@
 // Estado em memória -> conteúdo do session.json. Só entra o que sobrevive a um reinício.
 import { limitTitle, limitUrl } from '@shared/limit-stored-text'
-import { stripFragment } from '@shared/strip-fragment'
+import { stripFragment, stripFragmentFromTitle } from '@shared/strip-fragment'
 import type { AppSnapshot, SessionFile } from '@shared/types'
 
 export function toSessionFile(
@@ -16,7 +16,7 @@ export function toSessionFile(
       id: tab.id,
       spaceId: tab.spaceId,
       url: limitUrl(stripFragment(tab.url)),
-      title: limitTitle(tab.title),
+      title: limitTitle(stripFragmentFromTitle(tab.title, tab.url)),
       favicon: tab.favicon,
       muted: tab.muted,
       lastActiveAt: tab.lastActiveAt
@@ -24,7 +24,7 @@ export function toSessionFile(
     closed: closed.map(entry => ({
       ...entry,
       url: limitUrl(stripFragment(entry.url)),
-      title: limitTitle(entry.title)
+      title: limitTitle(stripFragmentFromTitle(entry.title, entry.url))
     }))
   }
 }

@@ -6,6 +6,7 @@
 // Uso normal do app não faz nada aqui: nenhuma conexão de saída acontece sem ação do usuário. Os
 // favoritos nunca são consultados (usam a letra e a cor locais); o favicon de um favorito só
 // aparece depois de o usuário visitar o site (store.fillFavoriteFavicons, no page-favicon-updated).
+import { sanitizeTitle } from '@shared/sanitize-title'
 import { getHostname } from '@shared/url-parts'
 import type { SpaceId, Tab } from '@shared/types'
 import type { MainContext } from '../context'
@@ -77,7 +78,7 @@ function buildJobs(ctx: MainContext): Job[] {
       // a aba pode ter acordado, navegado ou fechado enquanto a rede respondia
       if (!tab || !needsTabMeta(tab) || tab.url !== url) return
       store.patchTab(id, {
-        ...(meta.title ? { title: meta.title } : {}),
+        ...(meta.title ? { title: sanitizeTitle(meta.title) } : {}),
         ...(favicon && !tab.favicon ? { favicon } : {})
       })
     })

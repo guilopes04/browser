@@ -9,6 +9,8 @@ import { statSync, unlinkSync } from 'node:fs'
 import { join } from 'node:path'
 import { limitTitle, limitUrl } from '@shared/limit-stored-text'
 
+import { sanitizeTitle } from '@shared/sanitize-title'
+import { stripFragmentFromTitle } from '@shared/strip-fragment'
 import type { HistoryEntry, SpaceId } from '@shared/types'
 import { isHistoryUrl } from './is-history-url'
 import { loadHistory } from './load-history'
@@ -133,10 +135,11 @@ export class HistoryStore {
 
   record(spaceId: SpaceId, url: string, title: string, now = Date.now()): void {
     if (!isHistoryUrl(url)) return
-    // uma URL de megabytes não entra inteira na memória nem no arquivo
+    // uma URL de megabytes não entra inteira na memória nem no arquivo; o título da página não
+    // leva controles nem marcas bidi
     const visit = {
       url: limitUrl(url),
-      title: limitTitle(title),
+      title: stripFragmentFromTitle(sanitizeTitle(limitTitle(title)), url),
       visitedAt: now
     }
     if (this.loaded) {
@@ -149,7 +152,8 @@ export class HistoryStore {
   setTitle(spaceId: SpaceId, url: string, title: string): void {
     if (!title) return
     url = limitUrl(url)
-    title = limitTitle(title)
+    title = stripFragmentFromTitle(sanitizeTitle(limitTitle(title)), url)
+    if (!title) return
     if (this.loaded) {
       if (!setHistoryTitle(this.space(spaceId), url, title)) return
     } else this.early.push({ kind: 'title', spaceId, url, title })

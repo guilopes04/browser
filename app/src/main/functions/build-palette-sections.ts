@@ -6,6 +6,7 @@ import { getPaletteActions, type ActionState } from '@shared/commands'
 import { rankMatches } from '@shared/match-palette'
 import { normalizeText, toQueryWords } from '@shared/normalize-text'
 import { resolveTyped } from '@shared/resolve-input'
+import { sanitizeTitle } from '@shared/sanitize-title'
 import { getTabLabel } from '@shared/tab-label'
 import type {
   HistoryEntry,
@@ -141,7 +142,7 @@ export function buildPaletteSections(input: PaletteInput): PaletteSection[] {
     kind: 'favorite',
     favoriteId: favorite.id,
     spaceId: space.id,
-    title: favorite.title,
+    title: sanitizeTitle(favorite.title),
     url: limitUrl(favorite.url)
   }))
 
@@ -175,7 +176,7 @@ export function buildPaletteSections(input: PaletteInput): PaletteSection[] {
   ).map(({ spaceId, entry }): PaletteItem => ({
     kind: 'history',
     spaceId,
-    title: entry.title || getHostname(entry.url) || entry.url,
+    title: sanitizeTitle(entry.title) || getHostname(entry.url) || entry.url,
     url: limitUrl(entry.url),
     visitedAt: entry.visitedAt
   }))

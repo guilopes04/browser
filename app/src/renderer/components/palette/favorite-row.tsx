@@ -1,4 +1,5 @@
 import { displayUrl } from '@shared/display-url'
+import { sanitizeTitle } from '@shared/sanitize-title'
 import { stripScheme } from '@shared/url-key'
 import { getTileColor } from '@shared/tile-appearance'
 import { getFavoriteLetter } from '../../favorite-letter'
@@ -19,7 +20,7 @@ export function FavoriteRow({ item }: PaletteRowProps) {
         color={favorite?.tile || getTileColor(item.title)}
         favicon={favorite?.favicon ?? null}
       />
-      <span class="pal-title">{item.title}</span>
+      <span class="pal-title">{sanitizeTitle(item.title)}</span>
       <SpaceChip spaceId={item.spaceId} />
       <span class="pal-right">
         {displayUrl(stripScheme(item.url)).replace(/\/$/, '')}

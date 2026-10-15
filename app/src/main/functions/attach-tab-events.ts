@@ -1,6 +1,7 @@
 // Liga os eventos do webContents de uma aba ao store (título, favicon, áudio, navegação).
 import type { WebContents } from 'electron'
 import { sanitizeTitle } from '@shared/sanitize-title'
+import { stripFragmentFromTitle } from '@shared/strip-fragment'
 import type { Tab, TabId } from '@shared/types'
 import { getHostname } from '@shared/url-parts'
 import type { MainContext } from '../context'
@@ -21,6 +22,12 @@ function sameUrl(a: string, b: string): boolean {
   } catch {
     return a === b
   }
+}
+
+// título da página para guardar: sem controles nem marcas bidi e sem o #fragmento que o Chromium
+// copia do endereço quando a página não tem <title>
+function pageTitle(title: string, url: string): string {
+  return stripFragmentFromTitle(sanitizeTitle(title), url)
 }
 
 // um renderer que cai é recarregado uma vez; se cair de novo logo em seguida, fica como está
@@ -50,7 +57,7 @@ export function attachTabEvents(
       ctx.history.record(
         tab.spaceId,
         wc.getURL(),
-        sanitizeTitle(wc.getTitle())
+        pageTitle(wc.getTitle(), wc.getURL())
       )
   }
 
@@ -64,7 +71,7 @@ export function attachTabEvents(
     // a página de erro é da shell: o título da aba segue sendo o host que falhou
     if (store.getTab(tabId)?.error) return
     // controles e marcas bidi do título viram espaço antes de qualquer lugar vê-lo
-    const clean = sanitizeTitle(title)
+    const clean = pageTitle(title, wc.getURL())
     store.patchTab(tabId, { title: clean })
     const tab = store.getTab(tabId)
     if (tab) ctx.history.setTitle(tab.spaceId, wc.getURL(), clean)
@@ -99,7 +106,7 @@ export function attachTabEvents(
         ? { title: getHostname(failedUrl) || failedUrl, favicon: null }
         : // a página voltou: o título que o erro tinha trocado volta a ser o dela (o evento de
           // título nem sempre chega de novo, como num recarregamento da mesma página)
-          { title: sanitizeTitle(wc.getTitle()) })
+          { title: pageTitle(wc.getTitle(), wc.getURL()) })
     })
     if (ctx.attached.tabId !== tabId) return
     applyLayout(ctx)
