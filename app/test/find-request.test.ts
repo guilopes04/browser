@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { getFindRequest } from '@shared/find-request'
+import { getFindRequest, shouldResetFindSession } from '@shared/find-request'
 import {
   beginFindRequest,
   createFindState,
@@ -53,4 +53,16 @@ test('o "Aa" vai no pedido', () => {
   const state = beginFindRequest(setFindMatchCase(typed, true), 2)
   assert.equal(getFindRequest(state, 'next')?.options.matchCase, true)
   assert.equal(getFindRequest(state, 'restart')?.options.matchCase, true)
+})
+
+test('página nova: sessão nova do começo, mesmo com a sessão anterior viva', () => {
+  assert.deepEqual(getFindRequest(live, 'reload')?.options, {
+    forward: true,
+    findNext: true,
+    matchCase: false
+  })
+  // só a página nova encerra a sessão anterior antes: digitar segue do destaque ativo
+  assert.equal(shouldResetFindSession('reload'), true)
+  assert.equal(shouldResetFindSession('restart'), false)
+  assert.equal(shouldResetFindSession('next'), false)
 })

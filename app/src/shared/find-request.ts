@@ -1,9 +1,10 @@
 // Que pedido o estado da busca faz ao Chromium (webContents.findInPage). Puro.
 import type { FindState } from './find-state'
 
-// restart: texto novo, "Aa" trocado ou página que recarregou (sessão nova de busca)
+// restart: texto novo ou "Aa" trocado (sessão nova de busca, que começa no destaque ativo)
+// reload: a página mudou (navegação, aba que acordou): sessão nova do começo da página
 // next e previous: o mesmo texto, para o resultado seguinte ou anterior
-export type FindDirection = 'restart' | 'next' | 'previous'
+export type FindDirection = 'restart' | 'reload' | 'next' | 'previous'
 
 export interface FindRequest {
   text: string
@@ -19,7 +20,8 @@ export function getFindRequest(
   direction: FindDirection
 ): FindRequest | null {
   if (state.text === '') return null
-  const follow = direction !== 'restart' && state.live
+  const follow =
+    (direction === 'next' || direction === 'previous') && state.live
   return {
     text: state.text,
     options: {
@@ -28,4 +30,11 @@ export function getFindRequest(
       matchCase: state.matchCase
     }
   }
+}
+
+// o Chromium guarda o destaque ativo da sessão anterior, mesmo de uma página que já foi embora, e
+// uma sessão nova com o mesmo texto começa depois dele ("2 de 3" numa página recém-carregada).
+// Antes de recomeçar numa página nova, a sessão anterior é encerrada
+export function shouldResetFindSession(direction: FindDirection): boolean {
+  return direction === 'reload'
 }

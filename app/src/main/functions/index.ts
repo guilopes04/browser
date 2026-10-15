@@ -1,3 +1,4 @@
+export * from './apply-find-highlight'
 export * from './apply-layout'
 export * from './attach-close-events'
 export * from './attach-context-menu'
