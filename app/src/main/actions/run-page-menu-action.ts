@@ -3,6 +3,7 @@ import { clipboard, type ContextMenuParams, type WebContents } from 'electron'
 import type { TabId } from '@shared/types'
 import type { MainContext } from '../context'
 import type { PageMenuAction } from '../functions/describe-page-menu'
+import { markUserNavigation } from '../functions/user-intent'
 import { createTab } from './create-tab'
 
 export function runPageMenuAction(
@@ -60,12 +61,15 @@ export function runPageMenuAction(
       wc.selectAll()
       break
     case 'back':
+      markUserNavigation(ctx, tabId)
       if (wc.navigationHistory.canGoBack()) wc.navigationHistory.goBack()
       break
     case 'forward':
+      markUserNavigation(ctx, tabId)
       if (wc.navigationHistory.canGoForward()) wc.navigationHistory.goForward()
       break
     case 'reload':
+      markUserNavigation(ctx, tabId)
       wc.reload()
       break
     case 'inspect':

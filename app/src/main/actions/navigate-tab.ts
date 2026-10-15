@@ -3,6 +3,7 @@ import type { TabId } from '@shared/types'
 import { resolveTyped } from '@shared/resolve-input'
 import type { MainContext } from '../context'
 import { getLiveContents } from '../functions/get-live-contents'
+import { markUserNavigation } from '../functions/user-intent'
 import { activateTab } from './activate-tab'
 
 export function navigateTab(
@@ -25,6 +26,8 @@ export function navigateTab(
 
   const wc = getLiveContents(ctx.views.get(tabId))
   if (wc) {
+    // o beforeunload da página que sai pode perguntar: é uma ação do usuário
+    markUserNavigation(ctx, tabId)
     void wc.loadURL(url).catch(() => {})
     store.patchTab(tabId, { url })
     return

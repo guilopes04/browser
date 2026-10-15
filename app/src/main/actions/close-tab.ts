@@ -4,6 +4,7 @@
 import type { TabId } from '@shared/types'
 import type { MainContext } from '../context'
 import { getLiveContents } from '../functions/get-live-contents'
+import { markUserNavigation } from '../functions/user-intent'
 import { removeTab } from './remove-tab'
 
 // se a página não responde ao fechamento (renderer travado, sem diálogo na tela), a aba é
@@ -21,6 +22,8 @@ export function closeTab(ctx: MainContext, tabId: TabId): void {
   }
 
   ctx.closing.add(tabId)
+  // o beforeunload da página pode perguntar: é uma ação do usuário
+  markUserNavigation(ctx, tabId)
   wc.close({ waitForBeforeUnload: true })
   const timer = setTimeout(() => {
     // o diálogo "Ficar" tira a aba de closing; destruída, o evento já a removeu

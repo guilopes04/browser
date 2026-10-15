@@ -4,6 +4,7 @@ import { dialog } from 'electron'
 import { isDarkGlyph } from '../src/shared/favicon-tone'
 import { formatErrorLog } from '../src/main/functions/format-error-log'
 import { attachUnloadGuard } from '../src/main/functions/attach-unload-guard'
+import { markUserNavigation } from '../src/main/functions/user-intent'
 import { hideWindow } from '../src/main/actions/hide-window'
 import { showWindow } from '../src/main/actions/show-window'
 import { buildMenuTemplate } from '../src/main/services/app-menu'
@@ -147,6 +148,8 @@ test('beforeunload: Sair deixa a navegação seguir (preventDefault)', () => {
     return 0
   }
   ctx.closing.add(tab.id)
+  // o ⌘W do usuário (closeTab) também marca a ação que o beforeunload pode perguntar
+  markUserNavigation(ctx, tab.id)
   let prevented = false
   live.wc.emit('will-prevent-unload', {
     preventDefault: () => (prevented = true)
@@ -167,6 +170,7 @@ test('beforeunload: Ficar cancela o fechamento e devolve o endereço da aba', ()
   const { ctx, store, tab, live } = unloadSetup()
   ;(dialog as any).showMessageBoxSync = () => 1
   ctx.closing.add(tab.id)
+  markUserNavigation(ctx, tab.id)
   ctx.httpFallbacks.set(tab.id, { from: 'x', to: 'y' })
   // a barra de endereço já tinha mudado a URL da aba antes de a página recusar
   store.patchTab(tab.id, { url: 'https://digitada.com/' })

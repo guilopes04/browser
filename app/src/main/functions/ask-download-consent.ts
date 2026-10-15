@@ -11,7 +11,7 @@ export async function askDownloadConsent(
   ctx: MainContext,
   file: { name: string; bytes: number; site: string }
 ): Promise<boolean> {
-  const { response } = await showMessage(ctx, {
+  const result = await showMessage(ctx, {
     type: 'warning',
     buttons: ['Cancelar', 'Baixar'],
     defaultId: CANCEL,
@@ -22,5 +22,6 @@ export async function askDownloadConsent(
       ? `Site: ${clipForDialog(file.site, 120)}\nO download começou sem um clique ou toque seu.`
       : 'O download começou sem um clique ou toque seu.'
   })
-  return response === ALLOW
+  // janela escondida: ninguém para responder, o download não segue
+  return result?.response === ALLOW
 }

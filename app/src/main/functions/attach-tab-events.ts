@@ -114,8 +114,12 @@ export function attachTabEvents(
 
   wc.on('did-navigate', () => {
     ctx.httpFallbacks.delete(tabId)
-    // página nova: o aviso de pop-up bloqueado era da anterior
+    // página nova: o aviso de pop-up bloqueado, a contagem de diálogos e o "bloquear mais" eram
+    // da anterior (o bloqueio de diálogos vale "até recarregar")
     if (ctx.guard.blockedPopups.has(tabId)) takeBlockedPopups(ctx, tabId)
+    ctx.guard.dialogs.delete(tabId)
+    if (store.getTab(tabId)?.dialogBlocked)
+      store.patchTab(tabId, { dialogBlocked: false })
     syncNavigation()
     recordVisit()
     if (store.getTab(tabId)?.error) setError(null)

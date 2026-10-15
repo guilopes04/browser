@@ -24,6 +24,7 @@ import {
   installErrorLog,
   readTheme,
   registerAppScheme,
+  registerScriptDialogs,
   scheduleCapture,
   startMetaFill,
   startSuspensionTimer,
@@ -172,6 +173,7 @@ async function bootstrap(): Promise<void> {
     stateServed = true
     showWhenReady()
   })
+  registerScriptDialogs(ctx)
 
   store.subscribe(change => {
     if (change.kind === 'structure' || change.kind === 'view')
