@@ -41,6 +41,8 @@ export interface Space {
 export interface LoadError {
   code: number
   description: string
+  // o que a página de erro nomeia no lugar do endereço da aba (esquema desconhecido: "gilasnope")
+  target?: string
 }
 
 export interface Tab {

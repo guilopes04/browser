@@ -1,15 +1,14 @@
 // Liga os eventos do webContents de uma aba ao store (título, favicon, áudio, navegação).
 import type { WebContents } from 'electron'
 import type { Tab, TabId } from '@shared/types'
-import { getHostname } from '@shared/url-parts'
 import type { MainContext } from '../context'
-import { applyLayout } from './apply-layout'
 import { takeBlockedPopups } from './blocked-popups'
 import { destroyTabView } from './destroy-tab-view'
 import { faviconToDataUrl } from './favicon-to-data-url'
 import { forwardEarlyKey } from './forward-early-key'
 import { handleEarlyShortcut } from './handle-early-shortcut'
 import { shouldFallbackToHttp } from './http-fallback-errors'
+import { showTabError } from './show-tab-error'
 import { readNavigation } from './stash-navigation'
 import {
   isActivationKey,
@@ -99,18 +98,8 @@ export function attachTabEvents(
   // então um did-navigate é sempre uma página que carregou de verdade
   // na página de erro a aba deixa de se parecer com o site que falhou: o título vira o host e o
   // favicon volta ao padrão (letra e cor)
-  const setError = (error: Tab['error'], failedUrl = '') => {
-    store.patchTab(tabId, {
-      error,
-      ...(error
-        ? { title: getHostname(failedUrl) || failedUrl, favicon: null }
-        : {})
-    })
-    if (ctx.attached.tabId !== tabId) return
-    applyLayout(ctx)
-    if (error) ctx.shell.webContents.focus()
-    else wc.focus()
-  }
+  const setError = (error: Tab['error'], failedUrl = '') =>
+    showTabError(ctx, tabId, error, failedUrl)
 
   wc.on('did-navigate', () => {
     ctx.httpFallbacks.delete(tabId)

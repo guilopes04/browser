@@ -66,6 +66,13 @@ export function describeLoadError(
       title: 'Porta bloqueada por segurança',
       body: `O navegador não abre a porta indicada em ${site}, porque ela costuma ser usada por serviços que não são páginas.`
     }
+  // esquema que nenhum app do Mac abre (o `site` é o nome do esquema)
+  if (errorCode === -302)
+    return {
+      kind: 'problem',
+      title: 'Nenhum app abre este tipo de link',
+      body: `O endereço pedido usa o esquema "${site}", e nenhum app deste Mac sabe abri-lo.`
+    }
   if (errorCode === -6)
     return {
       kind: 'problem',

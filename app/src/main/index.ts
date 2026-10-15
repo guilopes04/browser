@@ -7,6 +7,7 @@ import type { MainContext } from './context'
 import { parseFlags } from './flags'
 import {
   applyLayout,
+  bindSessionContext,
   cleanUserAgent,
   exitVideoFullscreen,
   forwardEarlyKey,
@@ -146,6 +147,8 @@ async function bootstrap(): Promise<void> {
     quitting: false
   }
 
+  // as sessões dos espaços respondem a mailto: e afins com um diálogo (precisam do contexto)
+  bindSessionContext(ctx)
   const shellUrl = getShellUrl()
   guardShell(ctx, shellUrl)
   shell.webContents.on('before-input-event', (event, input) => {
