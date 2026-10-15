@@ -2,7 +2,8 @@
 // 32 px; ICO e SVG (que o nativeImage não lê no macOS) passam como vieram, se forem pequenos,
 // porque a <img> da shell sabe desenhar os dois.
 import { nativeImage, type Session } from 'electron'
-import { createFaviconCache } from './favicon-cache'
+import { createFaviconCache, type FaviconCache } from './favicon-cache'
+import { filterFaviconCandidates } from './filter-favicon-candidates'
 import { sniffRawImageType } from './sniff-raw-image'
 
 const SIZE = 32
@@ -11,7 +12,18 @@ const MAX_BYTES = 512 * 1024
 // ICO e SVG vão para o session.json sem reduzir, então o limite é bem menor
 const MAX_RAW_BYTES = 48 * 1024
 
-const cache = createFaviconCache()
+// um cache por sessão (espaço): o ícone baixado no Pessoal não responde, sem rede, no Trabalho, o
+// que revelaria que o site foi visitado no outro espaço
+const caches = new WeakMap<Session, FaviconCache>()
+
+function getCache(ses: Session): FaviconCache {
+  let cache = caches.get(ses)
+  if (!cache) {
+    cache = createFaviconCache()
+    caches.set(ses, cache)
+  }
+  return cache
+}
 
 function sizeHint(url: string): number {
   const match = /(\d{2,3})x\1/.exec(url) ?? /-(\d{2,3})\./.exec(url)
@@ -23,6 +35,7 @@ function isSupported(url: string): boolean {
 }
 
 async function download(ses: Session, url: string): Promise<string | null> {
+  const cache = getCache(ses)
   const cached = cache.get(url)
   if (cached) return cached
   try {
@@ -64,10 +77,12 @@ async function download(ses: Session, url: string): Promise<string | null> {
 
 export async function faviconToDataUrl(
   ses: Session,
-  candidates: string[]
+  candidates: string[],
+  // a página que declarou os ícones: só uma página da rede local pode apontá-los para a rede local
+  pageUrl = ''
 ): Promise<string | null> {
   // maiores primeiro (apple-touch, 180x180); a ordem original desempata
-  const ordered = candidates
+  const ordered = filterFaviconCandidates(pageUrl, candidates)
     .filter(isSupported)
     .map((url, index) => ({ url, index, hint: sizeHint(url) }))
     .sort((a, b) => b.hint - a.hint || a.index - b.index)

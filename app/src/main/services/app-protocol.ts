@@ -1,20 +1,23 @@
 // Serve a shell por app://shell/ lendo só de out/renderer (bloqueia "..").
-import { net, protocol } from 'electron'
+import { app, net, protocol } from 'electron'
 import { join, normalize, sep } from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { resolveShellUrl, SHELL_URL } from '../functions/resolve-shell-url'
 
-export const SHELL_URL = 'app://shell/index.html'
+export { SHELL_URL }
 export const FIND_URL = 'app://shell/find.html'
 
-// no desenvolvimento (electron-vite dev) a shell vem do servidor do Vite
+// no desenvolvimento (electron-vite dev) a shell vem do servidor do Vite (http://localhost:<porta>);
+// empacotado é sempre app://shell, seja qual for o ambiente
 export function getShellUrl(): string {
-  return process.env['ELECTRON_RENDERER_URL'] ?? SHELL_URL
+  return resolveShellUrl(process.env['ELECTRON_RENDERER_URL'], app.isPackaged)
 }
 
-// a barra de busca é a segunda página do renderer (find.html), numa view própria
+// a barra de busca é a segunda página do renderer (find.html), numa view própria; parte do
+// endereço já validado da shell, então empacotado a variável ELECTRON_RENDERER_URL não vale
 export function getFindUrl(): string {
-  const dev = process.env['ELECTRON_RENDERER_URL']
-  return dev ? new URL('find.html', `${dev}/`).href : FIND_URL
+  const shell = getShellUrl()
+  return shell === SHELL_URL ? FIND_URL : new URL('find.html', shell).href
 }
 
 // antes de app.ready

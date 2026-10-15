@@ -12,6 +12,7 @@ import { openFind } from '../actions/open-find'
 import { openPalette } from '../actions/open-palette'
 import { replaceFindTextAndSearch } from '../actions/replace-find-text'
 import type { MainContext } from '../context'
+import { logError } from '../functions/log-error'
 import { removeTempProfile } from './temp-profile'
 
 const LOAD_TIMEOUT_MS = 30_000
@@ -105,7 +106,7 @@ export function scheduleCapture(ctx: MainContext, outputPath: string): void {
       removeTempProfile()
       app.exit(0)
     } catch (error) {
-      console.error('[Capture][scheduleCapture] falha na captura', error)
+      logError('[Capture][scheduleCapture]', 'falha na captura', error)
       removeTempProfile()
       app.exit(1)
     }

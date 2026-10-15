@@ -10,6 +10,11 @@ export const NARROW_WINDOW = 900
 // fundo padrão do documento de uma aba: branco nos dois temas, como o Chrome. Quem quer escuro
 // declara color-scheme ou prefers-color-scheme (o Chromium já segue o tema do macOS)
 export const PAGE_CANVAS = '#FFFFFF'
+// aviso de tela cheia: a shell encolhe para este retângulo no topo, no centro da janela
+export const FULLSCREEN_NOTICE = { width: 320, height: 44, top: 20 } as const
+export const FULLSCREEN_NOTICE_TEXT = 'Site em tela cheia. Esc para sair'
+// quanto tempo o aviso fica na tela
+export const FULLSCREEN_NOTICE_MS = 3000
 
 // Barra de busca na página (Busca.dc.html): 397×44 pt, a 12 pt do alto e da direita do painel.
 // Ela vive numa view própria; a margem em volta deixa a sombra do design (0 8px 24px) respirar

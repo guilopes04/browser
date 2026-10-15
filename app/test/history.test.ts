@@ -90,10 +90,12 @@ test('trimHistory guarda no máximo 20 mil no total (as visitas mais recentes, d
     ['a', createSpaceHistory()],
     ['b', createSpaceHistory()]
   ])
-  // visitas intercaladas: as pares no espaço a e as ímpares no b
+  // visitas intercaladas: as pares no espaço a e as ímpares no b (em cem sites, para o limite por
+  // host, de 500, não entrar na conta)
+  const site = (i: number) => `s${i % 100}.com/${i}`
   for (let i = 0; i < MAX_HISTORY + 25; i++)
     addHistoryEntry(histories.get(i % 2 ? 'b' : 'a') as SpaceHistory, {
-      url: `https://site.com/${i}`,
+      url: `https://${site(i)}`,
       title: String(i),
       visitedAt: i
     })
@@ -103,11 +105,11 @@ test('trimHistory guarda no máximo 20 mil no total (as visitas mais recentes, d
   assert.equal(countEntries(histories), MAX_HISTORY)
   assert.equal(a.byKey.size + b.byKey.size, MAX_HISTORY)
   // as 25 mais antigas (de 0 a 24) saíram
-  assert.equal(a.list[0].url, `https://site.com/${MAX_HISTORY + 24}`)
-  assert.equal(b.list[0].url, `https://site.com/${MAX_HISTORY + 23}`)
-  assert.equal(a.byKey.has('site.com/24'), false)
-  assert.equal(b.byKey.has('site.com/25'), true)
-  assert.equal(a.list[a.list.length - 1].url, 'https://site.com/26')
+  assert.equal(a.list[0].url, `https://${site(MAX_HISTORY + 24)}`)
+  assert.equal(b.list[0].url, `https://${site(MAX_HISTORY + 23)}`)
+  assert.equal(a.byKey.has(site(24)), false)
+  assert.equal(b.byKey.has(site(25)), true)
+  assert.equal(a.list[a.list.length - 1].url, `https://${site(26)}`)
   // um espaço vazio ou sem nada a cortar não quebra
   trimHistory(new Map([['x', createSpaceHistory()]]))
   trimHistory(histories)
@@ -199,10 +201,14 @@ test('HistoryStore grava history.jsonl por append e relê', () => {
     assert.deepEqual(strip(reopened.getEntries('work')), [
       { url: 'https://b.com/', title: 'B', visitedAt: 12 }
     ])
-    // a visita com âncora substituiu a primeira ao reler
+    // a visita com âncora substituiu a primeira ao reler, e o #fragmento não foi para o disco
     assert.deepEqual(strip(reopened.getEntries('personal')), [
-      { url: 'https://a.com/#fim', title: 'A', visitedAt: 20 }
+      { url: 'https://a.com/', title: 'A', visitedAt: 20 }
     ])
+    assert.equal(
+      readFileSync(getHistoryPath(dir), 'utf8').includes('#fim'),
+      false
+    )
     assert.deepEqual(reopened.getEntries('outro'), [])
   })
 })
@@ -380,7 +386,7 @@ test('HistoryStore respeita o limite total ao registrar visitas em vários espa�
       lines.push(
         JSON.stringify({
           spaceId: i % 2 ? 'b' : 'a',
-          url: `https://site.com/${i}`,
+          url: `https://s${i % 100}.com/${i}`,
           title: 'S',
           visitedAt: i + 1
         })

@@ -4,6 +4,7 @@ import type { WebContentsView } from 'electron'
 import type { TabId } from '@shared/types'
 import { closeDeadTab } from '../actions/close-dead-tab'
 import type { MainContext } from '../context'
+import { logError } from './log-error'
 
 export function attachCloseEvents(
   ctx: MainContext,
@@ -16,7 +17,7 @@ export function attachCloseEvents(
     try {
       closeDeadTab(ctx, tabId, view)
     } catch (error) {
-      console.error('[Tab][destroyed] falha ao remover a aba', tabId, error)
+      logError('[Tab][destroyed]', `falha ao remover a aba ${tabId}`, error)
     }
   })
 }

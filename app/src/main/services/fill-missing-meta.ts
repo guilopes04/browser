@@ -1,13 +1,18 @@
-// Preenche em segundo plano o título e o favicon de abas suspensas e favoritos que nunca
-// carregaram (sessão de --abas, favoritos padrão da primeira abertura): a sidebar, o compacto, a
-// paleta e a Nova aba mostram o ícone e o título do site em vez de letra e endereço. Sem abrir
+// Só na bancada (--abas): preenche em segundo plano o título e o favicon de abas suspensas que nunca
+// carregaram, para a captura mostrar o ícone e o título do site em vez de letra e endereço. Sem abrir
 // página: só o começo do HTML pela rede do main, sem cookies. Espera a aba ativa terminar de
 // carregar para não competir com ela. Cada endereço é consultado uma vez por execução.
+//
+// Uso normal do app não faz nada aqui: nenhuma conexão de saída acontece sem ação do usuário. Os
+// favoritos nunca são consultados (usam a letra e a cor locais); o favicon de um favorito só
+// aparece depois de o usuário visitar o site (store.fillFavoriteFavicons, no page-favicon-updated).
+import { sanitizeTitle } from '@shared/sanitize-title'
 import { getHostname } from '@shared/url-parts'
-import type { Favorite, SpaceId, Tab } from '@shared/types'
+import type { SpaceId, Tab } from '@shared/types'
 import type { MainContext } from '../context'
 import { fetchSiteMeta } from '../functions/fetch-page-meta'
 import { getSpaceSession } from '../functions/get-space-session'
+import { logError } from '../functions/log-error'
 
 const CONCURRENCY = 3
 // se a aba ativa demora, começa assim mesmo
@@ -19,10 +24,6 @@ const isHttp = (url: string) => /^https?:\/\//i.test(url)
 
 function needsTabMeta(tab: Tab): boolean {
   return tab.dormant && tab.title === '' && isHttp(tab.url)
-}
-
-function needsFavorite(favorite: Favorite): boolean {
-  return favorite.favicon === null && isHttp(favorite.url)
 }
 
 function waitForActiveTab(ctx: MainContext): Promise<void> {
@@ -51,16 +52,13 @@ function buildJobs(ctx: MainContext): Job[] {
   // sessão do espaço atual para tudo: nenhum espaço ainda não usado ganha uma partição só por isso
   const ses = getSpaceSession(currentSpace)
 
-  // favicons que já existem, por site: a aba e o favorito do mesmo site não buscam de novo
+  // favicons que já existem, por site: duas abas do mesmo site não buscam de novo
   const byHost = new Map<string, string>()
   const remember = (url: string, favicon: string | null) => {
     const host = getHostname(url)
     if (host && favicon && !byHost.has(host)) byHost.set(host, favicon)
   }
   for (const tab of store.state.tabs) remember(tab.url, tab.favicon)
-  for (const space of store.state.spaces)
-    for (const favorite of space.favorites)
-      remember(favorite.url, favorite.favicon)
 
   const jobs: Job[] = []
   const bySpaceFirst = <T extends { spaceId: SpaceId }>(a: T, b: T) =>
@@ -81,41 +79,18 @@ function buildJobs(ctx: MainContext): Job[] {
       // a aba pode ter acordado, navegado ou fechado enquanto a rede respondia
       if (!tab || !needsTabMeta(tab) || tab.url !== url) return
       store.patchTab(id, {
-        ...(meta.title ? { title: meta.title } : {}),
+        ...(meta.title ? { title: sanitizeTitle(meta.title) } : {}),
         ...(favicon && !tab.favicon ? { favicon } : {})
       })
     })
   }
 
-  const favorites = store.state.spaces
-    .flatMap(space =>
-      space.favorites.filter(needsFavorite).map(favorite => ({
-        spaceId: space.id,
-        favorite
-      }))
-    )
-    .sort(bySpaceFirst)
-  for (const { spaceId, favorite } of favorites) {
-    jobs.push(async () => {
-      const host = getHostname(favorite.url)
-      let favicon = byHost.get(host) ?? null
-      if (!favicon) {
-        favicon = (
-          await fetchSiteMeta(ses, favorite.url, {
-            title: false,
-            favicon: true
-          })
-        ).favicon
-        remember(favorite.url, favicon)
-      }
-      if (favicon) store.setFavoriteFavicon(spaceId, favorite.id, favicon)
-    })
-  }
   return jobs
 }
 
-// resolve quando a fila esvazia (a captura espera por isso, com limite)
+// resolve quando a fila esvazia (a captura espera por isso, com limite). Só roda com --abas
 export async function startMetaFill(ctx: MainContext): Promise<void> {
+  if (ctx.flags.tabsSource === null) return
   await waitForActiveTab(ctx)
   if (ctx.quitting) return
   const queue = buildJobs(ctx)
@@ -125,7 +100,7 @@ export async function startMetaFill(ctx: MainContext): Promise<void> {
       try {
         await job()
       } catch (error) {
-        console.error('[Meta][startMetaFill] falha ao preencher', error)
+        logError('[Meta][startMetaFill]', 'falha ao preencher', error)
       }
     }
   }

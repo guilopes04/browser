@@ -1,5 +1,6 @@
 export * from './activate-tab'
 export * from './apply-find-early-key'
+export * from './clear-browsing-data'
 export * from './close-dead-tab'
 export * from './close-find'
 export * from './close-palette'

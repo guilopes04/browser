@@ -1,4 +1,5 @@
 import { displayUrl } from '@shared/display-url'
+import { sanitizeTitle } from '@shared/sanitize-title'
 import { stripScheme } from '@shared/url-key'
 import {
   getFavoriteTileColor,
@@ -38,7 +39,7 @@ export function TabRow({ item, compact, selected }: PaletteRowProps) {
           color={tile.color}
           favicon={tab?.favicon ?? null}
         />
-        <span class="pal-title">{item.title}</span>
+        <span class="pal-title">{sanitizeTitle(item.title)}</span>
         <span class="pal-right">{spaceName}</span>
       </>
     )
@@ -52,7 +53,9 @@ export function TabRow({ item, compact, selected }: PaletteRowProps) {
         favicon={tab?.favicon ?? null}
       />
       <div class="pal-two-lines">
-        <span class="pal-title pal-title-strong">{item.title}</span>
+        <span class="pal-title pal-title-strong">
+          {sanitizeTitle(item.title)}
+        </span>
         <span class="pal-sub">
           {displayUrl(stripScheme(item.url)).replace(/\/$/, '')}
         </span>

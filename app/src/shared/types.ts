@@ -5,7 +5,9 @@ export type TabId = string
 export type Theme = 'light' | 'dark'
 export type SidebarMode = 'open' | 'compact' | 'hidden'
 export type SpaceColor = 'indigo' | 'amber'
-export type OverlayReason = 'palette' | 'peek' | 'tooltip' | 'popover'
+// 'notice': aviso de tela cheia ("Site em tela cheia. Esc para sair"), só o main liga
+export type OverlayReason =
+  'palette' | 'peek' | 'tooltip' | 'popover' | 'notice'
 
 export interface Point {
   x: number
@@ -91,6 +93,14 @@ export interface DownloadStatus {
   lastFailed: boolean
 }
 
+// "Limpar dados de navegação" acabou de rodar neste espaço: a sidebar avisa por alguns segundos.
+// Só em memória
+export interface ClearedData {
+  spaceId: SpaceId
+  // epoch ms
+  at: number
+}
+
 export interface AppSnapshot {
   theme: Theme
   spaces: Space[]
@@ -104,6 +114,7 @@ export interface AppSnapshot {
   overlay: OverlayReason[]
   fullscreen: boolean
   downloads: DownloadStatus
+  clearedData: ClearedData | null
 }
 
 export type PersistedTab = Pick<
@@ -157,6 +168,7 @@ export interface HistoryEntry {
   visitedAt: number
   // caches em memória, preenchidos sob demanda; nunca vão para o arquivo
   key?: string
+  host?: string
   search?: NormalizedText
 }
 

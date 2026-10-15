@@ -4,6 +4,7 @@ import type { MainContext } from '../context'
 import { closeDeadTab } from '../actions/close-dead-tab'
 import { suspendTab } from '../actions/suspend-tab'
 import { getLiveContents } from '../functions/get-live-contents'
+import { logError } from '../functions/log-error'
 
 const MAX_TICK_MS = 60_000
 const MIN_TICK_MS = 250
@@ -61,7 +62,7 @@ export function startSuspensionTimer(ctx: MainContext): () => void {
     try {
       runSuspensionTick(ctx)
     } catch (error) {
-      console.error('[Suspension][tick] falha no tick', error)
+      logError('[Suspension][tick]', 'falha no tick', error)
     }
   }, interval)
   return () => clearInterval(timer)

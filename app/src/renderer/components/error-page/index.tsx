@@ -37,14 +37,16 @@ export function ErrorPage({ tab }: ErrorPageProps) {
         <h1 class="error-title">{text.title}</h1>
         <p class="error-body">{text.body}</p>
         <div class="error-actions">
-          <button
-            type="button"
-            class="error-retry"
-            onClick={() => api.send('tab:reload', {})}
-          >
-            Tentar de novo
-            <span class="error-retry-keys">⌘R</span>
-          </button>
+          {text.retry !== false && (
+            <button
+              type="button"
+              class="error-retry"
+              onClick={() => api.send('tab:reload', {})}
+            >
+              Tentar de novo
+              <span class="error-retry-keys">⌘R</span>
+            </button>
+          )}
           {offline && (
             <button
               type="button"

@@ -8,7 +8,17 @@ export interface LoadErrorText {
   body: string
   // Mac sem internet: a página recarrega sozinha quando a conexão volta e oferece os ajustes de rede
   offline?: boolean
+  // false: "Tentar de novo" não tem o que tentar (o endereço nunca é aberto)
+  retry?: boolean
 }
+
+// erro do app, não do Chromium: o endereço era um arquivo local (file://), que esta versão não abre.
+// Fora da faixa dos códigos de rede (-1 a -999)
+export const LOCAL_FILE_ERROR: Readonly<{ code: number; description: string }> =
+  {
+    code: -1000,
+    description: 'ERR_LOCAL_FILES_BLOCKED'
+  }
 
 // net_error_list.h do Chromium
 const OFFLINE = new Set([-106])
@@ -19,10 +29,27 @@ const INTERRUPTED = new Set([-100, -101, -103, -324])
 const INSECURE = new Set([-107, -110, -113, -501])
 const UNSAFE_PORT = new Set([-312])
 
+// net::ERR_BLOCKED_BY_CLIENT: o app cancelou o pedido (página da internet tentando a rede local)
+const BLOCKED_BY_CLIENT = -20
+
 export function describeLoadError(
   errorCode: number,
   site: string
 ): LoadErrorText {
+  if (errorCode === LOCAL_FILE_ERROR.code)
+    return {
+      kind: 'problem',
+      title: 'Arquivos locais não são abertos nesta versão',
+      body: 'Por segurança, o Gilas Browser ainda não abre arquivos do seu Mac (endereços que começam com file://). Digite um endereço da web.',
+      retry: false
+    }
+  if (errorCode === BLOCKED_BY_CLIENT)
+    return {
+      kind: 'problem',
+      title: 'Acesso à rede local bloqueado',
+      body: `Uma página da internet tentou abrir ${site}, que fica na sua rede local. Por segurança, isso é bloqueado. Para abrir esse endereço, digite-o você mesmo na barra de endereço.`,
+      retry: false
+    }
   if (OFFLINE.has(errorCode))
     return {
       kind: 'network',

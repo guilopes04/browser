@@ -11,6 +11,7 @@ import { attachFullscreenEvents } from './attach-fullscreen-events'
 import { attachTabEvents } from './attach-tab-events'
 import { attachUnloadGuard } from './attach-unload-guard'
 import { getSpaceSession } from './get-space-session'
+import { guardTabNavigation } from './guard-tab-navigation'
 import { installWindowOpenHandler } from './window-open'
 
 export function createTabView(
@@ -41,6 +42,7 @@ export function createTabView(
   attachContextMenu(ctx, tab.id, view.webContents)
   watchDownloads(ctx, view.webContents.session)
   attachFullscreenEvents(ctx, tab.id, view.webContents)
+  guardTabNavigation(view.webContents)
   installWindowOpenHandler(ctx, tab.spaceId, tab.id, view.webContents)
   return view
 }

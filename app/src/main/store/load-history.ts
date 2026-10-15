@@ -16,6 +16,8 @@ export interface LoadedHistory {
   lines: number
   // os arquivos antigos que foram absorvidos: depois de gravar o novo, ganham o sufixo .migrado
   legacy: LegacyHistory | null
+  // o history.jsonl tinha #fragmentos ou passava dos limites: reescrever limpa o arquivo
+  needsRewrite: boolean
 }
 
 export function loadHistory(path: string, userData: string): LoadedHistory {
@@ -31,5 +33,10 @@ export function loadHistory(path: string, userData: string): LoadedHistory {
       }
       mergeSpaceHistory(target, history)
     }
-  return { histories, lines: parsed?.lines ?? 0, legacy }
+  return {
+    histories,
+    lines: parsed?.lines ?? 0,
+    legacy,
+    needsRewrite: parsed?.needsRewrite ?? false
+  }
 }

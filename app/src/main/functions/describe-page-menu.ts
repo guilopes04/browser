@@ -45,6 +45,12 @@ export function isWebUrl(url: string): boolean {
   return /^https?:\/\//i.test(url)
 }
 
+// "Salvar imagem como" baixa pelo main, que não tem a trava de arquivo local do renderer: só o que
+// uma página pode mesmo carregar (nada de file://)
+export function isSavableImage(url: string): boolean {
+  return /^(https?:|data:image\/|blob:)/i.test(url)
+}
+
 // o texto selecionado no rótulo: uma linha só, curto, com reticências
 export function shortenSelection(text: string): string {
   const flat = text.replace(/\s+/g, ' ').trim()
@@ -77,7 +83,7 @@ export function describePageMenu(input: PageMenuInput): PageMenuEntry[] {
     groups.push([
       item('open-image', 'Abrir imagem em nova aba', isWebUrl(input.srcURL)),
       item('copy-image', 'Copiar imagem'),
-      item('save-image', 'Salvar imagem como…', input.srcURL !== '')
+      item('save-image', 'Salvar imagem como…', isSavableImage(input.srcURL))
     ])
 
   if (input.isEditable) {

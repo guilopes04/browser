@@ -9,6 +9,7 @@ import {
 import { CompactSidebar } from './components/compact-sidebar'
 import { Tooltip } from './components/compact-sidebar/tooltip'
 import { ErrorPage } from './components/error-page'
+import { FullscreenNotice } from './components/fullscreen-notice'
 import { NewTab } from './components/new-tab'
 import { Palette } from './components/palette'
 import { PeekSidebar, PeekTrigger } from './components/peek'
@@ -32,6 +33,9 @@ export function App() {
   }, [theme])
 
   if (!snap || !space) return null
+  // tela cheia: a shell é só a faixa do aviso (3 s), nada da interface
+  if (snap.fullscreen && overlay.value.includes('notice'))
+    return <FullscreenNotice />
 
   const tokens = THEME_TOKENS[theme]
   const spaceTokens = SPACE_TOKENS[space.color][theme]
@@ -44,8 +48,9 @@ export function App() {
         ? SIDEBAR_COMPACT_WIDTH
         : PANEL_INSET
   const tab = activeTab.value
-  const isNewTab = tab?.url === ''
   const hasError = tab?.error != null
+  // Nova aba com erro (file://): a página de erro toma o lugar dela
+  const isNewTab = tab?.url === '' && !hasError
 
   const vars = {
     '--bg': spaceTokens.bg,

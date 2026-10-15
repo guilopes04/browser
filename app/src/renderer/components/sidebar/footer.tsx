@@ -35,6 +35,7 @@ function useDismissOnOutside(open: boolean) {
 
 export function Footer() {
   const download = describeDownload(snapshot.value?.downloads)
+  const cleared = snapshot.value?.clearedData ?? null
   const extensions = extensionsOpen.value
   useDismissOnOutside(extensions)
 
@@ -65,14 +66,25 @@ export function Footer() {
           <ExtensionIcon />
         </button>
         <div class="grow" />
-        <span
-          class="blocked-today"
-          title={`${BLOCKED_TODAY} anúncios e rastreadores bloqueados hoje`}
-        >
-          <ShieldIcon size={12} />
-          <span>{BLOCKED_TODAY}</span>
-          <span>bloqueados</span>
-        </span>
+        {cleared ? (
+          <span
+            class="blocked-today footer-notice"
+            role="status"
+            title="Cookies, cache, dados dos sites, histórico e abas fechadas deste espaço foram apagados"
+          >
+            <ShieldIcon size={12} />
+            <span>Dados limpos</span>
+          </span>
+        ) : (
+          <span
+            class="blocked-today"
+            title={`${BLOCKED_TODAY} anúncios e rastreadores bloqueados hoje`}
+          >
+            <ShieldIcon size={12} />
+            <span>{BLOCKED_TODAY}</span>
+            <span>bloqueados</span>
+          </span>
+        )}
       </div>
       {extensions && (
         <div class="popover" role="dialog" aria-label="Extensões">

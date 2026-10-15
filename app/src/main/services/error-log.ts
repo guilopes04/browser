@@ -1,10 +1,11 @@
 // Erros que ninguém tratou no main viram linhas em userData/logs/main.log. Sem um ouvinte de
 // 'uncaughtException' o Electron abre o diálogo modal "A JavaScript error occurred in the main
 // process", que congela o app; aqui o erro é registrado e o app segue.
-import { appendFileSync, mkdirSync, renameSync, statSync } from 'node:fs'
-import { dirname, join } from 'node:path'
+import { renameSync, statSync } from 'node:fs'
+import { join } from 'node:path'
 import { app } from 'electron'
 import { formatErrorLog, type ErrorKind } from '../functions/format-error-log'
+import { appendPrivate } from '../store/private-files'
 
 // ao passar disto o log vira main.old.log (um só anterior): o disco do usuário não enche
 const MAX_LOG_BYTES = 512 * 1024
@@ -15,14 +16,13 @@ export function getMainLogPath(userData: string): string {
 
 export function appendMainLog(file: string, line: string): void {
   try {
-    mkdirSync(dirname(file), { recursive: true })
     try {
       if (statSync(file).size > MAX_LOG_BYTES)
         renameSync(file, file.replace(/main\.log$/, 'main.old.log'))
     } catch {
       // ainda não existe
     }
-    appendFileSync(file, line)
+    appendPrivate(file, line)
   } catch {
     // sem disco ou sem permissão: o console abaixo ainda leva o erro
   }

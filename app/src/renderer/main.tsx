@@ -6,6 +6,7 @@ import './styles/sidebar.css'
 import './styles/compact.css'
 import './styles/peek.css'
 import './styles/error-page.css'
+import './styles/fullscreen-notice.css'
 import './styles/new-tab.css'
 import './styles/palette.css'
 

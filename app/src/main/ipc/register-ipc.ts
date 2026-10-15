@@ -37,6 +37,7 @@ import {
   toggleSidebar
 } from '../actions'
 import type { MainContext } from '../context'
+import { blockLocalFile } from '../functions/block-local-file'
 import { isShellUrl } from '../functions/is-shell-url'
 import { markKeyGateReady } from '../functions/key-gate'
 import { queryPalette } from '../functions/query-palette'
@@ -81,7 +82,7 @@ const handlers: { [K in keyof Commands]: Handler } = {
   },
   'tab:create': (ctx, payload) => {
     const input = isRecord(payload) ? payload : {}
-    // a URL passa pelo mesmo filtro da barra de endereço (só http, https e file viram aba)
+    // a URL passa pelo mesmo filtro da barra de endereço (só http e https viram aba)
     const typed =
       typeof input.url === 'string'
         ? resolveTyped(input.url, ctx.store.state.settings.searchUrl)
@@ -91,6 +92,8 @@ const handlers: { [K in keyof Commands]: Handler } = {
       url: typed?.url,
       background: input.background === true
     })
+    // file://: a aba nasce como Nova aba com a página de erro (esta versão não abre arquivos)
+    if (typed?.refused) blockLocalFile(ctx, tab.id)
     // domínio sem esquema: https primeiro e, se o servidor só fala http, a aba tenta http
     if (typed?.httpFallback)
       ctx.httpFallbacks.set(tab.id, {

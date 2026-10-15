@@ -1,7 +1,9 @@
 // Acorda uma aba dormente: cria a view na partição do espaço e restaura ou carrega.
 import type { WebContentsView } from 'electron'
+import { isLocalFileUrl } from '@shared/is-local-file-url'
 import type { TabId } from '@shared/types'
 import type { MainContext } from '../context'
+import { blockLocalFile } from '../functions/block-local-file'
 import { createTabView } from '../functions/create-tab-view'
 import { getLiveContents } from '../functions/get-live-contents'
 import { hideTabView } from '../functions/show-tab-view'
@@ -21,6 +23,12 @@ export function wakeTab(
   }
   const tab = ctx.store.getTab(tabId)
   if (!tab || !tab.url) return null
+  // sessão antiga ou editada à mão com um file://: nada é carregado
+  if (isLocalFileUrl(tab.url)) {
+    ctx.store.patchTab(tabId, { url: '', dormant: false })
+    blockLocalFile(ctx, tabId)
+    return null
+  }
 
   const view = createTabView(ctx, tab)
   const wc = view.webContents
