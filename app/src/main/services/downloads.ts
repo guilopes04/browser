@@ -157,15 +157,25 @@ export function watchDownloads(ctx: MainContext, ses: Session): void {
       owner,
       (guard.downloadsRunning.get(owner) ?? 0) + 1
     )
-    running.set(item, { received: 0, total: item.getTotalBytes() })
-    // um download novo apaga o aviso do anterior
-    ctx.store.setDownloads({
-      ...ctx.store.state.downloads,
-      lastPath: null,
-      lastName: null,
-      lastFailed: false
-    })
-    publish()
+    // o ícone de Downloads só conta o que o usuário permitiu: um download que espera permissão
+    // não mostra progresso nem apaga o aviso do anterior
+    let counted = false
+    const count = () => {
+      counted = true
+      running.set(item, {
+        received: item.getReceivedBytes(),
+        total: item.getTotalBytes()
+      })
+      // um download novo apaga o aviso do anterior
+      ctx.store.setDownloads({
+        ...ctx.store.state.downloads,
+        lastPath: null,
+        lastName: null,
+        lastFailed: false
+      })
+      publish()
+    }
+    if (decision !== 'ask') count()
 
     // sem gesto: pausa e pergunta. O download só anda se o usuário permitir
     let consent: Promise<boolean> = Promise.resolve(true)
@@ -182,6 +192,7 @@ export function watchDownloads(ctx: MainContext, ses: Session): void {
         .then(allowed => {
           prompt.pending = false
           if (allowed) {
+            count()
             if (item.isPaused()) item.resume()
           } else {
             prompt.deniedUntil = Date.now() + DOWNLOAD_COOLDOWN_MS
@@ -192,6 +203,7 @@ export function watchDownloads(ctx: MainContext, ses: Session): void {
     }
 
     item.on('updated', () => {
+      if (!counted) return
       running.set(item, {
         received: item.getReceivedBytes(),
         total: item.getTotalBytes()

@@ -41,6 +41,7 @@ export function TabRow({ item, compact, selected }: PaletteRowProps) {
           favicon={tab?.favicon ?? null}
         />
         <span class="pal-title">{item.title}</span>
+        {isInsecureUrl(item.url) && <InsecureMark small />}
         <span class="pal-right">{spaceName}</span>
       </>
     )

@@ -342,6 +342,8 @@ test('sem gesto: nenhum byte vai para Downloads antes de o usuário permitir; pe
     assert.ok(item.savePath.startsWith(env.temp), item.savePath)
     writeFileSync(item.savePath, 'ola!!')
     assert.deepEqual(readdirSync(env.dir), [])
+    // o ícone de Downloads não conta o que espera permissão
+    assert.equal(env.store.state.downloads.active, 0)
     // termina antes de o usuário responder: nada aparece em Downloads ainda
     env.finish(item)
     await env.tick()
