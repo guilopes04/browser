@@ -1,6 +1,7 @@
 // Grava a sessão: debounce de 1 s, só quando algo que o arquivo guarda mudou, e de forma
 // síncrona no before-quit. Conteúdo igual ao último gravado não reescreve o arquivo.
 import type { AppStore } from './app-store'
+import { logError } from '../functions/log-error'
 import { isPersistedChange } from './is-persisted-change'
 import { toSessionFile } from './serialize-session'
 import { writeAtomic } from './write-atomic'
@@ -28,7 +29,7 @@ export function startSessionWriter(
       writeAtomic(path, data)
       lastWritten = data
     } catch (error) {
-      console.error('[Session][saveNow] falha ao gravar a sessão', error)
+      logError('[Session][saveNow]', 'falha ao gravar a sessão', error)
     }
   }
 

@@ -12,6 +12,7 @@ import type { SpaceId, Tab } from '@shared/types'
 import type { MainContext } from '../context'
 import { fetchSiteMeta } from '../functions/fetch-page-meta'
 import { getSpaceSession } from '../functions/get-space-session'
+import { logError } from '../functions/log-error'
 
 const CONCURRENCY = 3
 // se a aba ativa demora, começa assim mesmo
@@ -99,7 +100,7 @@ export async function startMetaFill(ctx: MainContext): Promise<void> {
       try {
         await job()
       } catch (error) {
-        console.error('[Meta][startMetaFill] falha ao preencher', error)
+        logError('[Meta][startMetaFill]', 'falha ao preencher', error)
       }
     }
   }

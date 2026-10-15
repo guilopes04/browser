@@ -2,6 +2,7 @@
 // formato antigo); corrompido vira o que der para aproveitar.
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { logError } from '../functions/log-error'
 import { parseHistory, type ParsedHistory } from './parse-history'
 
 export function getHistoryPath(userData: string): string {
@@ -14,7 +15,7 @@ export function readHistoryFile(path: string): ParsedHistory | null {
     text = readFileSync(path, 'utf8')
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null
-    console.error('[History][readHistoryFile] falha ao ler o histórico', error)
+    logError('[History][readHistoryFile]', 'falha ao ler o histórico', error)
     return { histories: new Map(), lines: 0, needsRewrite: false }
   }
   return parseHistory(text)

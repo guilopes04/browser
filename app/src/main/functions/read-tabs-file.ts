@@ -2,6 +2,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import type { Rect } from '@shared/types'
+import { logError } from './log-error'
 
 export interface TabsFile {
   urls: string[]
@@ -34,7 +35,7 @@ export function readTabsFile(source: string): TabsFile | null {
     }
     return { urls, window: win }
   } catch (error) {
-    console.error('[Flags][readTabsFile] não foi possível ler --abas', error)
+    logError('[Flags][readTabsFile]', 'não foi possível ler --abas', error)
     return null
   }
 }

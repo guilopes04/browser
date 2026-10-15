@@ -13,6 +13,7 @@ import {
   forwardEarlyKey,
   guardShell,
   handleEarlyShortcut,
+  logError,
   readTabsFile,
   resolveWindowBounds
 } from './functions'
@@ -20,13 +21,13 @@ import { createBroadcaster } from './ipc/broadcast'
 import { registerIpc } from './ipc/register-ipc'
 import {
   buildAppMenu,
-  getShellUrl,
   enableAppSandbox,
+  getShellUrl,
   handleAppProtocol,
-  installErrorLog,
   hardenDefaultSession,
   installAppHardening,
   installClientCertificateDialog,
+  installErrorLog,
   readTheme,
   registerAppScheme,
   scheduleCapture,
@@ -38,16 +39,14 @@ import {
 import { AppStore } from './store/app-store'
 import { buildInitialState } from './store/build-initial-state'
 import { HistoryStore } from './store/history-store'
-import { readSessionFile } from './store/read-session-file'
 import { protectDataFiles } from './store/private-files'
+import { readSessionFile } from './store/read-session-file'
 import { getSessionPath } from './store/session-path'
 import { startSessionWriter } from './store/session-writer'
 
 // o primeiro de tudo: erro sem tratamento vai para o log, nunca para um diálogo modal
 installErrorLog()
 
-const flags = parseFlags(process.argv)
-// com --abas a sessão é de uso único: não lê nem grava o session.json (o do usuário fica intacto)
 // depuração remota e inspetor abrem uma porta com controle total do app: empacotado, só com --dev
 const refusedDebugFlags = findRefusedDebugFlags(
   process.argv,
@@ -68,6 +67,8 @@ if (startupRefused) {
 enableAppSandbox()
 installAppHardening()
 
+const flags = parseFlags(process.argv)
+// com --abas a sessão é de uso único: não lê nem grava o session.json (o do usuário fica intacto)
 const ephemeralSession = flags.tabsSource !== null
 // ...e também não toca no perfil real: sem --user-data-dir, os cookies e o cache das partições
 // dos espaços vão para uma pasta temporária (antes de pedir o lock, que depende dela)
@@ -85,9 +86,9 @@ app.commandLine.appendSwitch(
   'disable-features',
   'SpareRendererForSitePerProcess,WebBluetooth'
 )
+app.commandLine.appendSwitch('disable-background-networking')
 registerAppScheme()
 
-app.commandLine.appendSwitch('disable-background-networking')
 // user agent global sem "Electron/x" e sem o token do app (as sessões dos espaços, e a shell,
 // partem deste valor)
 app.userAgentFallback = cleanUserAgent(app.userAgentFallback)
@@ -99,13 +100,13 @@ const hasLock = !startupRefused && app.requestSingleInstanceLock()
 if (!hasLock && !startupRefused) app.quit()
 
 async function bootstrap(): Promise<void> {
+  hardenDefaultSession()
   handleAppProtocol(join(__dirname, '../renderer'))
 
-  hardenDefaultSession()
   const userData = app.getPath('userData')
-  const sessionPath = getSessionPath(userData)
   // sessão, histórico e log são só do usuário: 0600 (e a pasta 0700), mesmo os já existentes
   protectDataFiles(userData)
+  const sessionPath = getSessionPath(userData)
   if (ephemeralSession)
     console.log(
       '[Session][bootstrap] --abas: sessão de uso único, session.json intacto'
@@ -177,11 +178,11 @@ async function bootstrap(): Promise<void> {
     quitting: false
   }
 
+  installClientCertificateDialog(() => (win.isDestroyed() ? null : win))
   const shellUrl = getShellUrl()
   guardShell(ctx, shellUrl)
   shell.webContents.on('before-input-event', (event, input) => {
     if (!handleEarlyShortcut(ctx, event, input))
-  installClientCertificateDialog(() => (win.isDestroyed() ? null : win))
       forwardEarlyKey(ctx, event, input)
   })
   win.contentView.addChildView(shell)
@@ -261,7 +262,7 @@ async function bootstrap(): Promise<void> {
 
   // shell e aba ativa carregam em paralelo
   shell.webContents.loadURL(shellUrl).catch(error => {
-    console.error('[Shell][loadURL] falha ao carregar a interface', error)
+    logError('[Shell][loadURL]', 'falha ao carregar a interface', error)
   })
   const activeId = store.getActiveTabId()
   if (activeId) activateTab(ctx, activeId)

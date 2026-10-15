@@ -12,6 +12,7 @@ import { limitTitle, limitUrl } from '@shared/limit-stored-text'
 import { sanitizeTitle } from '@shared/sanitize-title'
 import { stripFragmentFromTitle } from '@shared/strip-fragment'
 import type { HistoryEntry, SpaceId } from '@shared/types'
+import { logError } from '../functions/log-error'
 import { isHistoryUrl } from './is-history-url'
 import { loadHistory } from './load-history'
 import { markLegacyMigrated } from './migrate-legacy-history'
@@ -115,7 +116,11 @@ export class HistoryStore {
       this.rewrite()
       if (legacy) markLegacyMigrated(legacy.files)
     } catch (error) {
-      console.error('[History][ensureLoaded] falha ao reescrever o histórico', error)
+      logError(
+        '[History][ensureLoaded]',
+        'falha ao reescrever o histórico',
+        error
+      )
     }
   }
 
@@ -190,7 +195,11 @@ export class HistoryStore {
     try {
       this.rewrite()
     } catch (error) {
-      console.error('[History][clearSpace] falha ao reescrever o histórico', error)
+      logError(
+        '[History][clearSpace]',
+        'falha ao reescrever o histórico',
+        error
+      )
     }
     for (const suffix of ['.json', '.json.migrado']) {
       try {
@@ -213,7 +222,7 @@ export class HistoryStore {
       if (this.needsCompaction()) this.rewrite()
       else appendPrivate(this.path, this.buffer.join(''))
     } catch (error) {
-      console.error('[History][saveNow] falha ao gravar o histórico', error)
+      logError('[History][saveNow]', 'falha ao gravar o histórico', error)
     }
     this.buffer = []
   }
