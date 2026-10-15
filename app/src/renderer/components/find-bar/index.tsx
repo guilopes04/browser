@@ -121,6 +121,7 @@ export function FindBar() {
           type="button"
           class="find-button"
           aria-label="Anterior (⇧⌘G)"
+          title="Anterior (⇧⌘G)"
           onMouseDown={keepFocus}
           onClick={() => stepFind(false)}
         >
@@ -130,6 +131,7 @@ export function FindBar() {
           type="button"
           class="find-button"
           aria-label="Próximo (⌘G)"
+          title="Próximo (⌘G)"
           onMouseDown={keepFocus}
           onClick={() => stepFind(true)}
         >
@@ -139,6 +141,7 @@ export function FindBar() {
           type="button"
           class="find-case"
           aria-label="Diferenciar maiúsculas"
+          title="Diferenciar maiúsculas"
           aria-pressed={view?.matchCase ?? false}
           onMouseDown={keepFocus}
           onClick={() => setFindCase(!(view?.matchCase ?? false))}
@@ -150,6 +153,7 @@ export function FindBar() {
           type="button"
           class="find-button find-close"
           aria-label="Fechar busca (esc)"
+          title="Fechar busca (esc)"
           onMouseDown={keepFocus}
           onClick={closeFind}
         >
