@@ -17,7 +17,8 @@ import {
   logError,
   pushFindState,
   readTabsFile,
-  resolveWindowBounds
+  resolveWindowBounds,
+  sweepStaging
 } from './functions'
 import { createBroadcaster } from './ipc/broadcast'
 import { registerIpc } from './ipc/register-ipc'
@@ -114,6 +115,9 @@ async function bootstrap(): Promise<void> {
   const userData = app.getPath('userData')
   // sessão, histórico e log são só do usuário: 0600 (e a pasta 0700), mesmo os já existentes
   protectDataFiles(userData)
+  // o que um download sem permissão deixou no temporário quando o app caiu antes de a pergunta ser
+  // respondida (sem quarentena, fora de Downloads)
+  sweepStaging(app.getPath('temp'))
   const sessionPath = getSessionPath(userData)
   if (ephemeralSession)
     console.log(
@@ -266,6 +270,10 @@ async function bootstrap(): Promise<void> {
     ctx.quitting = true
     writer?.saveNow()
     ctx.history.saveNow()
+  })
+  // encerrado com um download esperando permissão: o que o Chromium gravou no temporário não fica
+  app.on('will-quit', () => {
+    sweepStaging(app.getPath('temp'), { includeOwn: true })
   })
   app.on('second-instance', () => showWindow(ctx))
   // o clique no Dock também chega no primeiro lançamento, antes de a janela existir na tela

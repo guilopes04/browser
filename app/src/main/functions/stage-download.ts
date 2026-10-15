@@ -6,6 +6,7 @@ import { copyFileSync, mkdtempSync, renameSync, rmSync } from 'node:fs'
 import { join } from 'node:path'
 import { sanitizeFileName } from './pick-file-name'
 import { reserveDownloadPath } from './reserve-download-path'
+import { STAGING_PREFIX } from './sweep-staging'
 
 export interface Staging {
   dir: string
@@ -13,9 +14,10 @@ export interface Staging {
   path: string
 }
 
-// root: a pasta temporária do app (app.getPath('temp')); o nome da subpasta é aleatório
+// root: a pasta temporária do app (app.getPath('temp')); o nome da subpasta leva o pid (a varredura
+// da abertura, sweep-staging.ts, só apaga a de quem já morreu) e um sufixo aleatório
 export function createStaging(root: string, fileName: string): Staging {
-  const dir = mkdtempSync(join(root, 'gilas-download-'))
+  const dir = mkdtempSync(join(root, `${STAGING_PREFIX}${process.pid}-`))
   return { dir, path: join(dir, sanitizeFileName(fileName)) }
 }
 
