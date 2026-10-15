@@ -4,6 +4,8 @@ import type { Tab, TabId } from '@shared/types'
 import { getHostname } from '@shared/url-parts'
 import type { MainContext } from '../context'
 import { applyLayout } from './apply-layout'
+import { attachFindEvents } from './attach-find-events'
+import { closeFindOnEscape } from './close-find-on-escape'
 import { destroyTabView } from './destroy-tab-view'
 import { faviconToDataUrl } from './favicon-to-data-url'
 import { forwardEarlyKey } from './forward-early-key'
@@ -51,9 +53,11 @@ export function attachTabEvents(
 
   wc.on('before-input-event', (event, input) => {
     if (handleEarlyShortcut(ctx, event, input)) return
+    closeFindOnEscape(ctx, tabId, input)
     // com a paleta (ou a Nova aba) abrindo, as teclas seguem para a shell em vez de cair na página
     forwardEarlyKey(ctx, event, input)
   })
+  attachFindEvents(ctx, tabId, wc)
 
   wc.on('page-title-updated', (_event, title) => {
     // a página de erro é da shell: o título da aba segue sendo o host que falhou

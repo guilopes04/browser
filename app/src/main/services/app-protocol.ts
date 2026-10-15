@@ -4,10 +4,17 @@ import { join, normalize, sep } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 export const SHELL_URL = 'app://shell/index.html'
+export const FIND_URL = 'app://shell/find.html'
 
 // no desenvolvimento (electron-vite dev) a shell vem do servidor do Vite
 export function getShellUrl(): string {
   return process.env['ELECTRON_RENDERER_URL'] ?? SHELL_URL
+}
+
+// a barra de busca é a segunda página do renderer (find.html), numa view própria
+export function getFindUrl(): string {
+  const dev = process.env['ELECTRON_RENDERER_URL']
+  return dev ? new URL('find.html', `${dev}/`).href : FIND_URL
 }
 
 // antes de app.ready

@@ -2,6 +2,7 @@
 // no painel recuado. Estes eventos ligam o layout de "página ocupa a janela".
 import type { WebContents } from 'electron'
 import type { TabId } from '@shared/types'
+import { closeFind } from '../actions/close-find'
 import type { MainContext } from '../context'
 import { applyLayout } from './apply-layout'
 
@@ -13,6 +14,8 @@ export function attachFullscreenEvents(
   wc.on('enter-html-full-screen', () => {
     // só a aba que está na janela pode ocupá-la
     if (ctx.attached.tabId !== tabId) return
+    // a página ocupa a janela inteira: não há canto para a barra de busca
+    closeFind(ctx, false)
     ctx.store.setFullscreen(true)
     applyLayout(ctx)
   })

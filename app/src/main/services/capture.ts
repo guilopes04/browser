@@ -1,12 +1,16 @@
 // --captura=<png>: espera a aba ativa carregar, mais um tempo, captura a janela inteira com
 // screencapture -l (id da janela) e sai. --captura-paleta=<png> abre a paleta antes (consulta
-// vazia, ou a de --paleta-consulta) e --captura-nova-aba=<png> deixa uma Nova aba ativa.
+// vazia, ou a de --paleta-consulta), --captura-nova-aba=<png> deixa uma Nova aba ativa e
+// --captura-busca=<png> abre a barra de busca com a consulta "a" (ou a de --busca-consulta) e espera
+// o contador.
 import { execFile } from 'node:child_process'
 import { mkdirSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { app } from 'electron'
 import { createTab } from '../actions/create-tab'
+import { openFind } from '../actions/open-find'
 import { openPalette } from '../actions/open-palette'
+import { replaceFindTextAndSearch } from '../actions/replace-find-text'
 import type { MainContext } from '../context'
 import { removeTempProfile } from './temp-profile'
 
@@ -16,6 +20,8 @@ const LOAD_TIMEOUT_MS = 30_000
 const META_TIMEOUT_MS = 15_000
 // tempo para a shell pintar a paleta ou a Nova aba antes da foto
 const SCENE_PAINT_MS = 600
+// a barra de busca precisa nascer (um renderer novo) e o Chromium contar os resultados
+const FIND_TIMEOUT_MS = 15_000
 
 const wait = (ms: number) => new Promise<void>(done => setTimeout(done, ms))
 
@@ -49,12 +55,28 @@ function screenshot(windowId: string, file: string): Promise<void> {
   })
 }
 
-function prepareScene(ctx: MainContext): void {
+// a barra de busca pronta e com o contador de uma consulta respondida (ou "Nenhum resultado")
+async function waitForFind(ctx: MainContext): Promise<void> {
+  const end = Date.now() + FIND_TIMEOUT_MS
+  while (Date.now() < end) {
+    const session = ctx.find
+    if (session?.ready && session.state.status === 'done') return
+    await wait(100)
+  }
+  console.error('[Capture][waitForFind] a busca não respondeu a tempo')
+}
+
+async function prepareScene(ctx: MainContext): Promise<void> {
   const { captureScene, paletteQuery } = ctx.flags
   if (captureScene === 'palette') openPalette(ctx, 'search', paletteQuery)
   // a Nova aba entra no topo da lista e fica ativa (se a ativa já é uma, serve)
   if (captureScene === 'new-tab' && ctx.store.getActiveTab()?.url !== '')
     createTab(ctx)
+  if (captureScene === 'find') {
+    openFind(ctx)
+    replaceFindTextAndSearch(ctx, ctx.flags.findQuery)
+    await waitForFind(ctx)
+  }
 }
 
 export function scheduleCapture(ctx: MainContext, outputPath: string): void {
@@ -66,7 +88,7 @@ export function scheduleCapture(ctx: MainContext, outputPath: string): void {
       await wait(ctx.flags.captureDelayMs)
       // a shell precisa ter recebido o primeiro estado
       for (let i = 0; i < 50 && !ctx.shellReady; i++) await wait(100)
-      prepareScene(ctx)
+      await prepareScene(ctx)
       mkdirSync(dirname(file), { recursive: true })
       // semáforos coloridos só com a janela em primeiro plano; outros apps podem roubar o foco,
       // então insiste por até 3 s antes de capturar

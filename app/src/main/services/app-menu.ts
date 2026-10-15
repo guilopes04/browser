@@ -48,7 +48,10 @@ function appMenu(): MenuItemConstructorOptions {
   }
 }
 
-function editMenu(): MenuItemConstructorOptions {
+// os itens da busca na página (⌘F, ⌘G, ⇧⌘G) vêm de shortcuts.ts, depois dos papéis do sistema
+function editMenu(
+  find: MenuItemConstructorOptions[]
+): MenuItemConstructorOptions {
   return {
     label: 'Editar',
     submenu: [
@@ -60,7 +63,8 @@ function editMenu(): MenuItemConstructorOptions {
       { role: 'paste', label: 'Colar' },
       { role: 'pasteAndMatchStyle', label: 'Colar e Combinar Estilo' },
       { role: 'delete', label: 'Apagar' },
-      { role: 'selectAll', label: 'Selecionar Tudo' }
+      { role: 'selectAll', label: 'Selecionar Tudo' },
+      ...(find.length ? [{ type: 'separator' as const }, ...find] : [])
     ]
   }
 }
@@ -114,7 +118,7 @@ export function buildMenuTemplate(
   const template: MenuItemConstructorOptions[] = [
     appMenu(),
     { label: 'Arquivo', submenu: group('file') },
-    editMenu(),
+    editMenu(group('edit')),
     {
       label: 'Visualizar',
       submenu: [

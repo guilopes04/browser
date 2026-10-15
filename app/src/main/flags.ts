@@ -1,8 +1,9 @@
 // Flags de linha de comando (docs/arquitetura.md, seção 3 e 6).
 import type { Rect } from '@shared/types'
 
-// o que --captura* fotografa: a janela como está, a paleta aberta ou uma Nova aba ativa
-export type CaptureScene = 'window' | 'palette' | 'new-tab'
+// o que --captura* fotografa: a janela como está, a paleta aberta, uma Nova aba ativa ou a barra de
+// busca aberta com uma consulta
+export type CaptureScene = 'window' | 'palette' | 'new-tab' | 'find'
 
 export interface Flags {
   // caminho de um JSON no formato de bench/tabs.json (ou o próprio JSON inline)
@@ -18,8 +19,12 @@ export interface Flags {
   captureDelayMs: number
   // texto que a paleta mostra ao abrir na captura (padrão: vazio)
   paletteQuery: string
+  // texto que a barra de busca procura na captura (padrão: "a")
+  findQuery: string
   dev: boolean
 }
+
+const DEFAULT_FIND_QUERY = 'a'
 
 // aceita "--nome=valor" e "--nome valor"
 function readValue(argv: string[], name: string): string | null {
@@ -89,12 +94,16 @@ export function parseFlags(argv: string[]): Flags {
   const windowCapture = readValue(argv, 'captura') || null
   const paletteCapture = readValue(argv, 'captura-paleta') || null
   const newTabCapture = readValue(argv, 'captura-nova-aba') || null
-  const capturePath = paletteCapture ?? newTabCapture ?? windowCapture
+  const findCapture = readValue(argv, 'captura-busca') || null
+  const capturePath =
+    paletteCapture ?? newTabCapture ?? findCapture ?? windowCapture
   const captureScene: CaptureScene = paletteCapture
     ? 'palette'
     : newTabCapture
       ? 'new-tab'
-      : 'window'
+      : findCapture
+        ? 'find'
+        : 'window'
   return {
     tabsSource: readValue(argv, 'abas') || null,
     loadAll: hasFlag(argv, 'carregar-todas'),
@@ -105,6 +114,7 @@ export function parseFlags(argv: string[]): Flags {
     captureScene,
     captureDelayMs: delay ?? 1500,
     paletteQuery: readValue(argv, 'paleta-consulta') ?? '',
+    findQuery: readValue(argv, 'busca-consulta') || DEFAULT_FIND_QUERY,
     dev: hasFlag(argv, 'dev')
   }
 }

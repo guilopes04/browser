@@ -9,8 +9,10 @@ import { cycleTab } from './cycle-tab'
 import { focusAddress } from './focus-address'
 import { goBack } from './go-back'
 import { goForward } from './go-forward'
+import { openFind } from './open-find'
 import { reloadTab } from './reload-tab'
 import { reopenTab } from './reopen-tab'
+import { stepFind } from './step-find'
 import { stepZoom } from './step-zoom'
 import { suspendActiveTab } from './suspend-active-tab'
 import { switchSpace } from './switch-space'
@@ -67,6 +69,15 @@ export function runCommand(ctx: MainContext, command: CommandId): void {
       break
     case 'forward':
       goForward(ctx)
+      break
+    case 'find':
+      openFind(ctx)
+      break
+    case 'find-next':
+      stepFind(ctx, true)
+      break
+    case 'find-previous':
+      stepFind(ctx, false)
       break
     case 'toggle-sidebar':
       toggleSidebar(ctx)

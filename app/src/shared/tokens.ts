@@ -11,6 +11,15 @@ export const NARROW_WINDOW = 900
 // declara color-scheme ou prefers-color-scheme (o Chromium já segue o tema do macOS)
 export const PAGE_CANVAS = '#FFFFFF'
 
+// Barra de busca na página (Busca.dc.html): 397×44 pt, a 12 pt do alto e da direita do painel.
+// Ela vive numa view própria; a margem em volta deixa a sombra do design (0 8px 24px) respirar
+// (o que passa de 20 pt da borda vale menos de 2 níveis de cinza) e é a única área transparente
+// dela, que não deixa clicar na página por baixo
+export const FIND_BAR_WIDTH = 397
+export const FIND_BAR_HEIGHT = 44
+export const FIND_BAR_INSET = 12
+export const FIND_BAR_MARGIN = { left: 20, right: 20, top: 12, bottom: 28 }
+
 export interface SpaceTokens {
   accent: string
   bg: string

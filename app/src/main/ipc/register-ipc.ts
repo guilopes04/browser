@@ -1,4 +1,5 @@
-// Controller fino: canal -> valida o payload -> ação. Só aceita mensagens da shell.
+// Controller fino: canal -> valida o payload -> ação. Só aceita mensagens da shell (e, nos canais
+// find:*, da barra de busca).
 import { ipcMain, type IpcMainEvent, type IpcMainInvokeEvent } from 'electron'
 import { isKnownCommand } from '@shared/commands'
 import type { KeyGateTarget } from '@shared/early-key'
@@ -7,11 +8,13 @@ import { resolveTyped } from '@shared/resolve-input'
 import type { CommandId, SpaceId, TabId } from '@shared/types'
 import {
   activateTab,
+  closeFind,
   closePalette,
   closeTab,
   createTab,
   goBack,
   goForward,
+  markFindReady,
   moveTab,
   moveTabToSpace,
   navigateTab,
@@ -21,9 +24,12 @@ import {
   reloadTab,
   reopenTab,
   runCommand,
+  setFindCase,
+  setFindText,
   setOverlay,
   setTabMuted,
   showTabMenu,
+  stepFind,
   suspendTab,
   switchSpace,
   toggleSidebar
@@ -32,7 +38,7 @@ import type { MainContext } from '../context'
 import { isShellUrl } from '../functions/is-shell-url'
 import { markKeyGateReady } from '../functions/key-gate'
 import { queryPalette } from '../functions/query-palette'
-import { getShellUrl } from '../services/app-protocol'
+import { getFindUrl, getShellUrl } from '../services/app-protocol'
 
 type Handler = (ctx: MainContext, payload: unknown) => void
 
@@ -152,14 +158,38 @@ const handlers: { [K in keyof Commands]: Handler } = {
   },
   'system:open-network-settings': () => openNetworkSettings(),
   'downloads:open': ctx => openDownloads(ctx),
+  'find:ready': ctx => markFindReady(ctx),
+  'find:text': (ctx, payload) => {
+    if (isRecord(payload) && typeof payload.text === 'string')
+      setFindText(ctx, payload.text)
+  },
+  'find:step': (ctx, payload) => {
+    if (isRecord(payload) && typeof payload.forward === 'boolean')
+      stepFind(ctx, payload.forward)
+  },
+  'find:case': (ctx, payload) => {
+    if (isRecord(payload) && typeof payload.matchCase === 'boolean')
+      setFindCase(ctx, payload.matchCase)
+  },
+  'find:close': ctx => closeFind(ctx),
   'command:run': (ctx, payload) => {
     const command = isRecord(payload) ? readCommand(payload.command) : null
     if (command) runCommand(ctx, command)
   }
 }
 
+// os canais que só a barra de busca (view própria, com o mesmo preload) pode usar
+const FIND_CHANNELS: readonly string[] = [
+  'find:ready',
+  'find:text',
+  'find:step',
+  'find:case',
+  'find:close'
+]
+
 export function registerIpc(ctx: MainContext, onStateServed: () => void): void {
   const shellUrl = getShellUrl()
+  const findUrl = getFindUrl()
   // além do webContents, confere o frame: só o documento principal da shell manda comandos
   const isFromShell = (event: IpcMainEvent | IpcMainInvokeEvent) => {
     const frame = event.senderFrame
@@ -171,9 +201,22 @@ export function registerIpc(ctx: MainContext, onStateServed: () => void): void {
     )
   }
 
+  // a barra de busca: a view da sessão atual, só o documento principal dela
+  const isFromFind = (event: IpcMainEvent) => {
+    const frame = event.senderFrame
+    return (
+      ctx.find !== null &&
+      event.sender === ctx.find.view.webContents &&
+      frame !== null &&
+      frame.parent === null &&
+      isShellUrl(frame.url, findUrl)
+    )
+  }
+
   for (const channel of COMMAND_CHANNELS) {
+    const fromFind = FIND_CHANNELS.includes(channel)
     ipcMain.on(channel, (event, payload: unknown) => {
-      if (!isFromShell(event)) return
+      if (!(fromFind ? isFromFind(event) : isFromShell(event))) return
       handlers[channel](ctx, payload)
     })
   }

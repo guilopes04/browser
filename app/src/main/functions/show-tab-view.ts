@@ -1,6 +1,7 @@
 // Põe a view da aba ativa na árvore da janela (acima da shell) e tira a anterior.
 import type { WebContentsView } from 'electron'
 import type { TabId } from '@shared/types'
+import { closeFind } from '../actions/close-find'
 import type { MainContext } from '../context'
 import { applyLayout } from './apply-layout'
 import { exitVideoFullscreen } from './exit-video-fullscreen'
@@ -9,6 +10,8 @@ import { notifyTabShown } from './restore-scroll'
 
 // as outras abas vivas saem da árvore e continuam rodando; nada de setVisible(false)
 export function hideTabView(ctx: MainContext): void {
+  // a busca é da página que sai: a barra fecha e os destaques somem (o foco é de quem entra)
+  closeFind(ctx, false)
   exitVideoFullscreen(ctx)
   const { view } = ctx.attached
   if (view && !ctx.win.isDestroyed()) {

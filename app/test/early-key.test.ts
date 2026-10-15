@@ -103,6 +103,8 @@ test('classifyEarlyKey: ⌘↵ e ⌥↵ seguem com o modificador', () => {
 
 test('isSameTarget compara o tipo e, na Nova aba, a aba', () => {
   assert.equal(isSameTarget({ kind: 'palette' }, { kind: 'palette' }), true)
+  assert.equal(isSameTarget({ kind: 'find' }, { kind: 'find' }), true)
+  assert.equal(isSameTarget({ kind: 'find' }, { kind: 'palette' }), false)
   assert.equal(
     isSameTarget(
       { kind: 'new-tab', tabId: 'a' },

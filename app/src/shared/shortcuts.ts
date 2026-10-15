@@ -1,7 +1,7 @@
 // Lista fechada de atalhos (docs/arquitetura.md, seção 4). O menu do app é gerado daqui.
 import type { CommandId } from './types'
 
-export type MenuGroup = 'file' | 'view' | 'navigate' | 'spaces'
+export type MenuGroup = 'file' | 'edit' | 'view' | 'navigate' | 'spaces'
 
 export interface Shortcut {
   command: CommandId
@@ -36,6 +36,27 @@ export const FIXED_SHORTCUTS: Shortcut[] = [
     accelerator: 'CmdOrCtrl+Shift+T',
     keys: '⇧⌘T',
     group: 'file'
+  },
+  {
+    command: 'find',
+    label: 'Buscar na Página…',
+    accelerator: 'CmdOrCtrl+F',
+    keys: '⌘F',
+    group: 'edit'
+  },
+  {
+    command: 'find-next',
+    label: 'Buscar Próximo',
+    accelerator: 'CmdOrCtrl+G',
+    keys: '⌘G',
+    group: 'edit'
+  },
+  {
+    command: 'find-previous',
+    label: 'Buscar Anterior',
+    accelerator: 'CmdOrCtrl+Shift+G',
+    keys: '⇧⌘G',
+    group: 'edit'
   },
   {
     command: 'toggle-sidebar',
