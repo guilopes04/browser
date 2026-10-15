@@ -4,6 +4,7 @@
 import type { MainContext } from '../context'
 import { removeFindHighlightStyle } from '../functions/find-highlight-style'
 import { getActiveContents } from '../functions/get-active-contents'
+import { getLiveContents } from '../functions/get-live-contents'
 import { closeKeyGate } from '../functions/key-gate'
 
 export function closeFind(ctx: MainContext, restoreFocus = true): void {
@@ -14,14 +15,14 @@ export function closeFind(ctx: MainContext, restoreFocus = true): void {
   // o "Aa" fica para a próxima busca
   ctx.findMatchCase = session.state.matchCase
 
-  const contents = ctx.views.get(session.tabId)?.webContents
-  if (contents && !contents.isDestroyed()) {
+  const contents = getLiveContents(ctx.views.get(session.tabId))
+  if (contents) {
     contents.stopFindInPage('clearSelection')
     if (session.cssKey) removeFindHighlightStyle(contents, session.cssKey)
   }
 
   if (!ctx.win.isDestroyed()) ctx.win.contentView.removeChildView(session.view)
-  if (!session.view.webContents.isDestroyed()) session.view.webContents.close()
+  getLiveContents(session.view)?.close()
 
   if (restoreFocus) getActiveContents(ctx)?.focus()
 }

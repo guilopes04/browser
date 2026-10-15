@@ -3,12 +3,13 @@
 import { toFindViewState } from '@shared/find-state'
 import { SPACE_TOKENS } from '@shared/tokens'
 import type { MainContext } from '../context'
+import { getLiveContents } from './get-live-contents'
 
 export function pushFindState(ctx: MainContext): void {
   const session = ctx.find
   if (!session || !session.ready) return
-  const wc = session.view.webContents
-  if (wc.isDestroyed()) return
+  const wc = getLiveContents(session.view)
+  if (!wc) return
 
   const { theme } = ctx.store.state
   const accent = SPACE_TOKENS[ctx.store.getCurrentSpace().color][theme].accent

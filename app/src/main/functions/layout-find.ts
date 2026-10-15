@@ -2,9 +2,10 @@
 import type { Rect } from '@shared/types'
 import type { MainContext } from '../context'
 import { computeFindBounds } from './compute-find-bounds'
+import { getLiveContents } from './get-live-contents'
 
 export function layoutFind(ctx: MainContext, page: Rect): void {
   const session = ctx.find
-  if (!session || session.view.webContents.isDestroyed()) return
+  if (!session || !getLiveContents(session.view)) return
   session.view.setBounds(computeFindBounds(page))
 }

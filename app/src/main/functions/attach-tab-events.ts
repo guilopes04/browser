@@ -2,6 +2,7 @@
 import type { WebContents } from 'electron'
 import type { Tab, TabId } from '@shared/types'
 import { getHostname } from '@shared/url-parts'
+import { closeFind } from '../actions/close-find'
 import type { MainContext } from '../context'
 import { applyLayout } from './apply-layout'
 import { attachFindEvents } from './attach-find-events'
@@ -97,6 +98,8 @@ export function attachTabEvents(
         : {})
     })
     if (ctx.attached.tabId !== tabId) return
+    // a página de erro é da shell: a barra de busca não tem mais o que buscar
+    if (error && ctx.find?.tabId === tabId) closeFind(ctx, false)
     applyLayout(ctx)
     if (error) ctx.shell.webContents.focus()
     else wc.focus()

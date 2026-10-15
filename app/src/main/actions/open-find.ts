@@ -4,10 +4,11 @@
 import { createFindState, focusFind, replaceFindText } from '@shared/find-state'
 import type { TabId } from '@shared/types'
 import type { FindSession, MainContext } from '../context'
+import { applyFindHighlight } from '../functions/apply-find-highlight'
 import { getLayout } from '../functions/apply-layout'
 import { createFindView } from '../functions/create-find-view'
-import { insertFindHighlightStyle } from '../functions/find-highlight-style'
 import { getActiveContents } from '../functions/get-active-contents'
+import { getLiveContents } from '../functions/get-live-contents'
 import { openKeyGate } from '../functions/key-gate'
 import { layoutFind } from '../functions/layout-find'
 import { pushFindState } from '../functions/push-find-state'
@@ -15,6 +16,7 @@ import { readPageSelection } from '../functions/read-page-selection'
 import { runFind } from '../functions/run-find'
 import { activateTab } from './activate-tab'
 import { closeFind } from './close-find'
+import { closePalette } from './close-palette'
 
 function startSession(ctx: MainContext, tabId: TabId): void {
   closeFind(ctx, false)
@@ -37,11 +39,7 @@ function startSession(ctx: MainContext, tabId: TabId): void {
   layoutFind(ctx, getLayout(ctx).page)
   openKeyGate(ctx, { kind: 'find' })
 
-  void insertFindHighlightStyle(contents).then(key => {
-    if (!key) return
-    if (ctx.find === session) session.cssKey = key
-    else contents.removeInsertedCSS(key).catch(() => {})
-  })
+  applyFindHighlight(ctx, session, contents)
 }
 
 export function openFind(ctx: MainContext): void {
@@ -56,6 +54,9 @@ export function openFind(ctx: MainContext): void {
   const contents = getActiveContents(ctx)
   if (!contents || ctx.attached.tabId !== tab.id) return
 
+  // a paleta aberta (⌘F com o foco nela) dá lugar à barra: as duas abertas disputariam o teclado
+  closePalette(ctx, false)
+
   const reopened = ctx.find?.tabId === tab.id
   if (!reopened) startSession(ctx, tab.id)
   const session = ctx.find
@@ -65,12 +66,16 @@ export function openFind(ctx: MainContext): void {
     session.state = focusFind(session.state)
     pushFindState(ctx)
   }
-  session.view.webContents.focus()
+  getLiveContents(session.view)?.focus()
 
+  const textBefore = session.state.text
   void readPageSelection(contents).then(selected => {
     if (ctx.find !== session || selected === '') return
-    // quem já digitou na barra (teclas repassadas durante a abertura) não perde o texto
-    if (!reopened && session.state.text !== '') return
+    // quem já digitou na barra enquanto a seleção chegava (teclas repassadas durante a abertura,
+    // ou na caixa da barra já aberta) não perde o texto
+    if (session.state.text !== textBefore) return
+    // a seleção é o próprio texto da busca: nada a recomeçar (o destaque ativo fica onde está)
+    if (selected === session.state.text) return
     session.state = focusFind(replaceFindText(session.state, selected))
     runFind(ctx, 'restart')
   })
