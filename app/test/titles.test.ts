@@ -51,6 +51,20 @@ test('sanitizeTitle: controles C0 e C1 e marcas bidi viram espaço', () => {
       'a b',
       mark.charCodeAt(0).toString(16)
     )
+  // as marcas invisíveis de direção (LRM, RLM, ALM) e os separadores de linha e parágrafo
+  for (const mark of ['\u200E', '\u200F', '\u061C', '\u2028', '\u2029'])
+    assert.equal(
+      sanitizeTitle(`a${mark}b`),
+      'a b',
+      mark.charCodeAt(0).toString(16)
+    )
+  // o título da revisão, de ponta a ponta
+  assert.equal(
+    sanitizeTitle(
+      'Banco\u202Elatot\u202C seguro\u0007\u0000\u200F\u2066x\u2069'
+    ),
+    'Banco latot seguro x'
+  )
   // C0, DEL e C1
   assert.equal(
     sanitizeTitle('x\u0000\u0007\u001b[31my\u007f\u0085\u009fz'),
