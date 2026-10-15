@@ -1,8 +1,10 @@
 // Com a paleta ou a Nova aba abrindo, repassa a tecla à shell (keys:early) em vez de deixá-la ir
 // para a página ou para a shell antes de o campo existir. Os eventos do main para a shell chegam
-// em ordem, e a tecla vem depois de palette:show (ou do snapshot que traz a aba).
+// em ordem, e a tecla vem depois de palette:show (ou do snapshot que traz a aba). Com a busca na
+// página abrindo, a tecla entra direto no estado da busca, que é do main.
 import type { Input } from 'electron'
 import { classifyEarlyKey } from '@shared/early-key'
+import { applyFindEarlyKey } from '../actions/apply-find-early-key'
 import type { MainContext } from '../context'
 import { closeKeyGate, getOpenKeyGate } from './key-gate'
 
@@ -17,7 +19,8 @@ export function forwardEarlyKey(
   switch (action.kind) {
     case 'forward':
       event.preventDefault()
-      ctx.broadcaster.send('keys:early', { target, key: action.key })
+      if (target.kind === 'find') applyFindEarlyKey(ctx, action.key)
+      else ctx.broadcaster.send('keys:early', { target, key: action.key })
       break
     case 'swallow':
       event.preventDefault()

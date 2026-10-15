@@ -1,0 +1,112 @@
+/* Barra de busca na página (Busca.dc.html). O claro vem do design; o escuro é derivado dos tokens
+   da paleta. A view é transparente: só a barra pinta, e a margem em volta é a da sombra. */
+.root {
+  --find-bg: rgba(250, 250, 252, 0.97);
+  --find-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.14), 0 8px 24px rgba(0, 0, 0, 0.14);
+  --find-divider: rgba(0, 0, 0, 0.1);
+}
+
+.root[data-theme='dark'] {
+  --find-bg: rgba(38, 39, 45, 0.97);
+  /* sombra mais curta que a do claro: com a barra escura sobre uma página branca, uma sombra de
+     24 px e 50% apareceria cortada na borda da view */
+  --find-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.14), 0 6px 18px rgba(0, 0, 0, 0.3);
+  --find-divider: rgba(255, 255, 255, 0.12);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.find-bar {
+  position: absolute;
+  left: var(--find-left);
+  top: var(--find-top);
+  width: var(--find-width);
+  height: var(--find-height);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 6px 0 12px;
+  border-radius: 12px;
+  background: var(--find-bg);
+  box-shadow: var(--find-shadow);
+}
+
+/* até o primeiro estado a barra existe (a caixa precisa do foco), mas não aparece */
+.find-bar[data-ready='false'] {
+  opacity: 0;
+}
+
+/* a largura do campo é o que sobra: com "1 de 3" são os 180 px do design */
+.find-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  color: var(--text);
+  padding: 0;
+}
+
+.find-count {
+  font-size: 12.5px;
+  color: var(--sec);
+  padding: 0 6px;
+  white-space: nowrap;
+}
+
+.find-button,
+.find-case {
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--icon);
+}
+
+.find-button {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.find-close {
+  color: var(--sec);
+}
+
+.find-case {
+  height: 30px;
+  padding: 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.find-button:hover,
+.find-case:hover {
+  background: var(--hover-bg);
+}
+
+/* "Aa" ligado: o destaque do espaço, em tom claro */
+.find-case[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  color: var(--accent);
+}
+
+.find-separator {
+  width: 1px;
+  height: 20px;
+  background: var(--find-divider);
+  margin: 0 2px;
+}

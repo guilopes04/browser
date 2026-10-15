@@ -81,3 +81,20 @@ test('--captura-paleta e --captura-nova-aba escolhem a cena e também fixam o te
   assert.equal(none.capturePath, null)
   assert.equal(none.paletteQuery, '')
 })
+
+test('--captura-busca escolhe a cena da barra de busca, com a consulta "a" ou a de --busca-consulta', () => {
+  const standard = parseFlags(['--captura-busca=/tmp/b.png'])
+  assert.equal(standard.capturePath, '/tmp/b.png')
+  assert.equal(standard.captureScene, 'find')
+  assert.equal(standard.findQuery, 'a')
+  assert.equal(standard.theme, 'light')
+
+  const custom = parseFlags([
+    '--captura-busca=/tmp/b.png',
+    '--busca-consulta=webcontents',
+    '--tema=escuro'
+  ])
+  assert.equal(custom.findQuery, 'webcontents')
+  assert.equal(custom.theme, 'dark')
+  assert.equal(parseFlags([]).findQuery, 'a')
+})

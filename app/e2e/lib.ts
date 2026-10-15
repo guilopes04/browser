@@ -17,9 +17,10 @@ import { writeFixture } from './fixture.ts'
 export const DIR = import.meta.dirname
 export const APP = resolve(DIR, '..')
 export const OUT_DIR = process.env.E2E_OUT ?? join(tmpdir(), 'navegador-e2e')
-const CDP = 9361
-const INSPECT = 9362
-const SRV = 8261
+// portas (E2E_CDP, E2E_INSPECT e E2E_SRV mudam, para dois testes rodarem ao mesmo tempo)
+const CDP = Number(process.env.E2E_CDP ?? 9361)
+const INSPECT = Number(process.env.E2E_INSPECT ?? 9362)
+const SRV = Number(process.env.E2E_SRV ?? 8261)
 
 export const sleep = (ms: number) =>
   new Promise<void>(done => setTimeout(done, ms))
@@ -99,10 +100,17 @@ export const ev = (target: Target, expression: string) =>
 
 export async function shell(): Promise<Target> {
   const found = (await targets()).find(target =>
-    target.url.startsWith('app://shell')
+    target.url.startsWith('app://shell/index.html')
   )
   if (!found) throw new Error('shell não encontrada')
   return found
+}
+
+// a barra de busca (⌘F): a view própria, que só existe com a busca aberta
+export async function findBar(): Promise<Target | undefined> {
+  return (await targets()).find(target =>
+    target.url.startsWith('app://shell/find.html')
+  )
 }
 
 export async function pages(): Promise<Target[]> {
@@ -200,6 +208,16 @@ function frontName(): string {
   )
 }
 
+// outro Electron do mesmo app (outro teste, outra sessão) também se chama "Electron": quem está na
+// frente se confere pelo pid
+function frontPid(): number {
+  return Number(
+    osa(
+      'tell application "System Events" to get unix id of first application process whose frontmost is true'
+    )
+  )
+}
+
 export async function front(): Promise<void> {
   for (let i = 0; i < 15; i++) {
     try {
@@ -210,17 +228,28 @@ export async function front(): Promise<void> {
       // o processo ainda não tem janela
     }
     await sleep(150)
-    if (frontName() === 'Electron') return
+    if (electronPid ? frontPid() === electronPid : frontName() === 'Electron')
+      return
   }
   throw new Error(`Electron não ficou na frente: ${frontName()}`)
 }
 
-// só manda teclas com o Electron na frente (nunca para outro app)
+// só manda teclas com o Electron deste teste na frente (nunca para outro app, nem para outro
+// Electron). Se outro app tomou a frente entre o front() e o envio, as teclas não saem: tenta de
+// novo, e se não der, falha alto em vez de seguir como se tivessem saído
 export async function keys(script: string): Promise<void> {
-  await front()
-  osa(
-    `tell application "System Events"\nif (name of (first application process whose frontmost is true)) is "Electron" then\n${script}\nend if\nend tell`
-  )
+  const guard = electronPid
+    ? `(unix id of (first application process whose frontmost is true)) is ${electronPid}`
+    : '(name of (first application process whose frontmost is true)) is "Electron"'
+  for (let attempt = 0; attempt < 4; attempt++) {
+    await front()
+    const sent = osa(
+      `tell application "System Events"\nif ${guard} then\n${script}\nreturn "sent"\nend if\nreturn "skipped"\nend tell`
+    )
+    if (sent.endsWith('sent')) return
+    await sleep(300)
+  }
+  throw new Error('as teclas não saíram: o Electron perdeu a frente')
 }
 
 export const K = {
@@ -254,27 +283,59 @@ export async function click(x: number, y: number): Promise<void> {
   execFileSync(binary, [String(Math.round(x)), String(Math.round(y))])
 }
 
+// rolagem real em coordenadas de tela (dy negativo rola a página para baixo)
+export async function scroll(x: number, y: number, dy: number): Promise<void> {
+  await front()
+  mkdirSync(OUT_DIR, { recursive: true })
+  const binary = join(OUT_DIR, 'scroll')
+  if (!existsSync(binary))
+    execFileSync('swiftc', ['-O', join(DIR, 'scroll.swift'), '-o', binary])
+  execFileSync(binary, [
+    String(Math.round(x)),
+    String(Math.round(y)),
+    String(Math.round(dy))
+  ])
+}
+
 // ---------- processos ----------
 const PROCESS_PATTERN = `${APP}/node_modules/electron/dist`
+// os processos deste teste (o principal e os auxiliares) levam o --user-data-dir dele na linha de
+// comando; isso os distingue de outro Electron do mesmo app rodando ao mesmo tempo (e vale com
+// node_modules por link simbólico, como num worktree)
+let profileMarker: string | null = null
+
+function pgrep(pattern: string): number[] {
+  try {
+    const out = execFileSync('pgrep', ['-f', '--', pattern], {
+      encoding: 'utf8'
+    }).trim()
+    return out ? out.split('\n').map(Number) : []
+  } catch {
+    return []
+  }
+}
 
 export function electronMainPid(): number {
-  const out = execFileSync(
-    'pgrep',
-    ['-f', `${PROCESS_PATTERN}/Electron.app/Contents/MacOS/Electron`],
-    { encoding: 'utf8' }
-  ).trim()
-  return Number(out.split('\n')[0])
+  if (profileMarker) {
+    const pids = pgrep(profileMarker)
+    for (const pid of pids) {
+      const command = execFileSync(
+        'ps',
+        ['-ww', '-o', 'command=', '-p', String(pid)],
+        {
+          encoding: 'utf8'
+        }
+      )
+      if (/Contents\/MacOS\/Electron /.test(command) && !/Helper/.test(command))
+        return pid
+    }
+    throw new Error('processo principal do Electron não encontrado')
+  }
+  return pgrep(`${PROCESS_PATTERN}/Electron.app/Contents/MacOS/Electron`)[0]
 }
 
 export function countProcs(): number {
-  try {
-    const out = execFileSync('pgrep', ['-f', PROCESS_PATTERN], {
-      encoding: 'utf8'
-    }).trim()
-    return out ? out.split('\n').length : 0
-  } catch {
-    return 0
-  }
+  return pgrep(profileMarker ?? PROCESS_PATTERN).length
 }
 
 export interface Procs {
@@ -285,6 +346,7 @@ export interface Procs {
 // sobe o servidor das páginas de teste e o app, com o perfil em `profile`
 export function start(profile: string, extra: string[] = []): Procs {
   mkdirSync(OUT_DIR, { recursive: true })
+  profileMarker = `--user-data-dir=${profile}`
   const log = (name: string) => openSync(join(OUT_DIR, name), 'w')
   const options = (name: string): SpawnOptions => ({
     stdio: ['ignore', log(`${name}.log`), log(`${name}.err.log`)]

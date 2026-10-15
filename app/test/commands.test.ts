@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { getPaletteActions, isKnownCommand } from '@shared/commands'
+import { FIXED_SHORTCUTS } from '@shared/shortcuts'
 import type { Space } from '@shared/types'
 
 const spaces: Space[] = [
@@ -50,5 +51,20 @@ test('ações: sem página não recarrega nem suspende; reabrir só com aba fech
   assert.deepEqual(
     actions.map(action => action.command),
     ['new-tab', 'close-tab', 'reopen-tab', 'toggle-sidebar', 'space-1']
+  )
+})
+
+test('os comandos da busca na página são conhecidos e têm atalho no menu Editar', () => {
+  assert.equal(isKnownCommand('find'), true)
+  assert.equal(isKnownCommand('find-next'), true)
+  assert.equal(isKnownCommand('find-previous'), true)
+  const edit = FIXED_SHORTCUTS.filter(shortcut => shortcut.group === 'edit')
+  assert.deepEqual(
+    edit.map(shortcut => [shortcut.label, shortcut.keys, shortcut.accelerator]),
+    [
+      ['Buscar na Página…', '⌘F', 'CmdOrCtrl+F'],
+      ['Buscar Próximo', '⌘G', 'CmdOrCtrl+G'],
+      ['Buscar Anterior', '⇧⌘G', 'CmdOrCtrl+Shift+G']
+    ]
   )
 })

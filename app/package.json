@@ -16,6 +16,7 @@
     "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./test/register.mjs --test --test-concurrency=3 test/*.test.ts test-web/*.test.ts",
     "e2e:palette": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON e2e/palette.ts",
     "e2e:new-tab": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON e2e/new-tab.ts",
+    "e2e:find": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON e2e/find.ts",
     "e2e:migration": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON e2e/migration.ts",
     "dist": "electron-vite build && APPLE_KEYCHAIN_PROFILE=browser-notary electron-builder --mac --arm64 -c.directories.output=\"${GILAS_DIST:-$HOME/Library/Caches/gilas-browser/dist}\"",
     "dist:sem-assinar": "electron-vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac --arm64 -c.directories.output=\"${GILAS_DIST:-$HOME/Library/Caches/gilas-browser/dist}\""

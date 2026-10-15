@@ -16,7 +16,13 @@ export default defineConfig({
     resolve: { alias },
     build: {
       minify: 'oxc',
-      rollupOptions: { input: resolve('src/renderer/index.html') }
+      // a shell e a barra de busca (view própria, por cima da página)
+      rollupOptions: {
+        input: {
+          index: resolve('src/renderer/index.html'),
+          find: resolve('src/renderer/find.html')
+        }
+      }
     }
   }
 })

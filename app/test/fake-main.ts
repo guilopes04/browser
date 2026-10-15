@@ -137,6 +137,8 @@ export function fakeContext(urls: string[] = []) {
     attached: { tabId: null as string | null, view: null as unknown },
     shellRaised: false,
     shellReady: true,
+    find: null,
+    findMatchCase: false,
     keyGate: null,
     metaFilled: Promise.resolve(),
     quitting: false

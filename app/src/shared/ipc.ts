@@ -1,5 +1,7 @@
 // Contrato IPC: único ponto de contato entre a shell (renderer) e o main.
 import type { EarlyKey, KeyGateTarget } from './early-key'
+import type { FindPointer } from './find-pointer'
+import type { FindViewState } from './find-state'
 import type {
   AppSnapshot,
   CommandId,
@@ -48,6 +50,18 @@ export interface Commands {
   'system:open-network-settings': Record<string, never>
   // ícone de Downloads do rodapé: abre o último arquivo baixado no Finder, ou a pasta Downloads
   'downloads:open': Record<string, never>
+  // barra de busca na página (view própria; só ela manda estes). ready: a caixa já está na tela e
+  // com o foco, e o main deixa de repassar as teclas e manda o estado
+  'find:ready': Record<string, never>
+  // o que o usuário digitou na caixa
+  'find:text': { text: string }
+  // ↵, ⇧↵ e os botões: próximo (forward) ou anterior
+  'find:step': { forward: boolean }
+  // "Aa"
+  'find:case': { matchCase: boolean }
+  'find:close': Record<string, never>
+  // o mouse na margem transparente da view da barra (a da sombra): é da página
+  'find:pointer': FindPointer
 }
 
 // shell -> main com resposta: invoke / handle
@@ -78,6 +92,8 @@ export interface Events {
   // tecla digitada enquanto a paleta ou a Nova aba abria (ver shared/early-key.ts). Chega depois
   // de palette:show e pode chegar antes do snapshot que traz a Nova aba: por isso leva o tabId
   'keys:early': { target: KeyGateTarget; key: EarlyKey }
+  // main -> barra de busca: texto, contador, "Aa" e cores
+  'find:state': FindViewState
 }
 
 export const COMMAND_CHANNELS = [
@@ -102,7 +118,13 @@ export const COMMAND_CHANNELS = [
   'keys:ready',
   'command:run',
   'system:open-network-settings',
-  'downloads:open'
+  'downloads:open',
+  'find:ready',
+  'find:text',
+  'find:step',
+  'find:case',
+  'find:close',
+  'find:pointer'
 ] as const satisfies readonly (keyof Commands)[]
 
 export const REQUEST_CHANNELS = [
@@ -116,5 +138,6 @@ export const EVENT_CHANNELS = [
   'address:focus',
   'palette:show',
   'palette:hide',
-  'keys:early'
+  'keys:early',
+  'find:state'
 ] as const satisfies readonly (keyof Events)[]

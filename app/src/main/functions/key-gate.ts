@@ -1,10 +1,14 @@
-// Janela em que a paleta (ou a Nova aba) está abrindo: do pedido até a shell avisar que o campo
-// está na tela (keys:ready) mais uma folga, para as teclas já repassadas chegarem antes das
-// nativas. Tem teto: se o aviso nunca vier, o teclado volta ao normal sozinho.
+// Janela em que a paleta (a Nova aba ou a barra de busca) está abrindo: do pedido até o campo
+// avisar que está na tela (keys:ready, find:ready) mais uma folga, para as teclas já repassadas
+// chegarem antes das nativas. Tem teto: se o aviso nunca vier, o teclado volta ao normal sozinho.
 import { isSameTarget, type KeyGateTarget } from '@shared/early-key'
 import type { MainContext } from '../context'
 
 const MAX_MS = 600
+// a barra de busca é um renderer novo a cada ⌘F e, com o Mac ocupado, pode passar dos 600 ms. As
+// teclas dela ficam no estado da busca (no main), então esperar mais não as prende em lugar
+// nenhum: sem o portão, as digitadas entre o teto e a caixa existir se perderiam
+const FIND_MAX_MS = 2000
 const GRACE_MS = 100
 
 export function openKeyGate(ctx: MainContext, target: KeyGateTarget): void {
@@ -34,7 +38,8 @@ export function getOpenKeyGate(
 ): KeyGateTarget | null {
   const gate = ctx.keyGate
   if (!gate) return null
-  if (now - gate.openedAt > MAX_MS) return null
+  const max = gate.target.kind === 'find' ? FIND_MAX_MS : MAX_MS
+  if (now - gate.openedAt > max) return null
   if (gate.readyAt !== null && now - gate.readyAt > GRACE_MS) return null
   return gate.target
 }

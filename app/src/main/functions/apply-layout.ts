@@ -1,6 +1,7 @@
 // Aplica a geometria na shell, na aba visível e nos semáforos. Síncrono, sem animação.
 import type { MainContext } from '../context'
 import { computeLayout, type Layout } from './compute-layout'
+import { layoutFind } from './layout-find'
 import { syncShellOrder } from './sync-shell-order'
 
 export function getLayout(ctx: MainContext): Layout {
@@ -24,6 +25,7 @@ export function applyLayout(ctx: MainContext): void {
   syncShellOrder(ctx)
 
   ctx.shell.setBounds(layout.shell)
+  layoutFind(ctx, layout.page)
   const { view, tabId } = ctx.attached
   if (view) {
     // com erro de carregamento a shell desenha a página de erro; a view fica escondida

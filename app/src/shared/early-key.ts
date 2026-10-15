@@ -22,9 +22,10 @@ export interface EarlyKey {
   shift: boolean
 }
 
-// quem espera as teclas: a caixa da paleta ou o campo de busca da Nova aba (aquela aba)
+// quem espera as teclas: a caixa da paleta, o campo de busca da Nova aba (aquela aba) ou a barra
+// de busca na página (as teclas dela ficam no main: ver shared/find-early-key.ts)
 export type KeyGateTarget =
-  { kind: 'palette' } | { kind: 'new-tab'; tabId: TabId }
+  { kind: 'palette' } | { kind: 'new-tab'; tabId: TabId } | { kind: 'find' }
 
 export type EarlyKeyAction =
   // a shell recebe a tecla por IPC
@@ -94,5 +95,6 @@ export function classifyEarlyKey(input: EarlyKeyInput): EarlyKeyAction {
 
 export function isSameTarget(a: KeyGateTarget, b: KeyGateTarget): boolean {
   if (a.kind !== b.kind) return false
-  return a.kind === 'palette' || (b.kind === 'new-tab' && a.tabId === b.tabId)
+  if (a.kind === 'new-tab') return b.kind === 'new-tab' && a.tabId === b.tabId
+  return true
 }

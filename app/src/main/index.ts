@@ -12,6 +12,7 @@ import {
   forwardEarlyKey,
   guardShell,
   handleEarlyShortcut,
+  pushFindState,
   readTabsFile,
   resolveWindowBounds
 } from './functions'
@@ -136,6 +137,8 @@ async function bootstrap(): Promise<void> {
     attached: { tabId: null, view: null },
     shellRaised: false,
     shellReady: false,
+    find: null,
+    findMatchCase: false,
     keyGate: null,
     metaFilled: Promise.resolve(),
     quitting: false
@@ -174,6 +177,8 @@ async function bootstrap(): Promise<void> {
       ctx.broadcaster.scheduleSnapshot()
     else if (change.kind === 'tab')
       ctx.broadcaster.queueTabPatch(change.tabId, change.patch)
+    // a barra de busca também segue o tema
+    if (change.kind === 'view') pushFindState(ctx)
   })
 
   const writer = ephemeralSession
