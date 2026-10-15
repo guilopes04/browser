@@ -3,7 +3,10 @@
 // (↵, ⇧↵, ⌘G, ⇧⌘G), destaques pintados e limpos, esc, clicar na página sem fechar a barra (e a
 // página recebendo o clique), seleção da página pré-preenchendo, "Aa", "Nenhum resultado", acento
 // (tecla morta), digitar logo depois do atalho, trocar e fechar a aba, aba suspensa, navegação com
-// a barra aberta, o menu Editar, o layout seguindo a janela e o processo da barra indo embora.
+// a barra aberta, o menu Editar, o layout seguindo a janela e o processo da barra indo embora; e
+// ainda: clicar e rolar na margem da sombra, ⌘F com a paleta aberta, a página de erro, abrir e
+// fechar 30 vezes sem sobrar nada, a barra medida contra o design no claro e as cores do escuro, e
+// nenhuma exceção no main nem erro no console da shell ou da barra.
 // Pré-requisito: npm run build. Uso: npm run e2e:find. Usa o teclado e o mouse de verdade: não rode
 // junto com outro teste e2e nem mexa no Mac durante a execução (E2E_CDP, E2E_INSPECT e E2E_SRV
 // mudam as portas).
@@ -192,6 +195,25 @@ async function screenPoint(selector: string) {
 await L.runSuite(
   'find',
   async record => {
+    // exceções do main e erros no console da shell e da barra, do começo ao fim
+    await L.mainEval(`(() => {
+      const { app, webContents } = process.mainModule.require('electron')
+      global.__errors = []
+      const push = text => global.__errors.push(String(text).slice(0, 400))
+      process.on('uncaughtException', e => push('main: ' + (e && e.stack || e)))
+      process.on('unhandledRejection', e => push('main (promessa): ' + (e && e.stack || e)))
+      const error = console.error.bind(console)
+      console.error = (...args) => { push('main console.error: ' + args.map(String).join(' ')); error(...args) }
+      const watch = wc => wc.on('console-message', (event, level, message) => {
+        const lv = event && event.level !== undefined ? event.level : level
+        const text = event && event.message !== undefined ? event.message : message
+        if ((lv === 'error' || lv === 3) && wc.getURL().startsWith('app://')) push(wc.getURL() + ': ' + text)
+      })
+      for (const wc of webContents.getAllWebContents()) watch(wc)
+      app.on('web-contents-created', (_e, wc) => watch(wc))
+      return true
+    })()`)
+
     let s = await L.st()
     record(
       'preparação: abas f1 e f2 no Pessoal, f1 ativa',
@@ -324,6 +346,73 @@ await L.runSuite(
       page.clicks.length === 1,
       { page }
     )
+
+    // a margem transparente da sombra (10 pt abaixo da barra, no meio dela) também é da página: o
+    // clique chega no mesmo ponto, a página ganha o foco e a barra fica
+    const pageBounds = await L.mainEval(`(() => {
+      const { BaseWindow } = process.mainModule.require('electron')
+      const win = BaseWindow.getAllWindows()[0]
+      const view = win.contentView.children.find(c => c.webContents && c.webContents.getURL().includes('find.test/a'))
+      return view.getBounds()
+    })()`)
+    const barBox = await L.ev(
+      (await L.findBar()) as NonNullable<Awaited<ReturnType<typeof L.findBar>>>,
+      `(() => { const r = document.querySelector('.find-bar').getBoundingClientRect(); return { x: r.x, y: r.y, w: r.width, h: r.height } })()`
+    )
+    const inView = { x: barBox.x + barBox.w / 2, y: barBox.y + barBox.h + 10 }
+    await L.mainEval(`(() => {
+      const { webContents } = process.mainModule.require('electron')
+      return webContents.getAllWebContents().find(w => w.getURL().includes('find.test/a')).executeJavaScript('window.clicks = []; true')
+    })()`)
+    await L.click(
+      bounds.content.x + bounds.view.x + inView.x,
+      bounds.content.y + bounds.view.y + inView.y
+    )
+    await sleep(500)
+    page = await L.ev(
+      (await L.pageOf('find.test/a')) as NonNullable<
+        Awaited<ReturnType<typeof L.pageOf>>
+      >,
+      `({ clicks: window.clicks, hasFocus: document.hasFocus() })`
+    )
+    const expectedClick = [
+      bounds.view.x + inView.x - pageBounds.x,
+      bounds.view.y + inView.y - pageBounds.y
+    ]
+    state = await bar()
+    record(
+      'D4 clique na margem da sombra (10 pt abaixo da barra) chega à página no mesmo ponto, com o foco, e a barra fica',
+      page.clicks.length === 1 &&
+        Math.abs(page.clicks[0][0] - expectedClick[0]) <= 2 &&
+        Math.abs(page.clicks[0][1] - expectedClick[1]) <= 2 &&
+        page.hasFocus &&
+        !!state &&
+        state.count === '1 de 3',
+      { page, expectedClick, count: state?.count }
+    )
+
+    // rolar com o ponteiro na margem rola a página
+    const pageA = (await L.pageOf('find.test/a')) as NonNullable<
+      Awaited<ReturnType<typeof L.pageOf>>
+    >
+    await L.ev(pageA, 'scrollTo(0, 0); true')
+    await L.scroll(
+      bounds.content.x + bounds.view.x + inView.x,
+      bounds.content.y + bounds.view.y + inView.y,
+      -240
+    )
+    const scrolled = await L.waitFor(
+      async () => ((await L.ev(pageA, 'scrollY')) > 0 ? true : null),
+      2000
+    )
+    record(
+      'D5 rolar com o ponteiro na margem da sombra rola a página',
+      !!scrolled,
+      {
+        scrollY: await L.ev(pageA, 'scrollY')
+      }
+    )
+    await L.ev(pageA, 'scrollTo(0, 0); true')
 
     // ---------- E. esc fecha e limpa os destaques ----------
     await L.keys(K.esc)
@@ -545,14 +634,18 @@ await L.runSuite(
     state = await waitBar('banana', '1 de 3', 8000)
     const wokeMs = Date.now() - t1
     s = await L.st()
+    await sleep(300)
+    const wokeMarks = await highlights('find.test/b')
     record(
-      'M1 aba suspensa: ⌘2 acorda, ⌘F abre e a busca conta quando a página termina de carregar',
+      'M1 aba suspensa: ⌘2 acorda, ⌘F abre, a busca conta quando a página termina de carregar e pinta com as cores do design',
       dormantBefore === true &&
         !!state &&
         state.value === 'banana' &&
         activeOf(s) === 'f2' &&
-        s.tabs.find((t: L.Json) => t.id === 'f2').dormant === false,
-      { dormantBefore, wokeMs, state, bar: await bar() }
+        s.tabs.find((t: L.Json) => t.id === 'f2').dormant === false &&
+        wokeMarks.results > 0 &&
+        wokeMarks.active > 0,
+      { dormantBefore, wokeMs, state, bar: await bar(), wokeMarks }
     )
 
     // ---------- N. a página navega com a barra aberta ----------
@@ -565,11 +658,15 @@ await L.runSuite(
       return urlOf(x, 'f2')?.includes('find.test/c')
     }, 5000)
     await sleep(1500)
-    state = await waitCount(/^\d de 3$/, 6000)
+    state = await waitCount('1 de 3', 6000)
+    marks = await highlights('find.test/c')
     record(
-      'N1 página nova com a barra aberta: a barra fica e a busca recomeça nela',
-      !!state && state.value === 'banana',
-      { state, now: await bar() }
+      'N1 página nova com a barra aberta: a barra fica, a busca recomeça do primeiro resultado e os destaques têm as cores do design',
+      !!state &&
+        state.value === 'banana' &&
+        marks.results > 0 &&
+        marks.active > 0,
+      { state, now: await bar(), marks }
     )
 
     // ---------- O. menu Editar ----------
@@ -634,6 +731,174 @@ await L.runSuite(
     await L.keys(FIND.cmd('w'))
     const closedByTab = await waitClosed()
     record('Q1 fechar a aba (⌘W) fecha a barra', !!closedByTab, {})
+
+    // ---------- R. ⌘F com a paleta aberta ----------
+    await activate('f1')
+    await L.keys(K.cmdK)
+    await L.waitFor(async () => (await L.pal()).open, 3000)
+    await L.keys(FIND.cmdF)
+    state = await waitReady()
+    await sleep(300)
+    s = await L.st()
+    record(
+      'R1 ⌘F com a paleta aberta: a paleta fecha e a barra abre com o foco',
+      !!state && !(await L.pal()).open && !s.overlay.includes('palette'),
+      { state, overlay: s.overlay }
+    )
+
+    // ---------- S. página de erro com a barra aberta ----------
+    await L.keys(K.type('banana'))
+    await waitCount('1 de 3')
+    await L.send('tab:navigate', { tabId: 'f1', input: 'http://127.0.0.1:1/' })
+    const closedByError = await waitClosed(6000)
+    s = await L.st()
+    record(
+      'S1 a página de erro (da shell) fecha a barra',
+      !!closedByError && !!s.tabs.find((t: L.Json) => t.id === 'f1').error,
+      { error: s.tabs.find((t: L.Json) => t.id === 'f1').error }
+    )
+    await L.send('tab:navigate', {
+      tabId: 'f1',
+      input: 'http://find.test/a?t=Busca%20A'
+    })
+    await L.waitFor(async () => {
+      const x = await L.st()
+      return !x.tabs.find((t: L.Json) => t.id === 'f1').error
+    }, 6000)
+    await sleep(800)
+
+    // ---------- T. abrir e fechar 30 vezes: nada sobra ----------
+    const stats = () =>
+      L.mainEval(`(() => {
+        const { webContents, BaseWindow, ipcMain, app } = process.mainModule.require('electron')
+        const all = webContents.getAllWebContents()
+        const pageWc = all.find(w => w.getURL().includes('find.test/a'))
+        const win = BaseWindow.getAllWindows()[0]
+        const events = ['found-in-page', 'did-navigate', 'did-stop-loading', 'before-input-event', 'destroyed']
+        return {
+          contents: all.length,
+          children: win.contentView.children.length,
+          page: events.map(e => pageWc.listenerCount(e)),
+          ipc: ['find:ready', 'find:text', 'find:step', 'find:case', 'find:close', 'find:pointer'].map(c => ipcMain.listenerCount(c)),
+          win: win.eventNames().map(n => win.listenerCount(n)).join(','),
+          processes: app.getAppMetrics().length
+        }
+      })()`)
+    await focusPage('find.test/a')
+    const before = await stats()
+    const cycles: number[] = []
+    for (let i = 0; i < 30; i++) {
+      const t = Date.now()
+      await L.keys(FIND.cmdF)
+      const opened = await waitReady()
+      cycles.push(opened ? Date.now() - t : -1)
+      await L.keys(K.esc)
+      await waitClosed()
+    }
+    await sleep(2000)
+    const after = await stats()
+    record(
+      'T1 abrir e fechar a barra 30 vezes com teclas reais: nenhum listener, view, webContents ou processo sobra',
+      JSON.stringify(before) === JSON.stringify(after) &&
+        cycles.every(ms => ms > 0),
+      { before, after, cycles }
+    )
+
+    // ---------- U. a barra mede e pinta como o design (Busca.dc.html) ----------
+    const source = readFileSync(
+      join(L.APP, '..', 'design', 'fonte', 'Busca.dc.html'),
+      'utf8'
+    )
+    const designBar = source.slice(
+      source.indexOf('<div role="search"'),
+      source.indexOf('</main>')
+    )
+    await L.keys(FIND.cmdF)
+    await waitReady()
+    const measured = await L.ev(
+      (await L.findBar()) as NonNullable<Awaited<ReturnType<typeof L.findBar>>>,
+      `(() => {
+        const describe = base => {
+          const b = base.getBoundingClientRect()
+          const els = [base, ...base.querySelectorAll('input, span, button, div')]
+          return els.map(el => {
+            const r = el.getBoundingClientRect()
+            const cs = getComputedStyle(el)
+            return {
+              x: r.x - b.x, y: r.y - b.y, w: r.width, h: r.height,
+              style: [cs.color, cs.backgroundColor, cs.fontSize, cs.fontWeight, cs.fontFamily, cs.borderRadius, cs.boxShadow, cs.padding].join(' | ')
+            }
+          })
+        }
+        // o mesmo texto do design na caixa e no contador
+        document.getElementById('find-input').value = 'webcontents'
+        document.querySelector('.find-count').textContent = '1 de 3'
+        const host = document.createElement('div')
+        host.style.cssText = 'position:absolute; left:20px; top:12px; width:600px; height:44px; color:#17181C'
+        host.innerHTML = ${JSON.stringify(designBar)}
+        document.body.appendChild(host)
+        const design = host.querySelector('[role=search]')
+        Object.assign(design.style, { position: 'absolute', left: '0', top: '0', right: 'auto' })
+        const result = { ours: describe(document.querySelector('.find-bar')), design: describe(design) }
+        host.remove()
+        return result
+      })()`
+    )
+    const mismatches = measured.ours
+      .map((ours: L.Json, i: number) => {
+        const design = measured.design[i]
+        const off = ['x', 'y', 'w', 'h'].filter(
+          key => Math.abs(ours[key] - design[key]) > 0.5
+        )
+        return off.length || ours.style !== design.style
+          ? { i, ours, design }
+          : null
+      })
+      .filter(Boolean)
+    record(
+      'U1 claro: cada elemento da barra na posição e no tamanho do design (meio ponto de folga) e com as mesmas cores, fonte, raio e sombra',
+      measured.ours.length === measured.design.length &&
+        mismatches.length === 0,
+      { mismatches, count: measured.ours.length }
+    )
+
+    // ---------- V. escuro ----------
+    await L.mainEval(
+      `(process.mainModule.require('electron').nativeTheme.themeSource = 'dark', true)`
+    )
+    const dark = await L.waitFor(async () => {
+      const target = await L.findBar()
+      if (!target) return null
+      const value = await L.ev(
+        target,
+        `(() => { const q = s => getComputedStyle(document.querySelector(s)); return { theme: document.querySelector('.root').dataset.theme, bar: q('.find-bar').backgroundColor, input: q('.find-input').color, count: q('.find-count').color, button: q('.find-button').color, close: q('.find-close').color, sep: q('.find-separator').backgroundColor } })()`
+      )
+      return value.theme === 'dark' ? value : null
+    }, 3000)
+    record(
+      'V1 escuro com a barra aberta: ela troca para as cores do escuro (fundo da paleta escura, textos dos tokens)',
+      !!dark &&
+        dark.bar === 'rgba(38, 39, 45, 0.97)' &&
+        dark.input === 'rgb(241, 241, 244)' &&
+        dark.count === 'rgb(163, 164, 173)' &&
+        dark.button === 'rgb(201, 202, 210)' &&
+        dark.close === 'rgb(163, 164, 173)' &&
+        dark.sep === 'rgba(255, 255, 255, 0.12)',
+      { dark }
+    )
+    await L.mainEval(
+      `(process.mainModule.require('electron').nativeTheme.themeSource = 'light', true)`
+    )
+    await L.keys(K.esc)
+    await waitClosed()
+
+    // ---------- W. nenhuma exceção ----------
+    const errors = await L.mainEval('global.__errors')
+    record(
+      'W1 nenhuma exceção no main nem erro no console da shell ou da barra',
+      errors.length === 0,
+      { errors }
+    )
   },
   { fixture }
 )

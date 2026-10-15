@@ -283,6 +283,20 @@ export async function click(x: number, y: number): Promise<void> {
   execFileSync(binary, [String(Math.round(x)), String(Math.round(y))])
 }
 
+// rolagem real em coordenadas de tela (dy negativo rola a página para baixo)
+export async function scroll(x: number, y: number, dy: number): Promise<void> {
+  await front()
+  mkdirSync(OUT_DIR, { recursive: true })
+  const binary = join(OUT_DIR, 'scroll')
+  if (!existsSync(binary))
+    execFileSync('swiftc', ['-O', join(DIR, 'scroll.swift'), '-o', binary])
+  execFileSync(binary, [
+    String(Math.round(x)),
+    String(Math.round(y)),
+    String(Math.round(dy))
+  ])
+}
+
 // ---------- processos ----------
 const PROCESS_PATTERN = `${APP}/node_modules/electron/dist`
 // os processos deste teste (o principal e os auxiliares) levam o --user-data-dir dele na linha de
