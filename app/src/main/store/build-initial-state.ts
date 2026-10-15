@@ -80,7 +80,8 @@ export function buildInitialState(input: BuildInput): {
     settings,
     overlay: [],
     fullscreen: false,
-    downloads: createDownloadStatus()
+    downloads: createDownloadStatus(),
+    clearedData: null
   }
   return { state, closed: useSession ? sanitizeClosed(session.closed) : [] }
 }

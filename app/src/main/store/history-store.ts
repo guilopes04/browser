@@ -3,13 +3,17 @@
 // ou título) com debounce, e síncrono na saída; quando sobra muita linha antiga, é reescrito por
 // inteiro. A leitura (cerca de 15 ms com 20 mil linhas) espera a abertura passar, mas sempre
 // acontece antes da primeira gravação: um append em arquivo ainda não lido o criaria por cima do
-// formato antigo, que então nunca seria migrado.
-import { appendFileSync } from 'node:fs'
+// formato antigo, que então nunca seria migrado. Dados privados: arquivo 0600, sem #fragmento
+// (tokens de login), no máximo 500 entradas por host e 10 MB (as mais antigas saem).
+import { statSync, unlinkSync } from 'node:fs'
+import { join } from 'node:path'
 import { limitTitle, limitUrl } from '@shared/limit-stored-text'
+
 import type { HistoryEntry, SpaceId } from '@shared/types'
 import { isHistoryUrl } from './is-history-url'
 import { loadHistory } from './load-history'
 import { markLegacyMigrated } from './migrate-legacy-history'
+import { appendPrivate } from './private-files'
 import { getHistoryPath } from './read-history-file'
 import {
   serializeAll,
@@ -20,8 +24,10 @@ import {
   addHistoryEntry,
   countEntries,
   createSpaceHistory,
+  MAX_HISTORY_BYTES,
   setHistoryTitle,
   trimHistory,
+  trimHistoryBytes,
   type SpaceHistory
 } from './space-history'
 import { warmSearchText } from './warm-search-text'
@@ -53,6 +59,8 @@ export class HistoryStore {
   // linhas ainda não gravadas
   private buffer: string[] = []
   private lines = 0
+  // tamanho estimado do arquivo no disco (o lido mais o que já foi anexado)
+  private bytes = 0
   private timer: NodeJS.Timeout | null = null
 
   private readonly path: string
@@ -77,10 +85,21 @@ export class HistoryStore {
   private ensureLoaded(): void {
     if (this.loaded) return
     this.loaded = true
-    const { histories, lines, legacy } = loadHistory(this.path, this.userData)
+    const { histories, lines, legacy, needsRewrite } = loadHistory(
+      this.path,
+      this.userData
+    )
     this.histories = histories
     // mais as linhas que já esperam no buffer (o que aconteceu antes da leitura)
     this.lines = lines + this.buffer.length
+    // o arquivo mais o que ainda espera no buffer
+    let onDisk = 0
+    try {
+      onDisk = statSync(this.path).size
+    } catch {
+      // ainda não existe
+    }
+    this.bytes = onDisk + Buffer.byteLength(this.buffer.join(''))
 
     for (const op of this.early) {
       if (op.kind === 'visit') addHistoryEntry(this.space(op.spaceId), op)
@@ -89,15 +108,12 @@ export class HistoryStore {
     this.early = []
     trimHistory(this.histories)
 
-    if (!legacy) return
+    if (!legacy && !needsRewrite && this.bytes <= MAX_HISTORY_BYTES) return
     try {
       this.rewrite()
-      markLegacyMigrated(legacy.files)
+      if (legacy) markLegacyMigrated(legacy.files)
     } catch (error) {
-      console.error(
-        '[History][ensureLoaded] falha ao migrar o histórico',
-        error
-      )
+      console.error('[History][ensureLoaded] falha ao reescrever o histórico', error)
     }
   }
 
@@ -143,14 +159,42 @@ export class HistoryStore {
   private enqueue(line: string): void {
     this.buffer.push(line)
     this.lines++
+    this.bytes += Buffer.byteLength(line)
     this.timer ??= setTimeout(() => this.saveNow(), DEBOUNCE_MS)
   }
 
   // reescreve o arquivo com o que está na memória (já inclui o que estava no buffer)
   private rewrite(): void {
-    writeAtomic(this.path, serializeAll(this.histories))
+    if (this.bytes > MAX_HISTORY_BYTES) {
+      // passou de 10 MB: as visitas mais antigas saem, com folga para não reescrever a cada visita
+      trimHistoryBytes(this.histories, MAX_HISTORY_BYTES * 0.9)
+    }
+    const text = serializeAll(this.histories)
+    writeAtomic(this.path, text)
     this.buffer = []
     this.lines = countEntries(this.histories)
+    this.bytes = Buffer.byteLength(text)
+  }
+
+  // limpar os dados de navegação de um espaço: o histórico dele some da memória e do disco (o
+  // arquivo é reescrito sem ele; os arquivos do formato antigo, já migrados, também saem)
+  clearSpace(spaceId: SpaceId): void {
+    this.ensureLoaded()
+    this.histories.set(spaceId, createSpaceHistory())
+    if (this.timer) clearTimeout(this.timer)
+    this.timer = null
+    try {
+      this.rewrite()
+    } catch (error) {
+      console.error('[History][clearSpace] falha ao reescrever o histórico', error)
+    }
+    for (const suffix of ['.json', '.json.migrado']) {
+      try {
+        unlinkSync(join(this.userData, `history-${spaceId}${suffix}`))
+      } catch {
+        // não existe
+      }
+    }
   }
 
   saveNow(): void {
@@ -163,7 +207,7 @@ export class HistoryStore {
     if (this.buffer.length === 0 && !this.needsCompaction()) return
     try {
       if (this.needsCompaction()) this.rewrite()
-      else appendFileSync(this.path, this.buffer.join(''))
+      else appendPrivate(this.path, this.buffer.join(''))
     } catch (error) {
       console.error('[History][saveNow] falha ao gravar o histórico', error)
     }
@@ -172,7 +216,9 @@ export class HistoryStore {
 
   private needsCompaction(): boolean {
     return (
-      this.loaded && this.lines > countEntries(this.histories) + COMPACT_SLACK
+      this.loaded &&
+      (this.lines > countEntries(this.histories) + COMPACT_SLACK ||
+        this.bytes > MAX_HISTORY_BYTES)
     )
   }
 }

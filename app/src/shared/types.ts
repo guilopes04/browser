@@ -91,6 +91,14 @@ export interface DownloadStatus {
   lastFailed: boolean
 }
 
+// "Limpar dados de navegação" acabou de rodar neste espaço: a sidebar avisa por alguns segundos.
+// Só em memória
+export interface ClearedData {
+  spaceId: SpaceId
+  // epoch ms
+  at: number
+}
+
 export interface AppSnapshot {
   theme: Theme
   spaces: Space[]
@@ -104,6 +112,7 @@ export interface AppSnapshot {
   overlay: OverlayReason[]
   fullscreen: boolean
   downloads: DownloadStatus
+  clearedData: ClearedData | null
 }
 
 export type PersistedTab = Pick<
@@ -154,6 +163,7 @@ export interface HistoryEntry {
   visitedAt: number
   // caches em memória, preenchidos sob demanda; nunca vão para o arquivo
   key?: string
+  host?: string
   search?: NormalizedText
 }
 

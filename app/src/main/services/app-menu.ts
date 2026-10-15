@@ -8,6 +8,7 @@ import {
   type MenuGroup,
   type Shortcut
 } from '@shared/shortcuts'
+import { clearBrowsingData } from '../actions/clear-browsing-data'
 import { runCommand } from '../actions/run-command'
 import { showWindow } from '../actions/show-window'
 import type { MainContext } from '../context'
@@ -113,7 +114,18 @@ export function buildMenuTemplate(
 
   const template: MenuItemConstructorOptions[] = [
     appMenu(),
-    { label: 'Arquivo', submenu: group('file') },
+    {
+      label: 'Arquivo',
+      submenu: [
+        ...group('file'),
+        { type: 'separator' },
+        // sem atalho: apagar dados não é coisa de tecla solta
+        {
+          label: 'Limpar dados de navegação…',
+          click: () => void clearBrowsingData(ctx)
+        }
+      ]
+    },
     editMenu(),
     {
       label: 'Visualizar',

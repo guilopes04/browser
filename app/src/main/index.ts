@@ -39,6 +39,7 @@ import { AppStore } from './store/app-store'
 import { buildInitialState } from './store/build-initial-state'
 import { HistoryStore } from './store/history-store'
 import { readSessionFile } from './store/read-session-file'
+import { protectDataFiles } from './store/private-files'
 import { getSessionPath } from './store/session-path'
 import { startSessionWriter } from './store/session-writer'
 
@@ -103,6 +104,8 @@ async function bootstrap(): Promise<void> {
   hardenDefaultSession()
   const userData = app.getPath('userData')
   const sessionPath = getSessionPath(userData)
+  // sessão, histórico e log são só do usuário: 0600 (e a pasta 0700), mesmo os já existentes
+  protectDataFiles(userData)
   if (ephemeralSession)
     console.log(
       '[Session][bootstrap] --abas: sessão de uso único, session.json intacto'

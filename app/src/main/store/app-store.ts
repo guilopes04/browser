@@ -2,6 +2,7 @@
 // quem precisa reagir (shell, sessão) assina com subscribe.
 import type {
   AppSnapshot,
+  ClearedData,
   DownloadStatus,
   OverlayReason,
   Rect,
@@ -231,6 +232,18 @@ export class AppStore {
     if (this.state.fullscreen === on) return
     this.state.fullscreen = on
     this.emit({ kind: 'view' })
+  }
+
+  // "Limpar dados de navegação" terminou (ou o aviso expirou: null)
+  setClearedData(cleared: ClearedData | null): void {
+    this.state.clearedData = cleared
+    this.emit({ kind: 'view' })
+  }
+
+  // a pilha do ⇧⌘T esquece as abas fechadas de um espaço
+  clearClosed(spaceId: SpaceId): void {
+    this.closed = this.closed.filter(entry => entry.spaceId !== spaceId)
+    this.emit({ kind: 'dirty' })
   }
 
   // só avisa a shell quando algo mudou (o progresso chega várias vezes por segundo)

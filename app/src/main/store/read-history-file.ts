@@ -15,7 +15,7 @@ export function readHistoryFile(path: string): ParsedHistory | null {
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null
     console.error('[History][readHistoryFile] falha ao ler o histórico', error)
-    return { histories: new Map(), lines: 0 }
+    return { histories: new Map(), lines: 0, needsRewrite: false }
   }
   return parseHistory(text)
 }

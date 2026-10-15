@@ -427,6 +427,12 @@
   white-space: nowrap;
 }
 
+/* "Dados limpos": avisa por alguns segundos, no lugar do contador do bloqueador */
+.footer-notice {
+  color: var(--accent);
+  font-weight: 600;
+}
+
 /* download: o percentual (ou "Concluído") ao lado do ícone, em destaque (Sidebar.dc.html) */
 .footer-downloads-text {
   font-weight: 600;

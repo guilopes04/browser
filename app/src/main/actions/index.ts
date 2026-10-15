@@ -1,4 +1,5 @@
 export * from './activate-tab'
+export * from './clear-browsing-data'
 export * from './close-dead-tab'
 export * from './close-palette'
 export * from './close-tab'

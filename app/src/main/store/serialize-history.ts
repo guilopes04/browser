@@ -1,5 +1,6 @@
 // Linhas do history.jsonl. Visita: {spaceId, url, title, visitedAt}. Atualização de título:
 // {spaceId, url, title}, sem visitedAt (só vale para uma visita que já existe).
+import { stripFragment } from '@shared/strip-fragment'
 import type { SpaceId } from '@shared/types'
 import type { SpaceHistory } from './space-history'
 
@@ -9,7 +10,7 @@ export function serializeVisit(
 ): string {
   return `${JSON.stringify({
     spaceId,
-    url: visit.url,
+    url: stripFragment(visit.url),
     title: visit.title,
     visitedAt: visit.visitedAt
   })}\n`
@@ -20,7 +21,7 @@ export function serializeTitle(
   url: string,
   title: string
 ): string {
-  return `${JSON.stringify({ spaceId, url, title })}\n`
+  return `${JSON.stringify({ spaceId, url: stripFragment(url), title })}\n`
 }
 
 // o arquivo inteiro, da visita mais antiga para a mais nova (compactação)

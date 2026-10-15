@@ -5,6 +5,7 @@ import type { SpaceId } from '@shared/types'
 import { toUrlKey } from '@shared/url-key'
 import {
   createSpaceHistory,
+  limitEntriesPerHost,
   trimHistory,
   type SpaceHistory
 } from './space-history'
@@ -13,6 +14,8 @@ export interface ParsedHistory {
   histories: Map<SpaceId, SpaceHistory>
   // linhas válidas lidas: com muito mais linhas que entradas, vale compactar o arquivo
   lines: number
+  // o arquivo (de uma versão anterior) guardava #fragmentos ou passava dos limites: vale reescrevê-lo
+  needsRewrite: boolean
 }
 
 function applyLine(
@@ -60,18 +63,24 @@ function applyLine(
 export function parseHistory(text: string): ParsedHistory {
   const histories = new Map<SpaceId, SpaceHistory>()
   let lines = 0
+  let needsRewrite = false
   for (const line of text.split('\n')) {
     if (line === '') continue
     try {
       const data: unknown = JSON.parse(line)
-      if (typeof data === 'object' && data !== null && !Array.isArray(data))
+      if (typeof data === 'object' && data !== null && !Array.isArray(data)) {
+        const url = (data as Record<string, unknown>).url
+        if (typeof url === 'string' && url.includes('#')) needsRewrite = true
         if (applyLine(histories, data as Record<string, unknown>)) lines++
+      }
     } catch {
       // linha cortada ou corrompida
     }
   }
-  for (const history of histories.values())
+  for (const history of histories.values()) {
     history.list.sort((a, b) => b.visitedAt - a.visitedAt)
+    if (limitEntriesPerHost(history) > 0) needsRewrite = true
+  }
   trimHistory(histories)
-  return { histories, lines }
+  return { histories, lines, needsRewrite }
 }
