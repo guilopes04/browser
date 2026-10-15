@@ -235,15 +235,21 @@ export async function front(): Promise<void> {
 }
 
 // só manda teclas com o Electron deste teste na frente (nunca para outro app, nem para outro
-// Electron)
+// Electron). Se outro app tomou a frente entre o front() e o envio, as teclas não saem: tenta de
+// novo, e se não der, falha alto em vez de seguir como se tivessem saído
 export async function keys(script: string): Promise<void> {
-  await front()
   const guard = electronPid
     ? `(unix id of (first application process whose frontmost is true)) is ${electronPid}`
     : '(name of (first application process whose frontmost is true)) is "Electron"'
-  osa(
-    `tell application "System Events"\nif ${guard} then\n${script}\nend if\nend tell`
-  )
+  for (let attempt = 0; attempt < 4; attempt++) {
+    await front()
+    const sent = osa(
+      `tell application "System Events"\nif ${guard} then\n${script}\nreturn "sent"\nend if\nreturn "skipped"\nend tell`
+    )
+    if (sent.endsWith('sent')) return
+    await sleep(300)
+  }
+  throw new Error('as teclas não saíram: o Electron perdeu a frente')
 }
 
 export const K = {
