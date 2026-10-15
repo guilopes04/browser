@@ -26,7 +26,8 @@ Quem desenha o quê:
 - **shellView na base (índice 0)**: a sidebar (aberta ou compacta); a faixa de arrasto; a sombra e o hairline do painel (uma div no retângulo da página com o `box-shadow` do `Main.dc.html`: `0 0 0 .5px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.06)`; no escuro, `0 0 0 .5px rgba(255,255,255,.08)`); a tela de Nova aba quando a aba ativa tem `url === ''` (nesse caso não existe tabView); e o gatilho de 8 px da sidebar oculta. O `body` é sempre transparente; só os elementos pintam.
 - **tabView**: a página. Só a aba ativa do espaço atual fica na árvore. As outras abas vivas saem com `removeChildView` e continuam rodando (o áudio segue). Proibido deixar views penduradas com `setVisible(false)`.
 - **shellView sobreposta**: paleta, revelação da sidebar oculta (peek), dicas do modo compacto e popovers que invadem o painel. O main guarda um conjunto de motivos (`palette | peek | tooltip | popover`): a shell sobe com `addChildView(shell)` quando o conjunto tem algum motivo e desce com `addChildView(shell, 0)` quando ele esvazia. Sobreposta, a shell recebe todos os cliques (o véu fecha a paleta; sair da sidebar flutuante fecha o peek). Ao abrir a paleta, foco em `shell.webContents.focus()`; ao fechar, foco de volta em `tab.webContents.focus()`.
-- Uma só view de UI: um renderer a menos (cerca de 30 a 50 MB), nenhum estado sincronizado entre duas UIs, e a paleta cobre a sidebar como no design.
+- Uma só view de UI permanente: um renderer a menos (cerca de 30 a 50 MB), nenhum estado sincronizado entre duas UIs, e a paleta cobre a sidebar como no design.
+- **findView** (barra de busca, ⌘F): a única exceção, e só enquanto a busca está aberta. A barra é de 397×44 pt no canto do painel e fica **acima da página**, numa `WebContentsView` própria (`find.html`, transparente, do tamanho da barra mais a margem da sombra), criada ao abrir e destruída ao fechar (cerca de 21 MB de footprint medidos com ela aberta, 100 a 160 ms para abrir). Uma shell por cima da página inteira, como a da paleta, levaria todos os cliques; a view pequena deixa a página receber os cliques fora dela, e clicar na página não fecha a barra. Só a margem transparente da sombra (20 pt em volta da barra) não deixa passar clique. O estado da busca (texto, "Aa", contador) é do main (`FindSession` em `ctx.find`, com as transições puras em `shared/find-state.ts`); a barra só mostra e devolve o que o usuário digita (`find:*`, seção 3). O destaque dos resultados é do Chromium; `::search-text` o pinta com as cores do design.
 
 Geometria em pt (W×H = conteúdo), calculada pela função pura `main/functions/compute-layout.ts`:
 
@@ -45,6 +46,7 @@ Geometria em pt (W×H = conteúdo), calculada pela função pura `main/functions
 - `resize` da BaseWindow → `computeLayout` → `setBounds` síncrono na shell e na aba ativa, sem `animate`. Com a janela abaixo de 900 pt, a sidebar vai para compacta sem gravar ("Esconder sozinha em janelas estreitas").
 - ⌘S alterna entre `open` e o estilo escondido dos Ajustes (`hidden` com revelação na borda, o padrão, ou `compact`); se o destino não mudaria nada na tela (janela estreita já mostra a compacta), vai para `hidden` (`functions/get-next-sidebar-mode.ts`). Na sidebar oculta, um `mousemove` (não `mouseenter`: o gatilho reaparece sob o ponteiro parado ao fechar e o Chromium dispara uma entrada sintética) no gatilho de 8 px da borda esquerda dispara `shell:raise {reason:'peek', on:true}`. O main sobe a shell e mostra os semáforos em `{x:23,y:29}`; quando o ponteiro fica 250 ms a mais de 16 px da sidebar, com esc, com clique fora, ao perder o foco ou ao trocar o modo da sidebar, `on:false`. A dica do modo compacto usa o motivo `tooltip` do mesmo jeito (350 ms de atraso; a troca de botão é imediata). Com a shell por cima, o painel da página (`.page-panel`) fica transparente para a página aparecer.
 - Tema: o main lê `nativeTheme.shouldUseDarkColors` e escuta `updated`. `--tema=claro|escuro|sistema` fixa `nativeTheme.themeSource`; com `--captura` e sem `--tema` o tema é o claro, para a imagem ser comparável com as telas do design. O main pinta a janela; a shell recebe `theme` no snapshot e põe `data-theme` no `<html>`. `tabView.setBackgroundColor` é `#FFFFFF` nos dois temas (`PAGE_CANVAS` em `shared/tokens.ts`): esse valor vira o fundo padrão do documento, então uma cor escura pintaria de cinza toda página sem fundo próprio (decisão da correção do núcleo, 15/10/2026: o Chrome também é branco). Página que aceita o escuro declara `color-scheme` ou `prefers-color-scheme`, e o Chromium já segue o tema do macOS. O `#212126` do escuro continua só nas telas desenhadas pela shell (Nova aba, erro).
+- Capturas: `--captura=<png>` fotografa a janela; `--captura-paleta=<png>` (com `--paleta-consulta=<texto>`), `--captura-nova-aba=<png>` e `--captura-busca=<png>` preparam a cena antes. A da busca abre a barra na aba ativa (a primeira de `--abas`) com a consulta `a` (ou `--busca-consulta=<texto>`), espera o contador e fotografa. O e2e da busca é `npm run e2e:find`.
 - Segurança: toda view com `sandbox: true`, `contextIsolation: true`, `nodeIntegration: false`. Só a shell tem preload. A shell é servida por `protocol.handle('app')` (`app://shell/index.html`, lendo só de `out/renderer`, com bloqueio de `..`); em dev, por `ELECTRON_RENDERER_URL`. Mede-se sempre o build de produção.
 
 ## 2. Pastas (`app/src`)
@@ -63,6 +65,8 @@ src/
     match-palette.ts          ranking da paleta (puro)
     early-key.ts              teclas repassadas pelo main enquanto a paleta ou a Nova aba abrem (puro)
     url-key.ts                chave de endereço (host sem caixa, sem esquema, www, âncora nem barra final)
+    find-state.ts  find-request.ts  find-early-key.ts  find-selection.ts
+                              busca na página: estado e contador, pedido ao Chromium, teclas da abertura, seleção (puros)
   main/
     index.ts                  bootstrap: flags, protocolo, menu, janela, timers
     context.ts                interface MainContext { store, views, win, shell, flags }
@@ -108,6 +112,7 @@ src/
       palette/  index.tsx  palette-input.tsx  palette-section.tsx  palette-row.tsx  use-palette-keys.ts
       new-tab/  index.tsx
       icons/    index.tsx  (SVGs copiados do design)
+      find-bar/ index.tsx icons.tsx  (a barra de busca; entra por find.html e find-main.tsx, com find-state.ts)
 ```
 
 Usa os padrões do electron-vite (`src/main/index.ts`, `src/preload/index.ts`, `src/renderer/index.html`). Para o JSX, `tsconfig` com `"jsx": "react-jsx"` e `"jsxImportSource": "preact"`, sem plugin extra. As funções puras e o main sem Electron têm teste em `app/test/*.test.ts`; os módulos da shell (estado da paleta, teclas, Nova aba), com `window.api` de mentira, em `app/test-web/*.test.ts` (`npm test`, `node --test --experimental-strip-types`). Os testes de ponta a ponta ficam em `app/e2e/` (`npm run build` antes; `npm run e2e:palette`, `e2e:new-tab`, `e2e:migration`): sobem o app de verdade, mandam teclas e cliques reais (System Events e CGEvent, com o Electron na frente e acessibilidade liberada para o terminal), leem o estado por CDP e `--inspect`, e guardam perfis e resultados em `E2E_OUT` (padrão: pasta temporária).
@@ -189,6 +194,9 @@ export interface Commands {        // shell → main: ipcRenderer.send / ipcMain
   'keys:ready': { target: KeyGateTarget }              // o campo já está na tela e com o foco: fim do repasse
   'command:run': { command: CommandId }
   'system:open-network-settings': {}                   // botão da página de erro sem conexão
+  // só a barra de busca (find.html) manda estes; o main confere o remetente
+  'find:ready': {}  'find:text': { text: string }  'find:step': { forward: boolean }
+  'find:case': { matchCase: boolean }  'find:close': {}
 }
 export interface Requests {        // shell → main com resposta: invoke / handle
   'state:get': { req: {}; res: AppSnapshot }
@@ -201,17 +209,19 @@ export interface Events {          // main → shell: webContents.send / ipcRend
   'palette:show': { mode: PaletteMode; text: string; sections: PaletteSection[] }  // já traz as seções; no modo address, text = URL atual selecionada
   'palette:hide': {}
   'keys:early': { target: KeyGateTarget; key: EarlyKey } // tecla digitada enquanto a paleta ou a Nova aba abria
+  'find:state': FindViewState                            // para a barra de busca: texto, contador "N de M", "Aa", tema
 }
-export type KeyGateTarget = { kind: 'palette' } | { kind: 'new-tab'; tabId: TabId }
+export type KeyGateTarget = { kind: 'palette' } | { kind: 'new-tab'; tabId: TabId } | { kind: 'find' }
 export const COMMAND_CHANNELS = [/* todas as chaves de Commands */] as const
 export const REQUEST_CHANNELS = ['state:get', 'palette:query'] as const
-export const EVENT_CHANNELS = ['state:snapshot', 'state:tab', 'address:focus', 'palette:show', 'palette:hide', 'keys:early'] as const
+export const EVENT_CHANNELS = ['state:snapshot', 'state:tab', 'address:focus', 'palette:show', 'palette:hide', 'keys:early', 'find:state'] as const
 ```
 
 Regras:
 - O main é a única fonte da verdade. A shell espelha o estado em signals e guarda localmente só hover, foco e o texto da paleta. Ao carregar, ela chama `state:get`; depois só ouve.
 - `state:snapshot` sai no máximo uma vez por tick (coalescido com `setImmediate`); `state:tab` sai por aba, coalescido a cada 50 ms. Os favicons vão como data URL (o main baixa com `session.fetch` da partição e redimensiona com `nativeImage` para 32 px; ICO e SVG ficam com letra e cor).
 - Teclas na abertura da paleta e da Nova aba (portão de teclas). ⌘K, ⌘L e ⌘T são tratados no `before-input-event` da shell e de cada aba (`functions/handle-early-shortcut.ts`), e não pelo accelerator do menu: o accelerator só dispara depois de a página devolver a tecla como não tratada, e nessa ida e volta as teclas digitadas em seguida caíam na página (num chat, o ↵ enviaria a mensagem) e a página ainda via o próprio ⌘T. O menu continua com os accelerators (para mostrar o atalho e para as views sem o gancho). Aberta a paleta ou ativada uma Nova aba, o main abre o portão (`functions/key-gate.ts`, `ctx.keyGate`): até a shell avisar `keys:ready` (o campo já está na tela e com o foco) mais 100 ms, no máximo 600 ms, cada tecla que a shell trata (`shared/early-key.ts`: caracteres, ↵, esc, ⇥, Backspace, ↑↓) é consumida no main e repassada por `keys:early`, que mantém a ordem com `palette:show` e o snapshot. Como `keys:early` pode chegar antes do snapshot que traz a Nova aba, leva o `tabId`, e o texto espera em `new-tab-state.ts`. ←, →, Delete, Home, End, PageUp e PageDown são descartados no portão (o texto repassado não tem cursor); atalhos com ⌘ ou ⌃, modificadores e soltar de tecla seguem o caminho normal; tecla morta e IME fecham o portão. ⌘T segurado cria uma aba só.
+- Buscar na página (⌘F). `actions/open-find.ts` cria `ctx.find` (aba, view, `FindState`), põe a `findView` acima da página (`layout-find.ts` a mantém no canto do painel em todo `applyLayout`), abre o portão de teclas com o alvo `find` e dá o foco a ela. Diferente da paleta e da Nova aba, as teclas do portão da busca não vão à shell: `forward-early-key.ts` as aplica direto no estado da busca (`shared/find-early-key.ts`: caracteres e Backspace editam o texto, ↵ e ⇧↵ andam, esc fecha) e a busca já roda antes de a barra existir; a barra, ao nascer, avisa `find:ready` e recebe o texto. ⌘F, ⌘G e ⇧⌘G são tratados no `before-input-event` da página, da shell e da barra (como ⌘K), e o menu Editar mostra os atalhos. Detalhes que custaram medida: (1) `findNext` do Electron é "começar sessão nova" (true abre a sessão; false só segue uma sessão viva, e sem sessão o Chromium nem responde): `shared/find-request.ts` usa true ao digitar, ao trocar o "Aa" e quando não há sessão viva, e false para ↵ e ⌘G; (2) o `found-in-page` só chega no resultado final, e consultas curtas (1 a 3 caracteres medidos) demoram cerca de 400 ms para responder, e o contador espera; respostas de pedidos velhos são descartadas pelo id; (3) o primeiro resultado de uma busca pode vir como "0 de 0" transitório, corrigido pela resposta seguinte; (4) sem diferenciar maiúsculas a busca também ignora acentos ("cafe" acha "café"); com "Aa" ligado, não; (5) o destaque do design vem de `::search-text` e `::search-text:current` (CSS inserido na página enquanto a busca está aberta, removido ao fechar); o raio e o halo de 2 px do design não existem para esse pseudo-elemento. A barra fecha e limpa os destaques (`stopFindInPage('clearSelection')`) com esc, com o botão ×, ao tirar a página da janela (`hideTabView`: trocar de aba ou de espaço, fechar a aba, abrir Nova aba), ao entrar em tela cheia de vídeo e se o renderer dela cair. Navegar na aba com a barra aberta não a fecha: a busca recomeça na página nova quando ela termina de carregar (`attach-find-events.ts`). A aba dormente acorda antes (`activate-tab`, chamado por `open-find` se a aba ativa não está na janela). O "Aa" fica para a próxima busca; o texto, não. Limite conhecido: os atalhos que só existem no menu (⌘1 a ⌘9, ⌘W, ⌘S) chegam depois de a página devolver a tecla; um ⌘F colado neles, sem pausa, vale para a aba antiga e a barra fecha quando a troca chega.
 - O preload confere o canal contra as listas acima e nada mais. `register-ipc.ts` aceita só mensagens vindas de `shell.webContents`, valida o payload (tipos e ids existentes) e chama a ação. Nada de `sendSync`.
 - Persistência: o store marca sujo e grava `session.json` 1 s depois, atômico (`.tmp` + `rename`), e de forma síncrona no `before-quit`. Na leitura, toda aba volta com `dormant: true`, `audible: false` e `loading: false`. Sem o arquivo: espaços Pessoal (`indigo`) e Trabalho (`amber`), cada um com uma Nova aba.
 - Página de erro: é da shell, como a Nova aba. O `did-fail-load` do frame principal (exceto `ERR_ABORTED` e o recuo http) grava `Tab.error` e esconde a view da página (`view.setVisible(false)` em `applyLayout`); o `did-navigate`, que o documento de erro do Chromium não dispara, limpa o erro e mostra a view de novo. A entrada de histórico segue sendo o endereço que falhou, então ⌘R, voltar e avançar funcionam sem tratamento. Sem conexão (`ERR_INTERNET_DISCONNECTED`) a shell recarrega a aba no evento `online` e oferece "Abrir ajustes de rede do Mac".
@@ -236,9 +246,12 @@ Todos via `Menu.setApplicationMenu` (`services/app-menu.ts`), gerados de `shared
 | ⌃1 ⌃2 (…⌃9) | ir para o espaço n | agora |
 | ⌘+ ⌘− ⌘0 | zoom da página | agora |
 | esc | fecha a paleta (tratado na shell) | agora |
-| ⌘C ⌘V ⌘X ⌘A ⌘Z ⇧⌘Z, ⌘Q ⌘H ⌘M | menus Editar e app com `role` (sem eles, copiar e colar não funcionam no macOS) | agora |
+| ⌘C ⌘V ⌘X ⌘A ⌘Z ⇧⌘Z, ⌘Q ⌘H ⌘M | menus Editar e app com `role` (sem eles, copiar e colar não funcionam no macOS). O Editar é montado com os papéis e termina em Buscar na Página… ⌘F, Buscar Próximo ⌘G e Buscar Anterior ⇧⌘G | agora |
 | ⌥⌘I | DevTools da aba (só com `--dev`) | agora |
-| ⇧⌘C ⌥⌘S ⇧⌘R ⌃⌘N ⇧⌘N ⌘F ⌘, | URL limpa, captura, leitura, split, anônima, buscar, Ajustes | quando o recurso existir |
+| ⌘F | buscar na página: abre a barra com o foco no campo, pré-preenchida com o texto selecionado na página; de novo, foca e seleciona. Na Nova aba e na página de erro não há o que buscar | agora |
+| ⌘G ⇧⌘G, ↵ ⇧↵ | resultado seguinte e anterior (↵ ⇧↵ na barra); ⌘G sem a barra a abre | agora |
+| esc | com a busca aberta, fecha a barra e limpa os destaques (na barra e na página) | agora |
+| ⇧⌘C ⌥⌘S ⇧⌘R ⌃⌘N ⇧⌘N ⌘, | URL limpa, captura, leitura, split, anônima, Ajustes | quando o recurso existir |
 
 Conflitos aceitos: ⌘S (salvar página), ⌘K (sites como Slack e Linear) e ⇧⌘R (recarregar forçado) ficam com o navegador.
 
