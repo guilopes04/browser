@@ -10,6 +10,11 @@ import { forwardEarlyKey } from './forward-early-key'
 import { handleEarlyShortcut } from './handle-early-shortcut'
 import { shouldFallbackToHttp } from './http-fallback-errors'
 import { readNavigation } from './stash-navigation'
+import {
+  isActivationKey,
+  isActivationPointer,
+  markGesture
+} from './user-gesture'
 
 // códigos de rede do Chromium
 const ERR_ABORTED = -3
@@ -53,6 +58,14 @@ export function attachTabEvents(
     if (handleEarlyShortcut(ctx, event, input)) return
     // com a paleta (ou a Nova aba) abrindo, as teclas seguem para a shell em vez de cair na página
     forwardEarlyKey(ctx, event, input)
+    // só é gesto da página a tecla que chegou a ela
+    if (!event.defaultPrevented && isActivationKey(input))
+      markGesture(ctx.guard, tabId)
+  })
+
+  // clique do usuário na página (a página não forja input-event); libera download, pop-up e afins
+  wc.on('input-event', (_event, inputEvent) => {
+    if (isActivationPointer(inputEvent.type)) markGesture(ctx.guard, tabId)
   })
 
   wc.on('page-title-updated', (_event, title) => {
@@ -166,7 +179,9 @@ export function attachTabEvents(
       audible: false,
       canGoBack: false,
       canGoForward: false,
-      error: null
+      error: null,
+      blockedPopups: 0,
+      dialogBlocked: false
     })
   })
 }

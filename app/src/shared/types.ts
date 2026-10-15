@@ -62,6 +62,12 @@ export interface Tab {
   canGoForward: boolean
   // a shell desenha a página de erro no lugar da página enquanto houver erro
   error: LoadError | null
+  // pop-ups que a página tentou abrir sem gesto do usuário e o app bloqueou (as URLs ficam no
+  // main). Só em memória
+  blockedPopups: number
+  // um alert/confirm/prompt desta aba foi descartado porque ela estava em segundo plano. Só em
+  // memória; some quando a aba é aberta ou recarrega
+  dialogBlocked: boolean
 }
 
 export interface WindowState {

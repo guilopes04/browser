@@ -12,6 +12,8 @@ export function hydrateTab(saved: SessionFile['tabs'][number]): Tab {
     loading: false,
     canGoBack: false,
     canGoForward: false,
-    error: null
+    error: null,
+    blockedPopups: 0,
+    dialogBlocked: false
   }
 }

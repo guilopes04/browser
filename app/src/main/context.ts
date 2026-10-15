@@ -6,6 +6,7 @@ import type { Flags } from './flags'
 import type { Broadcaster } from './ipc/broadcast'
 import type { AppStore } from './store/app-store'
 import type { HistoryStore } from './store/history-store'
+import type { WebGuard } from './web-guard'
 
 export interface ScrollPosition {
   x: number
@@ -67,6 +68,8 @@ export interface MainContext {
     openedAt: number
     readyAt: number | null
   } | null
+  // defesas contra páginas hostis: gestos, pop-ups, diálogos, downloads (web-guard.ts)
+  guard: WebGuard
   // resolve quando o preenchimento de título e favicon das abas e favoritos sem eles termina
   metaFilled: Promise<void>
   quitting: boolean

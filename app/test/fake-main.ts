@@ -7,6 +7,7 @@ import type { MainContext } from '../src/main/context'
 import { parseFlags } from '../src/main/flags'
 import { AppStore } from '../src/main/store/app-store'
 import { buildInitialState } from '../src/main/store/build-initial-state'
+import { createWebGuard } from '../src/main/web-guard'
 
 export interface FakeContents {
   destroyed: boolean
@@ -138,6 +139,7 @@ export function fakeContext(urls: string[] = []) {
     shellRaised: false,
     shellReady: true,
     keyGate: null,
+    guard: createWebGuard(),
     metaFilled: Promise.resolve(),
     quitting: false
   } as unknown as MainContext

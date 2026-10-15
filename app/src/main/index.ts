@@ -36,6 +36,7 @@ import { HistoryStore } from './store/history-store'
 import { readSessionFile } from './store/read-session-file'
 import { getSessionPath } from './store/session-path'
 import { startSessionWriter } from './store/session-writer'
+import { createWebGuard } from './web-guard'
 
 // o primeiro de tudo: erro sem tratamento vai para o log, nunca para um diálogo modal
 installErrorLog()
@@ -137,6 +138,7 @@ async function bootstrap(): Promise<void> {
     shellRaised: false,
     shellReady: false,
     keyGate: null,
+    guard: createWebGuard(),
     metaFilled: Promise.resolve(),
     quitting: false
   }
