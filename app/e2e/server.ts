@@ -24,9 +24,23 @@ createServer((req, res) => {
   }
   const key = host + url.pathname
   const title = url.searchParams.get('t') || TITLES[key] || key + url.search
-  res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' })
-  res.end(`<!doctype html><meta charset=utf-8><title>${title}</title>
-<script>window.keys=[];addEventListener('keydown',e=>{window.keys.push((e.metaKey?'⌘':'')+e.key)},true)</script>
+  // find.test: texto com contagens conhecidas para a busca na página (e2e/find.ts)
+  const findText =
+    host === 'find.test'
+      ? `<p id=t1 style="margin:40px">Banana banana BANANA</p>
+<p id=t2 style="margin:40px">Cafe, café e CAFÉ no balcão</p>
+<p id=t3 style="margin:40px">sobre <b id=pick>abacaxi</b> no prato</p>
+<p id=t4 style="margin:40px">ação e acao</p>`
+      : ''
+  // ?delay=<ms>: a página demora a responder (para a busca abrir com a página ainda carregando)
+  const delay = Number(url.searchParams.get('delay') ?? 0)
+  // window.clicks: os cliques no corpo da página (a barra de busca não pode roubá-los)
+  const page = `<!doctype html><meta charset=utf-8><title>${title}</title>
+<script>window.keys=[];window.clicks=[];addEventListener('keydown',e=>{window.keys.push((e.metaKey?'⌘':'')+e.key)},true);addEventListener('mousedown',e=>{window.clicks.push([e.clientX,e.clientY])},true)</script>
 <body style="margin:0;background:#fff;font:16px -apple-system"><h1 style="margin:40px">${title}</h1>
-<input id=field style="margin:40px" autofocus><p id=a style="margin:40px;height:1200px">a</p><p id=b>b</p></body>`)
+<input id=field style="margin:40px" autofocus>${findText}<p id=a style="margin:40px;height:1200px">a</p><p id=b>b</p></body>`
+  setTimeout(() => {
+    res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' })
+    res.end(page)
+  }, delay)
 }).listen(port, '127.0.0.1', () => console.log('servidor na porta', port))
