@@ -10,7 +10,11 @@ export function PopupNotice() {
   const count = tab?.blockedPopups ?? 0
   if (!tab || tab.url === '' || count === 0) return null
   return (
-    <div class="popup-notice" role="status">
+    <div
+      class="popup-notice"
+      role="status"
+      title={`${count} ${count === 1 ? 'pop-up bloqueado' : 'pop-ups bloqueados'} nesta página`}
+    >
       <PopupBlockedIcon />
       <span class="popup-notice-text">
         {count === 1 ? 'Pop-up bloqueado' : `${count} pop-ups bloqueados`}

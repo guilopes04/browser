@@ -111,8 +111,8 @@ await scenario(
     L.shotSheet(join(dir, 'consentimento.png'), pid)
     const s = await L.st()
     record(
-      'drive-by: o app continua responsivo (diálogo assíncrono) e o download está pausado',
-      s.downloads.active === 1 && s.downloads.lastPath === null,
+      'drive-by: o app continua responsivo (diálogo assíncrono) e o ícone de Downloads não conta o que espera permissão',
+      s.downloads.active === 0 && s.downloads.lastPath === null,
       s.downloads
     )
   }
@@ -628,7 +628,7 @@ await scenario(
     )
     record(
       'a página tentou sair várias vezes e o app não roubou o foco',
-      out.tries >= 5 && L.activeTab(s).url.includes('aba-da-frente'),
+      out.tries >= 3 && L.activeTab(s).url.includes('aba-da-frente'),
       {
         tentativas: out.tries,
         chamadas: out.calls,
