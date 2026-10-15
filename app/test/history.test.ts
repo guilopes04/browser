@@ -404,3 +404,33 @@ test('HistoryStore respeita o limite total ao registrar visitas em vários espa�
     assert.equal(store.getEntries('b')[0].url, 'https://nova.com/')
   })
 })
+
+test('HistoryStore: a âncora comum (token de login) não fica na memória nem no disco; #/rota fica na memória', () => {
+  withDir(dir => {
+    const store = new HistoryStore(dir)
+    store.record(
+      'personal',
+      'https://app.example/callback#access_token=SEGREDO&state=x',
+      'Entrando',
+      10
+    )
+    store.record('personal', 'https://spa.example/#/caixa', 'Caixa', 11)
+    store.record('personal', 'https://doc.example/guia#secao-3', 'Guia', 12)
+    // o que a paleta lê agora, com o app rodando
+    assert.deepEqual(
+      store.getEntries('personal').map(entry => entry.url),
+      [
+        'https://doc.example/guia',
+        'https://spa.example/#/caixa',
+        'https://app.example/callback'
+      ]
+    )
+    // o título que a página manda depois acha a entrada mesmo com a âncora no endereço
+    store.setTitle('personal', 'https://doc.example/guia#secao-4', 'Guia novo')
+    assert.equal(store.getEntries('personal')[0].title, 'Guia novo')
+    store.saveNow()
+    const disk = readFileSync(getHistoryPath(dir), 'utf8')
+    assert.equal(disk.includes('SEGREDO'), false)
+    assert.equal(disk.includes('#'), false)
+  })
+})

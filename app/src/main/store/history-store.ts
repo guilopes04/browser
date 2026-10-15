@@ -12,6 +12,7 @@ import { limitTitle, limitUrl } from '@shared/limit-stored-text'
 import { sanitizeTitle } from '@shared/sanitize-title'
 import { stripFragmentFromTitle } from '@shared/strip-fragment'
 import type { HistoryEntry, SpaceId } from '@shared/types'
+import { stripPlainAnchor } from '@shared/url-key'
 import { logError } from '../functions/log-error'
 import { isHistoryUrl } from './is-history-url'
 import { loadHistory } from './load-history'
@@ -141,9 +142,10 @@ export class HistoryStore {
   record(spaceId: SpaceId, url: string, title: string, now = Date.now()): void {
     if (!isHistoryUrl(url)) return
     // uma URL de megabytes não entra inteira na memória nem no arquivo; o título da página não
-    // leva controles nem marcas bidi
+    // leva controles nem marcas bidi; a âncora comum (#access_token=... de um login) nem fica na
+    // memória, onde a paleta a mostraria na tela (no arquivo nenhum #fragmento é gravado)
     const visit = {
-      url: limitUrl(url),
+      url: stripPlainAnchor(limitUrl(url)),
       title: stripFragmentFromTitle(sanitizeTitle(limitTitle(title)), url),
       visitedAt: now
     }

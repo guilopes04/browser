@@ -5,6 +5,12 @@ const SCHEME_AND_WWW = /^[a-z][a-z0-9+.-]*:\/\/(www\.)?/i
 // única que roteiam pelo fragmento)
 const PLAIN_ANCHOR = /#(?![/!]).*$/
 
+// o endereço sem a âncora comum (#secao, #access_token=...), que é a mesma página e não precisa ficar
+// guardada; #/rota e #!/rota ficam, porque identificam a página nos apps que roteiam pelo fragmento
+export function stripPlainAnchor(url: string): string {
+  return url.replace(PLAIN_ANCHOR, '')
+}
+
 // endereço como a pessoa o lê: sem esquema e sem www
 export function stripScheme(url: string): string {
   return url.replace(SCHEME_AND_WWW, '')
