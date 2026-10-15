@@ -1,20 +1,24 @@
-import { describeAddress } from '@shared/address-display'
+import { describeAddress, splitDomainTail } from '@shared/address-display'
 import { api } from '../../api'
 import { activeTab } from '../../state'
-import { InsecureMark } from '../guard/insecure-mark'
+import { InsecureIcon } from '../guard/icons'
 import { ShieldIcon } from '../icons'
 
 // até o bloqueador existir, a contagem é sempre 0; com 0 o escudo fica escondido (Sidebar.dc.html)
 const BLOCKED_COUNT = 0
 const PLACEHOLDER = 'Buscar ou digitar endereço'
+const INSECURE_TITLE = 'A conexão com este site não é criptografada'
 
-// o campo é só o endereço da aba: clicar nele (ou ⌘L) abre a paleta no modo endereço. O host
-// mostra o domínio registrável em destaque e sempre inteiro: o que não cabe é o começo (os
-// subdomínios), cortado com "…", nunca o fim
+// o campo é só o endereço da aba: clicar nele (ou ⌘L) abre a paleta no modo endereço. O domínio
+// registrável vem sempre inteiro; o que falta de espaço sai nesta ordem: caminho, subdomínios
+// (cortados no começo, com "…"), o texto "Não seguro" (fica o cadeado) e, só se o domínio sozinho
+// não couber, o meio dele. A ordem de cima para baixo no DOM é a da prioridade (o CSS a inverte
+// na tela, sidebar.css); o aria-label do botão leva o endereço inteiro
 export function AddressField() {
   const tab = activeTab.value
   const isNewTab = !tab || tab.url === ''
   const address = describeAddress(tab?.url ?? '')
+  const domain = splitDomainTail(address.domain)
 
   return (
     <div class="address">
@@ -42,13 +46,27 @@ export function AddressField() {
           <span class="address-path">{PLACEHOLDER}</span>
         ) : (
           <>
-            {address.insecure && <InsecureMark />}
-            {/* direction: rtl faz o "…" cair no começo; o miolo volta a ser lido da esquerda */}
+            {address.insecure && (
+              <span class="insecure" title={INSECURE_TITLE}>
+                <InsecureIcon size={12} />
+              </span>
+            )}
             <span class="address-host" title={address.host}>
-              <bdi dir="ltr">
-                <span class="address-sub">{address.subdomain}</span>
-                <span class="address-domain">{address.domain}</span>
-              </bdi>
+              <span class="address-domain">
+                <span class="address-domain-head">{domain.head}</span>
+                <span class="address-domain-tail">{domain.tail}</span>
+              </span>
+              {address.subdomain && (
+                <span class="address-sub">
+                  {/* direction: rtl faz o "…" cair no começo; o miolo volta a ser lido da esquerda */}
+                  <bdi dir="ltr">{address.subdomain}</bdi>
+                </span>
+              )}
+              {address.insecure && (
+                <span class="insecure-text" title={INSECURE_TITLE}>
+                  Não seguro
+                </span>
+              )}
             </span>
             <span class="address-path">{address.path}</span>
           </>

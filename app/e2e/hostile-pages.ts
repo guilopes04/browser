@@ -73,18 +73,20 @@ const logOf = (procs: L.Procs, text: string): boolean => {
 const address = () =>
   shellEval(`(() => {
     const q = s => document.querySelector(s)
-    const domain = q('.address-domain'), sub = q('.address-sub'), host = q('.address-host'), btn = q('.address-btn')
+    const domain = q('.address-domain'), sub = q('.address-sub'), head = q('.address-domain-head'), btn = q('.address-btn')
     const box = e => e ? e.getBoundingClientRect() : null
     const d = box(domain), b = box(btn)
+    const clipped = e => !!e && e.scrollWidth > e.clientWidth + 0.5
     return {
       sub: sub ? sub.textContent : null,
       domain: domain ? domain.textContent : null,
       path: q('.address-path') ? q('.address-path').textContent : null,
-      insecure: q('.address .insecure') ? q('.address .insecure').textContent : null,
+      insecure: q('.address .insecure-text') ? q('.address .insecure-text').textContent : null,
       weight: domain ? getComputedStyle(domain).fontWeight : null,
       subColor: sub ? getComputedStyle(sub).color : null,
       textColor: domain ? getComputedStyle(domain).color : null,
-      cut: host ? host.scrollWidth > host.clientWidth : null,
+      // o que não cabe sai pelo começo dos subdomínios (ou, sem espaço para o domínio, pelo miolo dele)
+      cut: clipped(sub) || clipped(head),
       domainVisible: !!(d && b && d.left >= b.left - 1 && d.right <= b.right + 1)
     }
   })()`)

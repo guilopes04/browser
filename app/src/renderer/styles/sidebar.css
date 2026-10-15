@@ -145,26 +145,73 @@
   text-align: left;
 }
 
-/* o host tem prioridade sobre o caminho: se não cabe, perde o começo (os subdomínios), com "…" */
+/* O host tem prioridade sobre o caminho e, nele, o domínio registrável sobre tudo: nunca perde o
+   começo. O que falta de espaço sai nesta ordem: caminho; subdomínios (cortados no começo, com
+   "…"); o texto "Não seguro" (fica o cadeado); e, só se o domínio sozinho não couber, o meio dele.
+   O DOM vem na ordem de prioridade (domínio, subdomínio, texto) e row-reverse a desfaz na tela
+   (texto, subdomínio, domínio). Com wrap, o que não cabe na linha cai para a segunda, que a
+   altura fixa esconde: o texto some inteiro em vez de aparecer pela metade. */
 .address-host {
   flex: 0 1 auto;
   min-width: 0;
+  height: 28px;
+  display: flex;
+  flex-flow: row-reverse wrap;
+  /* em row-reverse o fim do eixo principal é a esquerda */
+  justify-content: flex-end;
+  align-content: flex-start;
+  overflow: hidden;
   font-size: 13px;
   white-space: nowrap;
+}
+
+.address-host > * {
+  height: 28px;
+  display: flex;
+  align-items: center;
+}
+
+/* o domínio registrável é o que identifica o site; inteiro, até onde a linha deixar */
+.address-domain {
+  flex: 0 0 auto;
+  max-width: 100%;
+  font-weight: 600;
+}
+
+/* sem espaço nem para ele, o miolo vira "…" e o fim (TLD e porta) fica à mostra */
+.address-domain-head {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.address-domain-tail {
+  flex: none;
+}
+
+/* base de 12px: só precisa de espaço para o "…"; cresce até o texto inteiro. rtl põe o "…" no
+   começo */
+.address-sub {
+  flex: 1 1 12px;
+  min-width: 0;
+  max-width: max-content;
+  display: block;
+  line-height: 28px;
   overflow: hidden;
   text-overflow: ellipsis;
   direction: rtl;
   text-align: left;
-}
-
-.address-sub {
   color: var(--sec);
   font-weight: 400;
 }
 
-/* o domínio registrável é o que identifica o site */
-.address-domain {
-  font-weight: 600;
+.insecure-text {
+  flex: none;
+  margin-right: 4px;
+  color: var(--sec);
+  font-size: 11.5px;
+  font-weight: 400;
 }
 
 .address-path {
