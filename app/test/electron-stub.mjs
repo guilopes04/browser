@@ -8,6 +8,7 @@ export const app = {
   getName: () => 'Gilas Browser',
   commandLine: { hasSwitch: () => false, appendSwitch() {} },
   on() {},
+  exit() {},
   enableSandbox() {}
 }
 export const BaseWindow = Empty

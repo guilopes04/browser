@@ -12,6 +12,7 @@ import { openFind } from '../actions/open-find'
 import { openPalette } from '../actions/open-palette'
 import { replaceFindTextAndSearch } from '../actions/replace-find-text'
 import type { MainContext } from '../context'
+import { exitApp } from '../functions/exit-app'
 import { logError } from '../functions/log-error'
 import { removeTempProfile } from './temp-profile'
 
@@ -104,11 +105,11 @@ export function scheduleCapture(ctx: MainContext, outputPath: string): void {
       await screenshot(windowId, file)
       console.log(`[Capture][scheduleCapture] captura salva em ${file}`)
       removeTempProfile()
-      app.exit(0)
+      exitApp(ctx, 0)
     } catch (error) {
       logError('[Capture][scheduleCapture]', 'falha na captura', error)
       removeTempProfile()
-      app.exit(1)
+      exitApp(ctx, 1)
     }
   })()
 }

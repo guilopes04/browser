@@ -156,10 +156,13 @@ PID=$!
 I=0
 while kill -0 "$PID" 2>/dev/null && [ "$I" -lt 90 ]; do sleep 1; I=$((I + 1)); done
 if kill -0 "$PID" 2>/dev/null; then falha 'o app não terminou a captura em 90 s'; fi
-wait "$PID" || true
+# a saída tem de ser 0: o app que cai ao encerrar (133 = SIGTRAP) já gravou a captura e passaria por bom
+SAIDA_APP=0
+wait "$PID" || SAIDA_APP=$?
 PID=''
 [ -s "$CAPTURA" ] || { tail -20 "$TMP/app.log"; falha 'o app abriu do .dmg mas não gerou a captura'; }
-echo "OK: o app abriu a partir do .dmg e gravou $CAPTURA ($(wc -c < "$CAPTURA" | tr -d ' ') bytes)"
+[ "$SAIDA_APP" -eq 0 ] || { tail -20 "$TMP/app.log"; falha "o app gravou a captura mas saiu com código $SAIDA_APP (esperado 0; 133 é SIGTRAP, uma queda no encerramento)"; }
+echo "OK: o app abriu a partir do .dmg, gravou $CAPTURA ($(wc -c < "$CAPTURA" | tr -d ' ') bytes) e saiu com 0"
 
 passo 'ELECTRON_RUN_AS_NODE=1 não pode virar Node'
 ELECTRON_RUN_AS_NODE=1 "$BIN" $KEYCHAIN_ARG --user-data-dir="$TMP/ud-node" -e "console.log('NODE_PURO')" > "$TMP/node.log" 2>&1 &

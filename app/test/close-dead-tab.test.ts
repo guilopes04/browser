@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import type { WebContentsView } from 'electron'
+import { app, type WebContentsView } from 'electron'
 import { closeDeadTab } from '../src/main/actions/close-dead-tab'
 import { closeTab } from '../src/main/actions/close-tab'
 import { attachCloseEvents } from '../src/main/functions/attach-close-events'
+import { exitApp } from '../src/main/functions/exit-app'
 import { getLiveContents } from '../src/main/functions/get-live-contents'
 import { runSuspensionTick } from '../src/main/services/suspension-timer'
 import { fakeContext } from './fake-main'
@@ -165,4 +166,37 @@ test('encerrando o app, a view que morre não é recriada nem a aba removida (SI
   assert.equal(store.getTabsOfSpace('personal').length, 3)
   assert.equal(store.closed.length, 0)
   assert.equal(ctx.guard.scriptCloseUndoneAt.has(a.id), false)
+})
+
+test('app.exit() (modo --captura) não emite before-quit: exitApp marca quitting antes de o Electron destruir as views', () => {
+  const { ctx, store, a, b, makeLive } = setup()
+  const front = makeLive(a)
+  const other = makeLive(b)
+  store.setActiveTab('personal', a.id)
+  ctx.attached.tabId = a.id
+  ctx.attached.view = as<WebContentsView>(front.view)
+  attachCloseEvents(ctx, a.id, as<WebContentsView>(front.view))
+  attachCloseEvents(ctx, b.id, as<WebContentsView>(other.view))
+
+  const original = app.exit
+  const exits: { code: number; quittingAtCall: boolean }[] = []
+  // o app.exit de verdade fecha as janelas na hora: as views morrem dentro da chamada
+  app.exit = (code?: number) => {
+    exits.push({ code: code ?? 0, quittingAtCall: ctx.quitting })
+    front.view.destroy()
+    other.view.destroy()
+  }
+  try {
+    exitApp(ctx, 0)
+  } finally {
+    app.exit = original
+  }
+
+  assert.deepEqual(exits, [{ code: 0, quittingAtCall: true }])
+  assert.equal(ctx.quitting, true)
+  // a aba da frente (não aberta por script) não foi recriada no meio do desmonte
+  assert.equal(ctx.views.get(a.id), as(front.view))
+  assert.equal(store.getTab(a.id)?.dormant, false)
+  assert.equal(ctx.guard.scriptCloseUndoneAt.has(a.id), false)
+  assert.equal(store.getTabsOfSpace('personal').length, 3)
 })
