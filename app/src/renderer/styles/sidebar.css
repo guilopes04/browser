@@ -132,6 +132,7 @@
 }
 
 .address-btn {
+  position: relative;
   flex: 1;
   min-width: 0;
   display: flex;
@@ -145,12 +146,12 @@
   text-align: left;
 }
 
-/* O host tem prioridade sobre o caminho e, nele, o domínio registrável sobre tudo: nunca perde o
-   começo. O que falta de espaço sai nesta ordem: caminho; subdomínios (cortados no começo, com
-   "…"); o texto "Não seguro" (fica o cadeado); e, só se o domínio sozinho não couber, o meio dele.
-   O DOM vem na ordem de prioridade (domínio, subdomínio, texto) e row-reverse a desfaz na tela
-   (texto, subdomínio, domínio). Com wrap, o que não cabe na linha cai para a segunda, que a
-   altura fixa esconde: o texto some inteiro em vez de aparecer pela metade. */
+/* O host tem prioridade sobre o caminho e, nele, o domínio registrável sobre tudo: nunca é cortado.
+   O que falta de espaço sai nesta ordem: caminho; subdomínios (cortados no começo, com "…"); o
+   texto "Não seguro" (fica o cadeado). O DOM vem na ordem de prioridade (domínio, subdomínio,
+   texto) e row-reverse a desfaz na tela (texto, subdomínio, domínio). Com wrap, o que não cabe na
+   linha cai para a segunda, que a altura fixa esconde: o texto some inteiro em vez de aparecer
+   pela metade. O domínio que não cabe numa linha usa o modo .address-wraps (mais abaixo). */
 .address-host {
   flex: 0 1 auto;
   min-width: 0;
@@ -171,23 +172,52 @@
   align-items: center;
 }
 
-/* o domínio registrável é o que identifica o site; inteiro, até onde a linha deixar */
+/* o domínio registrável é o que identifica o site: sempre inteiro */
 .address-domain {
   flex: 0 0 auto;
   max-width: 100%;
   font-weight: 600;
 }
 
-/* sem espaço nem para ele, o miolo vira "…" e o fim (TLD e porta) fica à mostra */
-.address-domain-head {
-  flex: 0 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
+/* mede o domínio numa linha só, com a mesma fonte, sem aparecer nem ocupar lugar */
+.address-probe {
+  position: absolute;
+  visibility: hidden;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+  pointer-events: none;
 }
 
-.address-domain-tail {
-  flex: none;
+/* domínio comprido demais para uma linha: ele ocupa o campo e quebra onde precisar (de preferência
+   depois de um hífen), e o campo cresce. Só ficam o domínio e o cadeado: o host inteiro está no
+   tooltip e no aria-label */
+.address.address-wraps {
+  height: auto;
+  min-height: 36px;
+  padding: 4px;
+}
+
+.address-wraps .address-btn {
+  height: auto;
+  min-height: 28px;
+  padding: 3px 6px;
+}
+
+.address-host.address-host-wrap {
+  flex: 1 1 0;
+  height: auto;
+  display: block;
+  overflow: visible;
+  white-space: normal;
+}
+
+.address-host-wrap .address-domain {
+  display: block;
+  max-width: none;
+  height: auto;
+  line-height: 17px;
+  overflow-wrap: anywhere;
 }
 
 /* base de 12px: só precisa de espaço para o "…"; cresce até o texto inteiro. rtl põe o "…" no

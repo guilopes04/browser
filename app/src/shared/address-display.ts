@@ -2,8 +2,8 @@
 // registrável (que sempre aparece, com peso de destaque), o caminho em texto secundário e o
 // aviso de conexão sem criptografia (http). Sem isto, um host comprido do tipo
 // "contas.google.com.sessao.exemplo.tk" era cortado no fim e escondia o domínio verdadeiro.
-// O campo corta primeiro o caminho, depois os subdomínios, depois o texto "Não seguro" (fica o
-// cadeado) e, só se o domínio sozinho não couber, o meio dele (splitDomainTail).
+// O campo corta primeiro o caminho, depois os subdomínios e depois o texto "Não seguro" (fica o
+// cadeado); o domínio nunca é cortado: se não cabe numa linha, quebra em várias (address-field.tsx).
 // O host é decodificado de punycode só quando é seguro (idn-host.ts). Pura.
 import { displayUrl } from './display-url'
 import { displayHostname } from './idn-host'
@@ -30,22 +30,6 @@ function parse(url: string): URL | null {
   } catch {
     return null
   }
-}
-
-// quanto do fim do domínio fica sempre à mostra quando ele é longo demais para a sidebar: o TLD e
-// algumas letras antes dele ("…tendimento.com:8080")
-export const DOMAIN_TAIL_LENGTH = 14
-
-// divide o domínio em começo e fim. A sidebar corta só o começo (com "…", no meio do domínio) e o
-// fim fica inteiro, então um domínio longo nunca perde o TLD nem a porta. Por caractere, não por
-// unidade UTF-16, para não partir um par substituto. Pura.
-export function splitDomainTail(
-  domain: string,
-  tailLength = DOMAIN_TAIL_LENGTH
-): { head: string; tail: string } {
-  const chars = Array.from(domain)
-  const cut = Math.max(0, chars.length - tailLength)
-  return { head: chars.slice(0, cut).join(''), tail: chars.slice(cut).join('') }
 }
 
 export function isInsecureUrl(url: string): boolean {

@@ -1,10 +1,6 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import {
-  describeAddress,
-  isInsecureUrl,
-  splitDomainTail
-} from '../src/shared/address-display'
+import { describeAddress, isInsecureUrl } from '../src/shared/address-display'
 import {
   displayHostname,
   displayIdnLabel,
@@ -166,28 +162,4 @@ test('endereço: http é "não seguro"; https, arquivo e about não', () => {
   )
   assert.equal(describeAddress('about:blank').kind, 'about')
   assert.equal(describeAddress('').kind, 'other')
-})
-
-test('domínio longo: o começo pode ser cortado, o fim (TLD e porta) fica inteiro', () => {
-  assert.deepEqual(splitDomainTail('google.com'), {
-    head: '',
-    tail: 'google.com'
-  })
-  assert.deepEqual(
-    splitDomainTail('banco-do-brasil-seguranca-atendimento.com'),
-    {
-      head: 'banco-do-brasil-seguranca-a',
-      tail: 'tendimento.com'
-    }
-  )
-  // a porta faz parte do fim
-  const withPort = splitDomainTail('golpe-exemplo.com:9601')
-  assert.equal(withPort.head + withPort.tail, 'golpe-exemplo.com:9601')
-  assert.equal(withPort.tail, 'emplo.com:9601')
-  assert.equal(splitDomainTail('abc', 2).head, 'a')
-  assert.deepEqual(splitDomainTail(''), { head: '', tail: '' })
-  // não parte um par substituto ao meio
-  const emoji = splitDomainTail('😀😀😀😀', 2)
-  assert.equal(emoji.head, '😀😀')
-  assert.equal(emoji.tail, '😀😀')
 })
