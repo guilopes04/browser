@@ -287,6 +287,64 @@ await scenario(
   }
 )
 
+// o gesto é do documento em que o usuário o fez: o clique num link não vale para o que a página de
+// destino faz ao carregar (pop-up e download), nem um clique seguido de um endereço digitado
+await scenario(
+  'gesto-link-para-pouso',
+  ['http://hostil.test/p/gesture-link'],
+  async ({ procs, pid, dir }) => {
+    await L.click('gesture-link', '#l')
+    await sleep(2500)
+    const s = await L.st()
+    const out = await L.out('landing-drive-by')
+    record(
+      'clique em link para uma página que abre pop-up ao carregar: o pop-up é bloqueado',
+      L.urls(s).filter(u => u.includes('pouso-popup')).length === 0 &&
+        out?.opened?.every((o: boolean) => !o),
+      { abas: L.urls(s), opened: out?.opened }
+    )
+    record(
+      'e o download da página de pouso pergunta antes (nada na pasta)',
+      L.sheetsOf(pid).length === 1 &&
+        L.listDir(procs.downloads).every(
+          n => L.sizeOf(join(procs.downloads, n)) === 0
+        ),
+      { folhas: L.sheetsOf(pid).length, arquivos: L.listDir(procs.downloads) }
+    )
+    L.shotSheet(join(dir, 'pouso-consentimento.png'), pid)
+  }
+)
+
+await scenario(
+  'gesto-clique-e-endereco',
+  ['http://hostil.test/p/title?t=clique-solto'],
+  async ({ procs, pid, dir }) => {
+    // um clique qualquer e, 1,5 s depois, um endereço digitado para a página de pouso
+    await L.click('clique-solto')
+    await sleep(300)
+    await L.send('tab:navigate', {
+      tabId: L.activeTab(await L.st()).id,
+      input: 'http://hostil.test/p/landing-drive-by'
+    })
+    await sleep(2500)
+    const s = await L.st()
+    record(
+      'clique seguido de endereço digitado: o pop-up da página de pouso é bloqueado',
+      L.urls(s).filter(u => u.includes('pouso-popup')).length === 0,
+      { abas: L.urls(s) }
+    )
+    record(
+      'e o download da página de pouso pergunta antes',
+      L.sheetsOf(pid).length === 1 &&
+        L.listDir(procs.downloads).every(
+          n => L.sizeOf(join(procs.downloads, n)) === 0
+        ),
+      { folhas: L.sheetsOf(pid).length, arquivos: L.listDir(procs.downloads) }
+    )
+    L.shotSheet(join(dir, 'pouso-consentimento.png'), pid)
+  }
+)
+
 await scenario(
   'popups-fundo',
   [
@@ -409,7 +467,7 @@ await scenario(
     a = await address()
     record(
       'https .com.br: domínio registrável composto, sem "Não seguro"',
-      a.domain === 'exemplo.com.br' && a.insecure === null && a.sub === '',
+      a.domain === 'exemplo.com.br' && a.insecure === null && !a.sub,
       a
     )
     L.shot(join(dir, 'https-com-br.png'), pid)
@@ -943,6 +1001,78 @@ await scenario(
       'e o pop-up também continua (não se fechou sozinho)',
       !!L.tabByUrl(s, 'child-closes-opener'),
       { abas: L.urls(s) }
+    )
+  }
+)
+
+// E13: o que um pop-up que chama opener.close() consegue contra a página (com rascunho) da aba que o
+// abriu. O Electron não deixa o app vetar window.close (o Chromium destrói o webContents), então o
+// que protege é só o que o Chromium já faz: com o pop-up no mesmo processo, ele roda o beforeunload da
+// página e, havendo um, o fechamento é cancelado. Cruzando a origem (outro processo) isso não roda
+const draftOpener = (child: string, beforeUnload: boolean) =>
+  `http://hostil.test/p/opens-closer-draft?child=${encodeURIComponent(child)}${beforeUnload ? '&bu=1' : ''}`
+const typeDraft = async () => {
+  await L.click('opens-closer-draft', '#t')
+  await L.typeText('opens-closer-draft', 'rascunho')
+  await sleep(300)
+}
+const draftState = async () => {
+  const page = await L.pageOf('opens-closer-draft')
+  return page
+    ? await L.ev(
+        page,
+        '({ draft: document.getElementById("t").value, born: window.__out.born })'
+      )
+    : null
+}
+
+await scenario(
+  'window-close-opener-rascunho',
+  [draftOpener('/p/child-closes-opener', true)],
+  async () => {
+    await typeDraft()
+    const before = await draftState()
+    await L.click('opens-closer-draft', '#b')
+    await sleep(3500)
+    const after = await draftState()
+    record(
+      'pop-up da mesma origem chama opener.close() e a página tem beforeunload: o opener fica vivo, com o rascunho',
+      after?.draft === 'rascunho' && after?.born === before?.born,
+      { antes: before, depois: after }
+    )
+  }
+)
+
+await scenario(
+  'window-close-opener-sem-beforeunload',
+  [draftOpener('/p/child-closes-opener', false)],
+  async () => {
+    await typeDraft()
+    await L.click('opens-closer-draft', '#b')
+    await sleep(3500)
+    const s = await L.st()
+    const tab = L.tabByUrl(s, 'opens-closer-draft')
+    record(
+      'limite conhecido: sem beforeunload o Chromium destrói a página, mas a aba continua na sidebar (dormente) e o pop-up segue',
+      !!tab && tab.dormant === true && !!L.tabByUrl(s, 'child-closes-opener'),
+      { abas: L.urls(s), dormente: tab?.dormant }
+    )
+  }
+)
+
+await scenario(
+  'window-close-opener-outra-origem',
+  [draftOpener('http://outro.test/p/child-closes-opener', true)],
+  async () => {
+    await typeDraft()
+    await L.click('opens-closer-draft', '#b')
+    await sleep(3500)
+    const s = await L.st()
+    const tab = L.tabByUrl(s, 'opens-closer-draft')
+    record(
+      'limite conhecido: de outra origem o beforeunload nem roda; a aba continua na sidebar (dormente)',
+      !!tab && tab.dormant === true && !!L.tabByUrl(s, 'child-closes-opener'),
+      { abas: L.urls(s), dormente: tab?.dormant }
     )
   }
 )

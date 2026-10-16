@@ -2,15 +2,23 @@ import Cocoa
 
 // Uso:
 //   winlist                lista as janelas na tela (camada 0): id, dono, título, bounds, pid (separados por TAB)
+//   winlist --modais       também lista as janelas em camada 8 (painel modal): com um diálogo síncrono na tela
+//                          (showMessageBoxSync) o macOS novo move a janela e a folha para essa camada
 //   winlist --seguir [ms]  vigia as janelas a cada ms (padrão 25) e imprime uma linha sempre que uma
 //                          janela aparece ou muda de posição/tamanho:
 //                          epochMs, id, dono, pid, x, y, largura, altura, título (separados por TAB)
 setvbuf(stdout, nil, _IOLBF, 0)
 
+let includeModal = CommandLine.arguments.contains("--modais")
+let MODAL_PANEL_LAYER = 8
+
 func windows() -> [[String: Any]] {
   let opts: CGWindowListOption = [.optionOnScreenOnly, .excludeDesktopElements]
   let list = CGWindowListCopyWindowInfo(opts, kCGNullWindowID) as? [[String: Any]] ?? []
-  return list.filter { ($0[kCGWindowLayer as String] as? Int ?? 0) == 0 }
+  return list.filter {
+    let layer = $0[kCGWindowLayer as String] as? Int ?? 0
+    return layer == 0 || (includeModal && layer == MODAL_PANEL_LAYER)
+  }
 }
 
 func num(_ b: [String: Any], _ key: String) -> Int {

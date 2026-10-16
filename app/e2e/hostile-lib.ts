@@ -348,23 +348,26 @@ export function mainPid(procs: Procs): number {
 }
 
 // ---------- capturas ----------
-// o helper de janelas (bench/winlist.swift) é compilado na primeira vez
+// o helper de janelas (bench/winlist.swift) é compilado na primeira vez e de novo quando o fonte muda
 function winlist(): string {
   const binary = join(OUT_DIR, 'winlist')
+  const source = resolve(APP, '../bench/winlist.swift')
   mkdirSync(OUT_DIR, { recursive: true })
-  if (!existsSync(binary))
-    execFileSync('swiftc', [
-      '-O',
-      resolve(APP, '../bench/winlist.swift'),
-      '-o',
-      binary
-    ])
+  if (
+    !existsSync(binary) ||
+    statSync(source).mtimeMs > statSync(binary).mtimeMs
+  )
+    execFileSync('swiftc', ['-O', source, '-o', binary])
   return binary
 }
 
+// --modais: com um diálogo síncrono na tela (o "Sair desta página?" do beforeunload) o macOS novo
+// leva a janela do app e a folha para a camada 8, que a listagem padrão (camada 0) não mostra
+const listWindows = (): string[] =>
+  execFileSync(winlist(), ['--modais'], { encoding: 'utf8' }).split('\n')
+
 export function windowId(pid: number, nonEmptyTitle = true): number | null {
-  const lines = execFileSync(winlist(), [], { encoding: 'utf8' }).split('\n')
-  for (const line of lines) {
+  for (const line of listWindows()) {
     const cols = line.split('\t')
     if (cols.length < 5 || Number(cols[4]) !== pid) continue
     if (nonEmptyTitle && cols[2] === '') continue
@@ -377,9 +380,8 @@ export function windowId(pid: number, nonEmptyTitle = true): number | null {
 export function windowsOf(
   pid: number
 ): { id: number; title: string; width: number; height: number }[] {
-  const lines = execFileSync(winlist(), [], { encoding: 'utf8' }).split('\n')
   const found = []
-  for (const line of lines) {
+  for (const line of listWindows()) {
     const cols = line.split('\t')
     if (cols.length < 5 || Number(cols[4]) !== pid) continue
     const num = (key: string) =>

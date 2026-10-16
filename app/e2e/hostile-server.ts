@@ -132,6 +132,18 @@ const routes: Record<string, Route> = {
       </script>`
     ),
 
+  // ---- gesto não atravessa o documento (E7/E8) ----
+  '/p/gesture-link': () =>
+    page(
+      'link para a página de pouso',
+      `<a id="l" href="/p/landing-drive-by" style="position:absolute;left:24px;top:330px;font-size:30px">continuar</a><script>window.__out = {}</script>`
+    ),
+  // ao carregar, abre um pop-up e baixa um arquivo, sem nenhum gesto dela
+  '/p/landing-drive-by': () =>
+    page(
+      'pouso hostil',
+      `<script>window.__out = { opened: [] }; setTimeout(() => { window.__out.opened.push(!!window.open('/p/title?t=pouso-popup')); const a = document.createElement('a'); a.href = '/file?name=pouso.bin&n=3000'; a.download = ''; document.body.appendChild(a); a.click() }, 300)</script>`
+    ),
   // ---- window.close ----
   '/p/close-self': () =>
     page(
@@ -147,6 +159,12 @@ const routes: Record<string, Route> = {
     page(
       'abre o filho que fecha o opener',
       `<script>window.__out = {}; document.getElementById('b').onclick = () => { window.__out.child = !!window.open('/p/child-closes-opener') }</script>`
+    ),
+  // opener com rascunho (o textarea #t) que abre um pop-up (?child=) que chama opener.close()
+  '/p/opens-closer-draft': q =>
+    page(
+      'opener com rascunho',
+      `<script>window.__out = { born: Date.now() }; ${q.get('bu') ? "addEventListener('beforeunload', e => { e.preventDefault(); e.returnValue = '' });" : ''} document.getElementById('b').onclick = () => { window.__out.child = !!window.open(${JSON.stringify(q.get('child') || '/p/child-closes-opener')}) }</script>`
     ),
   '/p/child-closes-opener': () =>
     page(
