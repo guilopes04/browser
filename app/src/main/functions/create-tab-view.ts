@@ -29,14 +29,11 @@ export function createTabView(
           sandbox: true,
           contextIsolation: true,
           nodeIntegration: false,
-          // alert/confirm/prompt passam pelo main (preload/tab-guard.ts); os diálogos nativos do
-          // Electron, que não mostram a origem nem se calam, ficam desligados
+          // alert/confirm/prompt passam pelo main (preload/tab-guard.ts, registrado na sessão: vale
+          // também para o pop-up que o Chromium cria); os diálogos nativos do Electron, que não
+          // mostram a origem nem se calam, ficam desligados
           ...(preload
-            ? {
-                preload,
-                nodeIntegrationInSubFrames: true,
-                disableDialogs: true
-              }
+            ? { nodeIntegrationInSubFrames: true, disableDialogs: true }
             : {})
         }
       })

@@ -1,7 +1,8 @@
 // Downloads: cada sessão de espaço salva na pasta Downloads e o ícone de Downloads da sidebar
 // mostra o progresso. "Salvar imagem como" (ctx.saveAs) deixa o diálogo do sistema aparecer.
 // Contra página hostil:
-// - sem gesto recente do usuário na aba, o usuário permite ou não num diálogo (o download fica
+// - sem gesto recente do usuário na aba, ou com um gesto que não é de quem iniciou o download (o
+//   clique na página não vale para um iframe de outra origem), o usuário permite ou não num diálogo (o download fica
 //   pausado, gravando numa pasta temporária, e só vai para Downloads se ele permitir) e uma aba
 //   não segura mais de 20 downloads ao mesmo tempo;
 // - o nome do arquivo é reservado com abertura exclusiva, então downloads simultâneos do mesmo
@@ -9,7 +10,12 @@
 // - o arquivo concluído recebe a quarentena do macOS, que o Gatekeeper usa antes de abrir.
 import { rmSync, statSync } from 'node:fs'
 import { join } from 'node:path'
-import { app, type DownloadItem, type Session } from 'electron'
+import {
+  app,
+  type DownloadItem,
+  type Session,
+  type WebContents
+} from 'electron'
 import type { TabId } from '@shared/types'
 import { getHostname } from '@shared/url-parts'
 import type { MainContext } from '../context'
@@ -19,6 +25,7 @@ import {
   DOWNLOAD_COOLDOWN_MS
 } from '../functions/decide-download'
 import { findTabByContents } from '../functions/find-tab-by-contents'
+import { judgeRequester } from '../functions/judge-requester'
 import { sanitizeFileName } from '../functions/pick-file-name'
 import { quarantineFile } from '../functions/quarantine-file'
 import { reserveDownloadPath } from '../functions/reserve-download-path'
@@ -57,6 +64,23 @@ function dropFile(path: string): void {
   } catch (error) {
     console.error('[Downloads][drop] falha ao remover', error)
   }
+}
+
+// O gesto precisa ser de quem iniciou o download: o quadro de origem do pedido (getInitiatorOrigin,
+// dado do Chromium) tem de ter sido ativado. O clique na página principal não vale para o anúncio
+// de outra origem num iframe. (O item.hasUserGesture() do Chromium concordou nas medições, mas o
+// window.open consome a ativação, e um download logo depois do pop-up do mesmo clique é legítimo.)
+function hasGestureOfInitiator(
+  ctx: MainContext,
+  tabId: TabId,
+  contents: WebContents,
+  item: DownloadItem,
+  now: number
+): boolean {
+  const initiator = item.getInitiatorOrigin()
+  return (
+    judgeRequester(ctx, tabId, contents, initiator || null, now) !== 'foreign'
+  )
 }
 
 export function watchDownloads(ctx: MainContext, ses: Session): void {
@@ -111,7 +135,10 @@ export function watchDownloads(ctx: MainContext, ses: Session): void {
     const saveAs = ctx.saveAs.delete(item.getURL())
     const decision = decideDownload({
       userInitiated: saveAs,
-      hasGesture: tabId !== null && hasRecentGesture(guard, tabId, now),
+      hasGesture:
+        tabId !== null &&
+        hasRecentGesture(guard, tabId, now) &&
+        hasGestureOfInitiator(ctx, tabId, contents, item, now),
       running: guard.downloadsRunning.get(owner) ?? 0,
       prompt: guard.downloadPrompts.get(owner),
       now

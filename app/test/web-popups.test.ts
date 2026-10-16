@@ -16,6 +16,10 @@ import {
   decidePopup
 } from '../src/main/functions/decide-popup'
 import {
+  markFrameGesture,
+  markLinkClick
+} from '../src/main/functions/frame-gesture'
+import {
   GESTURE_WINDOW_MS,
   markGesture
 } from '../src/main/functions/user-gesture'
@@ -69,8 +73,15 @@ function setup() {
     opener.id,
     wc as unknown as WebContents
   )
-  const open = (url: string, disposition = 'foreground-tab') =>
-    handler?.({ url, disposition, frameName: '', features: '' }) as {
+  // referrer: o que o Chromium calcula a partir do quadro que pediu (vazio com noreferrer)
+  const open = (url: string, disposition = 'foreground-tab', referrer = '') =>
+    handler?.({
+      url,
+      disposition,
+      frameName: '',
+      features: '',
+      referrer: { url: referrer, policy: 'strict-origin-when-cross-origin' }
+    }) as {
       action: string
       outlivesOpener?: boolean
       createWindow?: (options: object) => WebContents
@@ -220,4 +231,158 @@ test('a aba que sai da sidebar esquece o que se sabia dela', () => {
   forgetTab(env.ctx.guard, env.opener.id)
   assert.equal(env.ctx.guard.scriptOpened.has(env.opener.id), false)
   assert.equal(env.ctx.guard.openers.has('filha'), false)
+})
+
+// ---------- gesto por quadro: o anúncio de outra origem não herda o clique na página ----------
+
+interface FakeFrame {
+  processId: number
+  frameToken: string
+  origin: string
+  url: string
+  parent: FakeFrame | null
+}
+
+function fakeFrame(
+  token: string,
+  origin: string,
+  url: string,
+  parent: FakeFrame | null = null
+): FakeFrame {
+  return { processId: 1, frameToken: token, origin, url, parent }
+}
+
+// a página (opener.test) com um anúncio de outra origem num iframe
+function setupWithAd() {
+  const env = setup()
+  const page = fakeFrame('page', 'https://opener.test', 'https://opener.test/')
+  const ad = fakeFrame(
+    'ad',
+    'https://ads.test',
+    'https://ads.test/banner',
+    page
+  )
+  Object.assign(env.wc, { mainFrame: { framesInSubtree: [page, ad] } })
+  const clickIn = (frame: FakeFrame) =>
+    markFrameGesture(env.ctx.guard, env.opener.id, {
+      key: `${frame.processId}:${frame.frameToken}`,
+      origin: frame.origin
+    })
+  return { ...env, page, ad, clickIn }
+}
+
+test('clique na página: o pop-up do iframe de outra origem é negado; o da página abre', () => {
+  const env = setupWithAd()
+  env.clickIn(env.page)
+  // window.open do anúncio: o referrer é da origem dele
+  const fromAd = env.open(
+    'https://ads.test/popunder',
+    'foreground-tab',
+    'https://ads.test/banner'
+  )
+  assert.equal(fromAd.action, 'deny')
+  assert.deepEqual(env.ctx.guard.blockedPopups.get(env.opener.id), [
+    'https://ads.test/popunder'
+  ])
+  // o mesmo clique continua valendo para a página
+  const fromPage = env.open(
+    'https://login.test/',
+    'foreground-tab',
+    'https://opener.test/'
+  )
+  assert.equal(fromPage.action, 'allow')
+  assert.equal(env.store.getTab(env.opener.id)?.blockedPopups, 1)
+})
+
+test('clique dentro do anúncio: o pop-up dele abre (como no Chromium), e a página também', () => {
+  const env = setupWithAd()
+  // o main não vê o clique num iframe de outra origem: só o relato do preload do quadro
+  assert.equal(env.ctx.guard.gestures.has(env.opener.id), false)
+  env.clickIn(env.ad)
+  assert.equal(
+    env.ctx.guard.gestures.has(env.opener.id),
+    true,
+    'o relato do quadro também é o gesto da aba'
+  )
+  const fromAd = env.open(
+    'https://ads.test/oferta',
+    'foreground-tab',
+    'https://ads.test/banner'
+  )
+  assert.equal(fromAd.action, 'allow')
+  const fromPage = env.open(
+    'https://opener.test/x',
+    'foreground-tab',
+    'https://opener.test/'
+  )
+  assert.equal(fromPage.action, 'allow')
+})
+
+test('sem referrer (noreferrer): só abre se nenhum quadro ficou sem o clique, ou se foi um clique em link', () => {
+  const env = setupWithAd()
+  env.clickIn(env.page)
+  // pode ser o anúncio pedindo: negado
+  assert.equal(env.open('https://ads.test/nr').action, 'deny')
+  // o usuário clicou num link para esta URL: o pop-up é dele
+  markLinkClick(env.ctx.guard, env.opener.id, 'https://externo.test/artigo')
+  assert.equal(env.open('https://externo.test/artigo').action, 'allow')
+  // a URL é outra (o anúncio tentando aproveitar o clique): negado
+  assert.equal(env.open('https://ads.test/nr2').action, 'deny')
+  // o clique no link vale por pouco tempo
+  env.ctx.guard.linkClicks.set(env.opener.id, {
+    url: 'https://externo.test/artigo',
+    at: Date.now() - 5000
+  })
+  assert.equal(env.open('https://externo.test/artigo').action, 'deny')
+})
+
+test('página sem iframe de outra origem: noreferrer abre normalmente com o clique', () => {
+  const env = setup()
+  const page = fakeFrame('page', 'https://opener.test', 'https://opener.test/')
+  const same = fakeFrame(
+    'same',
+    'https://opener.test',
+    'https://opener.test/w',
+    page
+  )
+  Object.assign(env.wc, { mainFrame: { framesInSubtree: [page, same] } })
+  markFrameGesture(env.ctx.guard, env.opener.id, {
+    key: '1:page',
+    origin: 'https://opener.test'
+  })
+  assert.equal(env.open('https://a.test/').action, 'allow')
+})
+
+test('o gesto por quadro e o clique em link somem quando a aba carrega outro documento', () => {
+  const env = setupWithAd()
+  env.clickIn(env.ad)
+  markLinkClick(env.ctx.guard, env.opener.id, 'https://x.test/')
+  const wc = Object.assign(env.wc, {
+    session: {},
+    navigationHistory: { canGoBack: () => false, canGoForward: () => false },
+    getTitle: () => ''
+  })
+  attachTabEvents(env.ctx, env.opener.id, wc as unknown as WebContents)
+  wc.emit('did-navigate')
+  assert.equal(env.ctx.guard.frameGestures.has(env.opener.id), false)
+  assert.equal(env.ctx.guard.linkClicks.has(env.opener.id), false)
+  assert.equal(env.ctx.guard.gestures.has(env.opener.id), false)
+  assert.equal(
+    env.open('https://ads.test/p', 'foreground-tab', 'https://ads.test/banner')
+      .action,
+    'deny'
+  )
+})
+
+test('decidePopup: o motivo é outro quadro, depois do gesto e antes do limite', () => {
+  assert.equal(
+    decidePopup(2000, undefined, undefined, false).reason,
+    'no-gesture'
+  )
+  const foreign = decidePopup(2000, 1000, undefined, false)
+  assert.equal(foreign.allow, false)
+  assert.equal(foreign.reason, 'other-frame')
+  // não gasta o saldo do gesto
+  assert.equal(foreign.budget, undefined)
+  assert.equal(decidePopup(2000, 1000, undefined, true).allow, true)
 })

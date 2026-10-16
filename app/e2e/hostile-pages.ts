@@ -287,6 +287,126 @@ await scenario(
   }
 )
 
+// o gesto é do quadro em que o usuário o fez: o clique na página não vale para o anúncio de outra
+// origem num iframe (pop-up, com e sem referrer, e download), mas vale para a própria página, para o
+// link rel=noreferrer em que o usuário clicou e para o iframe da mesma origem
+await scenario(
+  'anuncio-iframe-outra-origem',
+  ['http://hostil.test/p/ad-host'],
+  async ({ procs, pid, dir }) => {
+    await sleep(1500)
+    await L.click('ad-host')
+    await sleep(3000)
+    const s = await L.st()
+    const tab = L.tabByUrl(s, 'ad-host')
+    record(
+      'clique na página: nenhum pop-up do anúncio abre (window.open, noreferrer, link e formulário)',
+      L.urls(s).filter(u => u.includes('ad-popup')).length === 0,
+      { abas: L.urls(s) }
+    )
+    record(
+      'os pop-ups do anúncio ficam bloqueados, com o aviso na aba',
+      tab.blockedPopups > 0,
+      { blockedPopups: tab.blockedPopups }
+    )
+    record(
+      'a aba da frente continua sendo a da página',
+      L.activeTab(s).url.includes('ad-host'),
+      { ativa: L.activeTab(s).url }
+    )
+    // o Chromium pode criar por um instante o arquivo intermediário (.com.github.Electron.*) do
+    // download que o app acabou de recusar; o que não pode é ficar algo com conteúdo na pasta
+    const empty = () =>
+      L.listDir(procs.downloads).every(
+        n => L.sizeOf(join(procs.downloads, n)) === 0
+      )
+    const settled = await L.waitFor(() => empty(), 4000, 200)
+    const names = L.listDir(procs.downloads)
+    record(
+      'o download do anúncio não chega na pasta: o usuário é quem decide, no diálogo',
+      !!settled && L.sheetsOf(pid).length === 1,
+      { names, folhas: L.sheetsOf(pid).length }
+    )
+    L.shotSheet(join(dir, 'download-do-anuncio.png'), pid)
+  }
+)
+
+await scenario(
+  'anuncio-iframe-pagina-continua',
+  ['http://hostil.test/p/ad-host?dl=0'],
+  async ({ pid }) => {
+    const page = (await L.pageOf('ad-host'))!
+    await L.ev(
+      page,
+      "document.getElementById('b').onclick = () => { window.open('/p/title?t=pagina-popup'); window.open('/p/title?t=pagina-popup-nr', '_blank', 'noopener,noreferrer') }; 1"
+    )
+    await sleep(1000)
+    await L.click('ad-host')
+    await sleep(2500)
+    const s = await L.st()
+    record(
+      'a própria página abre o pop-up com o mesmo clique (referrer dela)',
+      L.urls(s).some(u => u.includes('t=pagina-popup') && !u.includes('-nr')),
+      { abas: L.urls(s) }
+    )
+    record(
+      'o anúncio segue bloqueado no mesmo clique',
+      L.urls(s).filter(u => u.includes('ad-popup')).length === 0,
+      { abas: L.urls(s) }
+    )
+    record(
+      'pop-up sem referrer e sem opener, numa página com anúncio de outra origem, não abre (limite documentado: pode ser o anúncio)',
+      !L.urls(s).some(u => u.includes('pagina-popup-nr')),
+      { abas: L.urls(s) }
+    )
+    record(
+      'sem diálogo (o anúncio não baixa neste cenário)',
+      L.sheetsOf(pid).length === 0
+    )
+  }
+)
+
+await scenario(
+  'anuncio-iframe-link-noreferrer',
+  ['http://hostil.test/p/ad-host?dl=0'],
+  async () => {
+    await sleep(1500)
+    await L.click('ad-host', '#lnk')
+    await sleep(2500)
+    const s = await L.st()
+    record(
+      'clique do usuário no link rel="noopener noreferrer": abre, mesmo com o anúncio de outra origem na página',
+      L.urls(s).some(u => u.includes('link-noref')),
+      { abas: L.urls(s) }
+    )
+    record(
+      'e o anúncio continua sem abrir nada',
+      L.urls(s).filter(u => u.includes('ad-popup')).length === 0,
+      { abas: L.urls(s) }
+    )
+  }
+)
+
+await scenario(
+  'iframe-mesma-origem',
+  ['http://hostil.test/p/same-host'],
+  async () => {
+    await sleep(1800)
+    const before = L.urls(await L.st()).filter(u =>
+      u.includes('same-frame-popup')
+    )
+    await L.click('same-host')
+    await sleep(2000)
+    const s = await L.st()
+    record(
+      'iframe da mesma origem: sem clique não abre; com o clique na página abre (herda, como no Chromium)',
+      before.length === 0 &&
+        L.urls(s).filter(u => u.includes('same-frame-popup')).length === 1,
+      { antes: before, abas: L.urls(s) }
+    )
+  }
+)
+
 // o gesto é do documento em que o usuário o fez: o clique num link não vale para o que a página de
 // destino faz ao carregar (pop-up e download), nem um clique seguido de um endereço digitado
 await scenario(
@@ -635,6 +755,34 @@ await scenario(
       { folhas: L.sheetsOf(pid).length }
     )
     L.shotSheet(join(dir, 'confirm-popup.png'), pid)
+  }
+)
+
+// o pop-up que o Chromium cria (window.open) não herdava o preload das webPreferences da aba: o
+// alert dele era o nativo, sem a guarda. O preload agora é registrado na sessão do espaço
+await scenario(
+  'popup-leva-o-preload',
+  ['http://hostil.test/p/oauth-opener'],
+  async () => {
+    const page = (await L.pageOf('oauth-opener'))!
+    await L.ev(
+      page,
+      "document.getElementById('b').onclick = () => window.open('/p/title?t=filho-preload'); 1"
+    )
+    await L.click('oauth-opener')
+    await sleep(2000)
+    const child = await L.pageOf('filho-preload')
+    const guarded = child
+      ? await L.ev(
+          child,
+          "Object.getOwnPropertyDescriptor(window, 'alert').writable === false && Object.getOwnPropertyDescriptor(window, 'confirm').configurable === false"
+        )
+      : null
+    record(
+      'o pop-up aberto por script tem o alert/confirm da guarda (não o nativo)',
+      guarded === true,
+      { achou: !!child, guarded }
+    )
   }
 )
 

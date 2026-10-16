@@ -23,6 +23,7 @@ import {
   quarantineValue
 } from '../src/main/functions/quarantine-file'
 import { reserveDownloadPath } from '../src/main/functions/reserve-download-path'
+import { markFrameGesture } from '../src/main/functions/frame-gesture'
 import { markGesture } from '../src/main/functions/user-gesture'
 import { watchDownloads } from '../src/main/services/downloads'
 import { fakeContext } from './fake-main'
@@ -211,6 +212,8 @@ class FakeItem extends EventEmitter {
   url: string
   filename: string
   bytes: number
+  // a origem do quadro que iniciou (vazia quando não foi uma página)
+  initiator = ''
   constructor(url: string, filename: string, bytes: number) {
     super()
     this.url = url
@@ -218,6 +221,7 @@ class FakeItem extends EventEmitter {
     this.bytes = bytes
   }
   getURL = () => this.url
+  getInitiatorOrigin = () => this.initiator
   getFilename = () => this.filename
   getTotalBytes = () => this.bytes
   getReceivedBytes = () => 0
@@ -262,7 +266,7 @@ function setupDownloads() {
     rmSync(dir, { recursive: true, force: true })
     rmSync(temp, { recursive: true, force: true })
   }
-  return { ...env, tab, dir, temp, start, finish, tick, clean }
+  return { ...env, tab, wc: live.wc, dir, temp, start, finish, tick, clean }
 }
 
 function answerDialog(response: number) {
@@ -497,6 +501,99 @@ test('"Salvar imagem como" (pedido do app) segue sem gesto e mostra o diálogo d
     assert.ok(item.dialogOptions)
     assert.equal(env.ctx.saveAs.has('https://site.test/foto.png'), false)
     assert.deepEqual(readdirSync(env.dir), [])
+  } finally {
+    env.clean()
+  }
+})
+
+// ---- o gesto tem de ser de quem iniciou o download ----
+
+function withAd(env: ReturnType<typeof setupDownloads>) {
+  const page = {
+    processId: 1,
+    frameToken: 'page',
+    origin: 'https://site.test',
+    url: 'https://site.test/',
+    parent: null
+  }
+  const ad = {
+    processId: 2,
+    frameToken: 'ad',
+    origin: 'https://ads.test',
+    url: 'https://ads.test/banner',
+    parent: page
+  }
+  Object.assign(env.wc, { mainFrame: { framesInSubtree: [page, ad] } })
+  const clickIn = (frame: {
+    processId: number
+    frameToken: string
+    origin: string
+  }) =>
+    markFrameGesture(env.ctx.guard, env.tab.id, {
+      key: `${frame.processId}:${frame.frameToken}`,
+      origin: frame.origin
+    })
+  return { page, ad, clickIn }
+}
+
+test('clique na página: o download do iframe de outra origem pergunta; o da página baixa', async () => {
+  const env = setupDownloads()
+  try {
+    const calls = answerDialog(0)
+    const { page, clickIn } = withAd(env)
+    clickIn(page)
+
+    // o anúncio baixa sozinho depois do clique do usuário na página
+    const fromAd = new FakeItem('https://ads.test/ad.bin', 'ad.bin', 1000)
+    fromAd.initiator = 'https://ads.test'
+    assert.equal(env.start(fromAd).prevented, false)
+    assert.equal(fromAd.paused, true, 'pausado até o usuário permitir')
+    assert.equal(calls.length, 1)
+    assert.equal(calls[0].defaultId, 0, 'Cancelar é o padrão')
+    await env.tick()
+    assert.equal(fromAd.cancelled, true)
+    assert.equal(existsSync(join(env.dir, 'ad.bin')), false)
+
+    // a página, com o mesmo clique, baixa na hora
+    const fromPage = new FakeItem('https://site.test/a.zip', 'a.zip', 1000)
+    fromPage.initiator = 'https://site.test'
+    env.start(fromPage)
+    assert.equal(fromPage.paused, false)
+    assert.equal(fromPage.savePath, join(env.dir, 'a.zip'))
+    assert.equal(calls.length, 1)
+  } finally {
+    env.clean()
+  }
+})
+
+test('clique dentro do anúncio: o download dele segue na hora', () => {
+  const env = setupDownloads()
+  try {
+    const calls = answerDialog(0)
+    const { ad, clickIn } = withAd(env)
+    clickIn(ad)
+    const item = new FakeItem('https://ads.test/oferta.pdf', 'oferta.pdf', 1000)
+    item.initiator = 'https://ads.test'
+    env.start(item)
+    assert.equal(item.paused, false)
+    assert.equal(calls.length, 0)
+  } finally {
+    env.clean()
+  }
+})
+
+test('download que o app pediu ("Salvar imagem como") não depende de quadro', () => {
+  const env = setupDownloads()
+  try {
+    const calls = answerDialog(0)
+    const { page, clickIn } = withAd(env)
+    clickIn(page)
+    env.ctx.saveAs.add('https://ads.test/img.png')
+    const item = new FakeItem('https://ads.test/img.png', 'img.png', 1000)
+    item.initiator = 'https://ads.test'
+    env.start(item)
+    assert.equal(item.paused, false)
+    assert.equal(calls.length, 0)
   } finally {
     env.clean()
   }

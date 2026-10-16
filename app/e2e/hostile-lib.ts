@@ -285,6 +285,10 @@ export function start(
       '--janela=0,40,1300,860',
       '--tema=claro',
       '--carregar-todas',
+      // opções do Electron para a máquina de quem roda (E2E_ELECTRON_ARGS="--use-mock-keychain
+      // -ApplePersistenceIgnoreState YES": sem o pedido da keychain e sem o aviso do macOS para
+      // reabrir janelas depois de uma queda)
+      ...(process.env.E2E_ELECTRON_ARGS?.split(' ').filter(Boolean) ?? []),
       ...extra
     ],
     {

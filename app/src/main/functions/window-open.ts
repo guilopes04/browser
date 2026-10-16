@@ -4,12 +4,21 @@
 // webContents que o Chromium já criou (createWindow), o que preserva o `opener` dos popups de
 // OAuth, e sobrevive ao fechamento da aba que a abriu (outlivesOpener). Quando quem abre não é a
 // aba ativa, a nova nasce em segundo plano.
+//
+// O gesto tem de ser de quem pede: um iframe de outra origem (um anúncio) não herda o clique dado na
+// página principal. Quem pede vem do referrer do pedido (o Chromium o calcula a partir do quadro de
+// origem; a página não o forja). Sem referrer (rel=noreferrer, Referrer-Policy: no-referrer) o
+// pedido só vale se nenhum quadro da aba ficou sem o gesto, ou se o usuário acabou de clicar num
+// link para exatamente aquela URL (o preload reporta o clique).
 import type { WebContents } from 'electron'
 import type { SpaceId, TabId } from '@shared/types'
 import { openPopupAsTab } from '../actions/open-popup-as-tab'
 import type { MainContext } from '../context'
 import { recordBlockedPopup } from './blocked-popups'
 import { decidePopup } from './decide-popup'
+import { originOfUrl } from './frame-activation'
+import { hasLinkClick } from './frame-gesture'
+import { judgeRequester } from './judge-requester'
 import { getLastGesture } from './user-gesture'
 
 const ALLOWED_URL = /^(https?:|about:blank$|blob:)/i
@@ -24,14 +33,20 @@ export function installWindowOpenHandler(
     if (!ctx.store.getTab(tabId) || !ALLOWED_URL.test(details.url))
       return { action: 'deny' }
 
+    const now = Date.now()
+    const fromUserClick = hasLinkClick(ctx.guard, tabId, details.url, now)
+    const activation = fromUserClick
+      ? 'activated'
+      : judgeRequester(ctx, tabId, wc, originOfUrl(details.referrer?.url), now)
     const verdict = decidePopup(
-      Date.now(),
+      now,
       getLastGesture(ctx.guard, tabId),
-      ctx.guard.popupBudget.get(tabId)
+      ctx.guard.popupBudget.get(tabId),
+      activation !== 'foreign'
     )
     if (verdict.budget) ctx.guard.popupBudget.set(tabId, verdict.budget)
     if (!verdict.allow) {
-      recordBlockedPopup(ctx, tabId, details.url)
+      recordBlockedPopup(ctx, tabId, details.url, verdict.reason)
       return { action: 'deny' }
     }
 

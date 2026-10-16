@@ -2,6 +2,7 @@
 // Fica todo em ctx.guard, para o contexto não ganhar um campo por defesa. As chaves são ids de
 // aba: o que vale só para uma view (gestos, diálogos) é zerado quando a view é destruída.
 import type { TabId } from '@shared/types'
+import type { FrameGesture } from './functions/frame-activation'
 
 // quantos pop-ups o último gesto já liberou
 export interface PopupBudget {
@@ -27,9 +28,19 @@ export interface DownloadPrompt {
   deniedUntil: number
 }
 
+// o último clique do usuário num link da aba (endereço já resolvido) e quando
+export interface LinkClick {
+  url: string
+  at: number
+}
+
 export interface WebGuard {
   // último gesto real do usuário (tecla ou clique) na página da aba, em epoch ms
   gestures: Map<TabId, number>
+  // em que quadro cada gesto caiu (o preload de cada quadro reporta): o clique na página não vale
+  // para um iframe de outra origem (functions/frame-activation.ts)
+  frameGestures: Map<TabId, FrameGesture[]>
+  linkClicks: Map<TabId, LinkClick>
   popupBudget: Map<TabId, PopupBudget>
   // URLs de pop-ups bloqueados por aba (o snapshot só leva a contagem)
   blockedPopups: Map<TabId, string[]>
@@ -53,6 +64,8 @@ export interface WebGuard {
 export function createWebGuard(): WebGuard {
   return {
     gestures: new Map(),
+    frameGestures: new Map(),
+    linkClicks: new Map(),
     popupBudget: new Map(),
     blockedPopups: new Map(),
     scriptOpened: new Set(),
@@ -73,6 +86,8 @@ export function createWebGuard(): WebGuard {
 // digitado logo depois de um clique
 export function resetDocumentState(guard: WebGuard, tabId: TabId): void {
   guard.gestures.delete(tabId)
+  guard.frameGestures.delete(tabId)
+  guard.linkClicks.delete(tabId)
   guard.popupBudget.delete(tabId)
 }
 

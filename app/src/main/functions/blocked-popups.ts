@@ -9,14 +9,15 @@ export const MAX_KEPT_POPUPS = 5
 export function recordBlockedPopup(
   ctx: MainContext,
   tabId: TabId,
-  url: string
+  url: string,
+  reason = ''
 ): void {
   const list = ctx.guard.blockedPopups.get(tabId) ?? []
   if (!list.includes(url) && list.length < MAX_KEPT_POPUPS) list.push(url)
   ctx.guard.blockedPopups.set(tabId, list)
   ctx.store.patchTab(tabId, { blockedPopups: list.length })
   console.warn(
-    `[Popups][window-open] bloqueado na aba ${tabId}: ${url.slice(0, 120)}`
+    `[Popups][window-open] bloqueado na aba ${tabId}${reason ? ` (${reason})` : ''}: ${url.slice(0, 120)}`
   )
 }
 

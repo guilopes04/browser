@@ -132,6 +132,31 @@ const routes: Record<string, Route> = {
       </script>`
     ),
 
+  // ---- gesto por quadro: o anúncio de outra origem num iframe (E7/E8) ----
+  // a página (hostil.test) tem um botão, um link rel=noopener noreferrer e o iframe do anúncio
+  // (anuncio.test), que tenta pop-up (com e sem referrer, por link e por formulário) e download a
+  // cada 300 ms. O usuário só clica na página
+  '/p/ad-host': q =>
+    page(
+      'página com anúncio',
+      `<iframe src="http://anuncio.test/p/ad-frame?dl=${q.get('dl') ?? '1'}" style="position:absolute;left:24px;top:330px;width:320px;height:120px;border:1px solid #888"></iframe>` +
+        `<a id="lnk" href="/p/title?t=link-noref" target="_blank" rel="noopener noreferrer" style="position:absolute;left:320px;top:100px;font-size:24px">link sem referrer</a>` +
+        '<script>window.__out = {}</script>'
+    ),
+  '/p/ad-frame': q =>
+    `<!doctype html><html><head><meta charset="utf-8"><title>anuncio</title></head><body style="margin:0"><p>anúncio</p>` +
+    `<form id="f" action="/p/title" target="_blank"><input type="hidden" name="t" value="ad-popup-form"></form>` +
+    `<a id="nr" href="/p/title?t=ad-popup-link" target="_blank" rel="noopener noreferrer">x</a>` +
+    `<script>window.__out = { tries: 0 }; setInterval(() => { const n = ++window.__out.tries; window.open('/p/title?t=ad-popup-open-' + n); window.open('/p/title?t=ad-popup-nr-' + n, '_blank', 'noopener,noreferrer'); document.getElementById('nr').click(); document.getElementById('f').submit(); if (${q.get('dl') === '0' ? 'false' : 'true'}) { const a = document.createElement('a'); a.href = '/file?name=ad.bin&n=3000'; a.download = ''; document.body.appendChild(a); a.click() } }, 300)</script></body></html>`,
+  // iframe da mesma origem: herda o clique na página, como no Chromium
+  '/p/same-host': () =>
+    page(
+      'página com iframe da mesma origem',
+      `<iframe src="/p/same-frame" style="position:absolute;left:24px;top:330px;width:320px;height:120px"></iframe><script>window.__out = {}</script>`
+    ),
+  '/p/same-frame': () =>
+    `<!doctype html><html><head><meta charset="utf-8"><title>mesma origem</title></head><body><p>mesma origem</p><script>window.__out = { tries: 0 }; const iv = setInterval(() => { window.__out.tries++; if (window.open('/p/title?t=same-frame-popup')) clearInterval(iv) }, 300)</script></body></html>`,
+
   // ---- gesto não atravessa o documento (E7/E8) ----
   '/p/gesture-link': () =>
     page(

@@ -5,6 +5,7 @@ import { app, dialog } from 'electron'
 import { describeLoadError } from '../src/shared/describe-load-error'
 import { externalSchemeOf } from '../src/main/functions/external-scheme'
 import { requestExternalOpen } from '../src/main/functions/handle-external-open'
+import { markFrameGesture } from '../src/main/functions/frame-gesture'
 import { markGesture } from '../src/main/functions/user-gesture'
 import { fakeContext } from './fake-main'
 
@@ -66,9 +67,15 @@ function setup(handlerName = 'Mail') {
   ;(
     app as unknown as { getApplicationNameForProtocol: (url: string) => string }
   ).getApplicationNameForProtocol = () => handlerName
-  const request = (url: string | undefined) =>
+  const request = (url: string | undefined, requestingUrl?: string) =>
     new Promise<boolean>(done =>
-      requestExternalOpen(env.ctx, wc as unknown as WebContents, url, done)
+      requestExternalOpen(
+        env.ctx,
+        wc as unknown as WebContents,
+        url,
+        done,
+        requestingUrl
+      )
     )
   return {
     ...env,
@@ -157,4 +164,40 @@ test('janela escondida: não há como perguntar, não abre', async () => {
   env.ctx.win.hide()
   env.answer(1)
   assert.equal(await env.request('mailto:a@b.com'), false)
+})
+
+test('o clique na página não vale para o iframe de outra origem abrir um app', async () => {
+  const env = setup()
+  const page = {
+    processId: 1,
+    frameToken: 'page',
+    origin: 'https://pagina.test',
+    url: 'https://pagina.test/x',
+    parent: null
+  }
+  const ad = {
+    processId: 2,
+    frameToken: 'ad',
+    origin: 'https://ads.test',
+    url: 'https://ads.test/banner',
+    parent: page
+  }
+  Object.assign(env.wc, { mainFrame: { framesInSubtree: [page, ad] } })
+  markFrameGesture(env.ctx.guard, env.tab.id, {
+    key: '1:page',
+    origin: page.origin
+  })
+  env.answer(1)
+  // pedido do anúncio (requestingUrl é do quadro dele): recusado sem perguntar
+  assert.equal(
+    await env.request('mailto:ad@example.com', 'https://ads.test/banner'),
+    false
+  )
+  assert.equal(env.asked.length, 0)
+  // a página, com o mesmo clique, pergunta
+  assert.equal(
+    await env.request('mailto:pagina@example.com', 'https://pagina.test/x'),
+    true
+  )
+  assert.equal(env.asked.length, 1)
 })

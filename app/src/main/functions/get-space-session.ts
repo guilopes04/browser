@@ -7,6 +7,7 @@ import { requestExternalOpen } from './handle-external-open'
 import { hardenSession } from './harden-session'
 import { installLocalNetworkGuard } from './local-network-guard'
 import { isPermissionAllowed, PAGE_PERMISSIONS } from './permission-policy'
+import { getTabPreloadPath } from './tab-preload-path'
 
 const configured = new Set<string>()
 
@@ -30,7 +31,8 @@ function configureSession(ses: Session): void {
           boundContext,
           contents,
           (details as { externalURL?: string }).externalURL,
-          callback
+          callback,
+          (details as { requestingUrl?: string }).requestingUrl
         )
       else callback(false)
       return
@@ -39,6 +41,15 @@ function configureSession(ses: Session): void {
   })
   // página da internet não alcança a rede local (roteador, serviços em localhost)
   installLocalNetworkGuard(ses)
+  // o preload da guarda vale para todo webContents da sessão, inclusive o pop-up que o Chromium cria
+  // (window.open) e a aba adota: o preload das webPreferences não chega a ele
+  const preload = getTabPreloadPath()
+  if (preload)
+    ses.registerPreloadScript({
+      type: 'frame',
+      filePath: preload,
+      id: 'gilas-tab-guard'
+    })
 }
 
 export function getSpaceSession(spaceId: string): Session {
