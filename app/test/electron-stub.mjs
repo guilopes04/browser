@@ -6,7 +6,11 @@ export const app = {
   isPackaged: false,
   getPath: () => '',
   getName: () => 'Gilas Browser',
-  commandLine: { hasSwitch: () => false, appendSwitch() {} },
+  commandLine: {
+    hasSwitch: () => false,
+    getSwitchValue: () => '',
+    appendSwitch() {}
+  },
   on() {},
   exit() {},
   enableSandbox() {}

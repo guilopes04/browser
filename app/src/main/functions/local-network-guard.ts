@@ -20,8 +20,16 @@
 //   já saiu; só a leitura da resposta é impedida). Atrás de um proxy o IP é o do proxy, então esse
 //   corte só vale em conexão direta;
 // - origem sem registro (a lista é limitada, ou o documento veio de fora) conta como pública quando
-//   é um nome de DNS: resolver o nome agora devolveria o que o atacante quiser.
+//   é um nome de DNS: resolver o nome agora devolveria o que o atacante quiser;
+// - --ip-address-space-overrides (a opção de teste do Chromium, shared/address-space-overrides.ts)
+//   manda: o endereço IP e a porta que ela declara públicos são públicos, mesmo sendo 127.0.0.1.
+//   O Chromium usa a declaração no cálculo dele, que no Electron 44 não bloqueia nada; a guarda a
+//   honra para a página "pública" em localhost não ler o serviço ao lado.
 import type { Session } from 'electron'
+import {
+  NO_OVERRIDES,
+  type AddressSpaceOverrides
+} from '@shared/address-space-overrides'
 import {
   getNetworkHost,
   isIpLiteral,
@@ -88,7 +96,8 @@ function remember<K, V>(map: Map<K, V>, key: K, value: V, max: number): void {
 
 export function createLocalNetworkGuard(
   resolve: HostResolver,
-  now: () => number = Date.now
+  now: () => number = Date.now,
+  overrides: AddressSpaceOverrides = NO_OVERRIDES
 ): LocalNetworkGuard {
   const zones = new Map<string, Zone>()
   const resolved = new Map<string, { addresses: string[]; at: number }>()
@@ -140,6 +149,9 @@ export function createLocalNetworkGuard(
     if (!origin && request.initiatorOrigin === 'null' && request.topUrl)
       origin = originOf(request.topUrl)
     if (!origin) return null
+    // a declaração da linha de comando vale mais que o texto do host e que o histórico
+    const declared = overrides.spaceOf(origin)
+    if (declared) return declared
     const known = zones.get(origin)
     if (known) {
       // quem está pedindo agora é o que menos deve sair da lista
@@ -160,6 +172,8 @@ export function createLocalNetworkGuard(
     if (request.initiatorOrigin === undefined) return false
     const zone = initiatorZone(request)
     if (zone === null || zone === 'private') return false
+    const declared = overrides.spaceOf(request.url)
+    if (declared) return declared === 'private'
     return destinationIsPrivate(destHost)
   }
 
@@ -184,6 +198,8 @@ export function createLocalNetworkGuard(
       if (!ip || initiatorOrigin === undefined || !isPrivateAddress(ip))
         return false
       if (!getNetworkHost(url)) return false
+      // o destino que a linha de comando declarou público não é rede local, seja qual for o IP
+      if (overrides.spaceOf(url) === 'public') return false
       return initiatorZone(response) === 'public'
     },
 
@@ -199,11 +215,18 @@ export function createLocalNetworkGuard(
   }
 }
 
-export function installLocalNetworkGuard(ses: Session): void {
-  const guard = createLocalNetworkGuard(async host => {
-    const { endpoints } = await ses.resolveHost(host)
-    return endpoints.map(endpoint => endpoint.address)
-  })
+export function installLocalNetworkGuard(
+  ses: Session,
+  overrides: AddressSpaceOverrides = NO_OVERRIDES
+): void {
+  const guard = createLocalNetworkGuard(
+    async host => {
+      const { endpoints } = await ses.resolveHost(host)
+      return endpoints.map(endpoint => endpoint.address)
+    },
+    Date.now,
+    overrides
+  )
   ses.webRequest.onBeforeRequest(
     { urls: ['http://*/*', 'https://*/*', 'ws://*/*', 'wss://*/*'] },
     (details, callback) => {

@@ -1,5 +1,6 @@
 // Sessão persistente de cada espaço, configurada uma única vez.
-import { session, type Session } from 'electron'
+import { app, session, type Session } from 'electron'
+import { parseAddressSpaceOverrides } from '@shared/address-space-overrides'
 import type { MainContext } from '../context'
 import { cleanUserAgent } from './clean-user-agent'
 import { getPartitionName } from './get-partition-name'
@@ -40,7 +41,12 @@ function configureSession(ses: Session): void {
     callback(isPermissionAllowed(permission, PAGE_PERMISSIONS))
   })
   // página da internet não alcança a rede local (roteador, serviços em localhost)
-  installLocalNetworkGuard(ses)
+  installLocalNetworkGuard(
+    ses,
+    parseAddressSpaceOverrides(
+      app.commandLine.getSwitchValue('ip-address-space-overrides')
+    )
+  )
   // o preload da guarda vale para todo webContents da sessão, inclusive o pop-up que o Chromium cria
   // (window.open) e a aba adota: o preload das webPreferences não chega a ele
   const preload = getTabPreloadPath()

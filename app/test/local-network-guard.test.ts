@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { session, type Session } from 'electron'
+import { parseAddressSpaceOverrides } from '../src/shared/address-space-overrides'
 import { getSpaceSession } from '../src/main/functions/get-space-session'
 import { filterFaviconCandidates } from '../src/main/functions/filter-favicon-candidates'
 import {
@@ -760,4 +761,141 @@ test('isDirectProxy: só "DIRECT" sozinho prova que não há proxy', () => {
   assert.equal(isDirectProxy(' direct '), true)
   for (const value of ['', 'PROXY a:1', 'PROXY a:1; DIRECT', 'SOCKS5 a:1'])
     assert.equal(isDirectProxy(value), false, value)
+})
+
+// ---- --ip-address-space-overrides: a opção de teste do Chromium que simula página pública em localhost ----
+
+test('overrides: lê ip:porta=espaço, com IPv6, vários itens, "local" e lixo ignorado', () => {
+  const overrides = parseAddressSpaceOverrides(
+    '127.0.0.1:9701=public, [::1]:9701=PUBLIC ,10.0.0.5:80=private,127.0.0.1:9800=local,lixo,x=y,1.2.3.4=public,=public,127.0.0.1:1=a=b'
+  )
+  assert.equal(overrides.spaceOf('http://127.0.0.1:9701/x'), 'public')
+  assert.equal(overrides.spaceOf('ws://127.0.0.1:9701/ws'), 'public')
+  assert.equal(overrides.spaceOf('http://[::1]:9701/'), 'public')
+  // localhost é o loopback
+  assert.equal(overrides.spaceOf('http://localhost:9701/'), 'public')
+  // porta padrão implícita
+  assert.equal(overrides.spaceOf('http://10.0.0.5/'), 'private')
+  assert.equal(overrides.spaceOf('https://10.0.0.5/'), null)
+  // "local" e "private" são rede local
+  assert.equal(overrides.spaceOf('http://127.0.0.1:9800/'), 'private')
+  // o que a opção não diz fica de fora
+  assert.equal(overrides.spaceOf('http://127.0.0.1:9702/'), null)
+  assert.equal(overrides.spaceOf('http://exemplo.com:9701/'), null)
+  assert.equal(overrides.spaceOf('file:///etc/hosts'), null)
+  assert.equal(overrides.spaceOf('não é url'), null)
+  const none = parseAddressSpaceOverrides('')
+  assert.equal(none.spaceOf('http://127.0.0.1:9701/'), null)
+})
+
+test('overrides: a página declarada pública em 127.0.0.1 não alcança o serviço ao lado (o teste do enunciado)', async () => {
+  const guard = createLocalNetworkGuard(
+    async () => [],
+    Date.now,
+    parseAddressSpaceOverrides('127.0.0.1:9701=public')
+  )
+  const page = 'http://127.0.0.1:9701'
+  const ask = (url: string, extra: Partial<GuardRequest> = {}) =>
+    guard.shouldBlock({
+      url,
+      resourceType: 'xhr',
+      initiatorOrigin: page,
+      ...extra
+    })
+  for (const url of [
+    'http://127.0.0.1:9702/segredo',
+    'http://localhost:9702/segredo',
+    'http://[::1]:9702/segredo',
+    'http://2130706433:9702/segredo',
+    'ws://127.0.0.1:9702/ws',
+    'http://192.168.0.1/'
+  ])
+    assert.equal(await ask(url), true, url)
+  // iframe, worker e redirect saem do mesmo iniciador
+  assert.equal(
+    await ask('http://127.0.0.1:9702/segredo', { resourceType: 'subFrame' }),
+    true
+  )
+  assert.equal(
+    await ask('http://127.0.0.1:9702/segredo', {
+      initiatorOrigin: 'null',
+      topUrl: `${page}/pagina`
+    }),
+    true,
+    'iframe em sandbox (origem opaca) vale a página de topo'
+  )
+  // a própria origem declarada pública segue funcionando: scripts, iframes e fetch dela
+  assert.equal(
+    await ask(`${page}/frame-fetch`, { resourceType: 'subFrame' }),
+    false
+  )
+  assert.equal(await ask(`${page}/api`), false)
+  // a internet pública também
+  assert.equal(await ask('https://cdn.example.net/a.js'), false)
+  // o endereço digitado na barra (sem iniciador) passa
+  assert.equal(
+    await ask('http://127.0.0.1:9702/segredo', { initiatorOrigin: undefined }),
+    false
+  )
+})
+
+test('overrides: sem a declaração, a mesma página é da rede local e alcança o serviço ao lado', async () => {
+  const guard = createLocalNetworkGuard(async () => [])
+  assert.equal(
+    await guard.shouldBlock({
+      url: 'http://127.0.0.1:9702/segredo',
+      resourceType: 'xhr',
+      initiatorOrigin: 'http://127.0.0.1:9701'
+    }),
+    false
+  )
+})
+
+test('overrides: destino declarado rede local é bloqueado; destino declarado público passa; a resposta segue a declaração', async () => {
+  const guard = createLocalNetworkGuard(
+    async () => ['93.184.216.34'],
+    Date.now,
+    parseAddressSpaceOverrides(
+      '127.0.0.1:9701=public,203.0.113.7:8080=private,127.0.0.1:9703=public'
+    )
+  )
+  const page = 'http://127.0.0.1:9701'
+  const ask = (url: string) =>
+    guard.shouldBlock({ url, resourceType: 'xhr', initiatorOrigin: page })
+  // um IP público que a linha de comando declarou rede local
+  assert.equal(await ask('http://203.0.113.7:8080/x'), true)
+  // um loopback que a linha de comando declarou público
+  assert.equal(await ask('http://127.0.0.1:9703/x'), false)
+  // a resposta que veio do loopback: corta para o serviço ao lado, deixa passar a declarada pública
+  const response = (url: string) => ({
+    url,
+    resourceType: 'xhr',
+    ip: '127.0.0.1',
+    initiatorOrigin: page
+  })
+  assert.equal(
+    guard.shouldBlockResponse(response('http://127.0.0.1:9702/s')),
+    true
+  )
+  assert.equal(
+    guard.shouldBlockResponse(response('http://127.0.0.1:9703/s')),
+    false
+  )
+  assert.equal(guard.shouldBlockResponse(response(`${page}/x`)), false)
+})
+
+test('overrides: a origem privada continua alcançando a rede local (declarada ou não)', async () => {
+  const guard = createLocalNetworkGuard(
+    async () => [],
+    Date.now,
+    parseAddressSpaceOverrides('127.0.0.1:9701=public,127.0.0.1:9800=local')
+  )
+  assert.equal(
+    await guard.shouldBlock({
+      url: 'http://127.0.0.1:9702/x',
+      resourceType: 'xhr',
+      initiatorOrigin: 'http://127.0.0.1:9800'
+    }),
+    false
+  )
 })
