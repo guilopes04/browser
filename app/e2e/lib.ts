@@ -371,6 +371,8 @@ export function start(profile: string, extra: string[] = []): Procs {
       `--host-resolver-rules=MAP * 127.0.0.1:${SRV}`,
       '--janela=0,40,1440,860',
       '--tema=claro',
+      // opções do Electron para a máquina de quem roda (veja E2E_ELECTRON_ARGS em hostile-lib.ts)
+      ...(process.env.E2E_ELECTRON_ARGS?.split(' ').filter(Boolean) ?? []),
       ...extra
     ],
     options('electron')

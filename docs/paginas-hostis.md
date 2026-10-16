@@ -17,9 +17,53 @@ link não vale para o que a página de destino fizer ao carregar, nem um clique 
 endereço digitado logo depois. `#fragmento` e `pushState` são o mesmo documento e mantêm o gesto.
 Só o gesto na página nova conta; sem ele, o pop-up é bloqueado e o download pergunta.
 
+### O gesto é do quadro (E7/E8)
+
+Como no Chromium, um gesto ativa o **quadro em que aconteceu, os ancestrais dele e os descendentes
+da mesma origem**; um iframe de outra origem (o anúncio) não herda o clique dado na página
+principal. Antes, o gesto valia para a aba inteira: depois de qualquer clique na página, um iframe
+de terceiro abria pop-up (que virava a aba ativa) e baixava arquivo sem perguntar.
+
+- Quem sabe em que quadro o clique caiu é o preload das abas (`preload/tab-guard.ts`, em todos os
+  quadros): ouve `mousedown`, `pointerdown`, `touchend` e `keydown` com `isTrusted` (a página não
+  fabrica), na captura da janela (antes de qualquer ouvinte da página) e reporta por IPC
+  **síncrono**, para o main saber antes de a página tratar o evento (o pop-up do clique sai na mesma
+  tarefa). O quadro vem de `event.senderFrame` (dado do Chromium), não do que a página diz. O relato
+  também é o gesto da aba: o main não vê o clique dado dentro de um iframe de outra origem (o
+  Chromium o entrega direto ao renderer dele), então o clique dentro de um iframe de outra origem
+  (o botão "entrar com o Google", um player embutido) não contava como gesto da aba e o pop-up que
+  ele abre era bloqueado (medido: clique real no anúncio, `no-gesture`); agora conta, para o quadro
+  dele e os ancestrais.
+- `functions/frame-activation.ts` (pura) decide: o quadro que pede foi ativado? Quem pede é achado
+  pelo **referrer do `window.open`** (o Chromium o calcula a partir do quadro de origem; a página
+  não o forja), pelo **iniciador do download** (`item.getInitiatorOrigin()`) e pelo `requestingUrl`
+  da permissão de abrir em outro app. Todos os quadros daquela origem precisam estar ativados.
+  Origem opaca (sandbox, `data:`) nunca é igual a nada; o quadro em sandbox é achado pelo endereço.
+- Sem referrer (`rel="noreferrer"`, `Referrer-Policy: no-referrer`), qualquer quadro pode estar
+  pedindo, e só vale se todos estiverem ativados, **ou** se o usuário clicou, há menos de 1,5 s,
+  num link para exatamente aquela URL (o preload reporta o clique em `a`/`area`, `isTrusted`, para
+  `rel="noopener noreferrer"` que não deixa opener nem referrer).
+- Gesto que nenhum quadro reportou (quadro sem preload) vale para a página principal, nunca para
+  um iframe.
+- Limites: um `window.open(url, '_blank', 'noopener,noreferrer')` disparado pelo clique do usuário,
+  numa página que tem iframe de outra origem, fica bloqueado com o aviso "Pop-up bloqueado" (pode
+  ser o anúncio; **Abrir** resolve). Os quadros internos de um pop-up aberto por script não têm
+  preload (o Electron não herda `nodeIntegrationInSubFrames` na janela que o Chromium cria), então
+  o clique dentro de um iframe de outra origem de um pop-up não conta; o clique na página do
+  pop-up conta.
+- O preload é registrado na sessão do espaço (`session.registerPreloadScript`), não nas
+  `webPreferences` da aba: o pop-up que o Chromium cria em `window.open` e a aba adota nascia sem o
+  preload das `webPreferences`, e o `alert` dele era o nativo, sem a guarda (o e2e antigo só contava
+  folhas e não via). Agora o pop-up tem o mesmo `alert`/`confirm`/`prompt` das outras abas
+  (`popup-leva-o-preload`).
+
 ## Downloads (H-01, DADOS-01, E7)
 
-- Com gesto na aba (ou pedido do próprio app, como "Salvar imagem como"): baixa na hora.
+- Com gesto na aba **e de quem iniciou o download** (o quadro de origem do pedido foi ativado, veja
+  acima), ou pedido do próprio app ("Salvar imagem como"): baixa na hora. O download do anúncio
+  de outra origem, com o usuário clicando só na página, pergunta como se não houvesse gesto. (O
+  `item.hasUserGesture()` do Chromium concordou nas medições, mas o `window.open` consome a
+  ativação e um download logo depois do pop-up do mesmo clique é legítimo, então ele não entra.)
 - Sem gesto: o download pausa e grava numa pasta temporária; o diálogo nativo pergunta "Este site
   quer baixar <nome> (<tamanho>). Permitir?", com Cancelar como padrão. Permitido, o arquivo
   concluído vai para Downloads; recusado, tudo some. Um diálogo por vez e 10 s de silêncio depois
@@ -28,6 +72,15 @@ Só o gesto na página nova conta; sem ele, o pop-up é bloqueado e o download p
 - Ao concluir, `xattr -w com.apple.quarantine "0083;<hora hex>;Gilas Browser;"` e leitura de volta
   para conferir. Sem a quarentena o arquivo não fica e o ícone mostra falha.
 - No máximo 20 downloads simultâneos por aba.
+- Limite medido: no download recusado sem diálogo (`reject-busy`, `reject-cooldown`, `reject-limit`,
+  que dão `event.preventDefault()`), o Chromium cria o arquivo intermediário `.com.github.Electron.*`
+  na pasta de Downloads, grava nele o que já chegou e o apaga em instantes (lendo a pasta a cada 5
+  ms: 15 aparições em 9 s, numa página que tenta baixar a cada 300 ms; a pasta fica vazia no fim). É
+  um arquivo escondido de nome aleatório, sem o nome que a página deu. Mandar o destino para a
+  pasta temporária antes de recusar (`setSavePath` e depois `cancel()` ou `preventDefault()`) e
+  `session.setDownloadPath` foram tentados e não mudaram nada, então não foi corrigido. O download
+  que pergunta (`ask`) não passa por Downloads: o intermediário nasce na pasta temporária. O e2e
+  espera o intermediário sumir em vez de exigir a pasta vazia no primeiro instante.
 - Controles de direção de texto (U+202E e afins) saem do nome do arquivo.
 - Flag `--pasta-downloads=<pasta>` para os testes não tocarem em `~/Downloads`.
 - A pasta temporária leva o pid no nome (`gilas-download-<pid>-<sufixo>`). Se o app cai ou é morto
@@ -38,8 +91,9 @@ Só o gesto na página nova conta; sem ele, o pop-up é bloqueado e o download p
 
 ## Pop-ups (H-02, E8)
 
-- `window.open` e `target=_blank` só abrem com gesto recente na aba de origem; um gesto libera no
-  máximo 3 (`functions/decide-popup.ts`).
+- `window.open` e `target=_blank` só abrem com gesto recente na aba de origem **e no quadro que
+  pede** (um iframe de outra origem não herda o clique na página: motivo `other-frame` no log); um
+  gesto libera no máximo 3 (`functions/decide-popup.ts`).
 - Bloqueado: o pedido é negado e a aba ganha `blockedPopups` (as URLs ficam só no main). A sidebar
   mostra "Pop-up bloqueado" com **Abrir** e dispensar; o aviso some quando a aba navega.
 - A aba aberta por uma aba que não é a ativa nasce em segundo plano.
@@ -49,13 +103,17 @@ Só o gesto na página nova conta; sem ele, o pop-up é bloqueado e o download p
 
 - O campo mostra o host dividido: subdomínios em cor secundária e o **domínio registrável** em
   peso 600 (`shared/registrable-domain.ts`: dois últimos rótulos, mais as exceções `com.br`,
-  `co.uk`, `gov.br`... e plataformas como `github.io`). O que falta de espaço sai nesta ordem: o
-  caminho, os subdomínios (cortados no começo, com "…"), o texto "Não seguro" (fica o cadeado) e,
-  só se o domínio sozinho não couber, o miolo dele ("banco-do-br…tendimento.com", com o TLD e a
-  porta sempre à mostra: `splitDomainTail`). O domínio nunca é cortado só no começo: ou aparece
-  inteiro ou perde o miolo, com o "…" à vista. O CSS faz isso sem JS: `.address-host` é um flex `row-reverse wrap` de altura fixa, o DOM
-  vem na ordem de prioridade (domínio, subdomínio, texto) e o que não cabe na linha cai para a
-  segunda, escondida (`sidebar.css`).
+  `co.uk`, `gov.br`... e plataformas como `github.io`). O domínio **nunca é cortado**: um domínio
+  longo cortado no meio ("banco-do-br…tendimento.com") esconde as letras que separam o site
+  verdadeiro do falso. O que falta de espaço sai nesta ordem: o caminho, os subdomínios (cortados
+  no começo, com "…") e o texto "Não seguro" (fica o cadeado). O CSS faz isso sem JS: `.address-host`
+  é um flex `row-reverse wrap` de altura fixa, o DOM vem na ordem de prioridade (domínio,
+  subdomínio, texto) e o que não cabe na linha cai para a segunda, escondida (`sidebar.css`). Se o
+  domínio sozinho não cabe numa linha (mais de ~26 caracteres na sidebar de 260 px), uma sonda
+  invisível o mede (`address-field.tsx`) e o campo entra no modo `.address-wraps`: o domínio
+  ocupa o campo e quebra em quantas linhas precisar (depois de um hífen, ou em qualquer
+  caractere), o campo cresce, e ficam só o domínio e o cadeado (o host inteiro está no tooltip e no
+  `aria-label`). Os subdomínios e o "Não seguro" não aparecem nesse modo.
 - IDN (`shared/idn-host.ts`): o rótulo só aparece em Unicode quando todas as letras são de um
   único script (ASCII conta como latim; han com kana ou hangul é permitido) e não é cirílico ou
   grego que só tem letras parecidas com as latinas. Senão fica em punycode.
@@ -103,7 +161,11 @@ só rótulo. Segurar a tecla só repete o zoom e o passo da busca (⌘G, ⇧⌘G
   o rascunho), cancela o fechamento em silêncio; o rascunho sobrevive. Sem `beforeunload`, ou com
   o pop-up de outra origem (o login em outro domínio, em outro processo, em que o `beforeunload`
   nem roda), a página do opener é descartada: a aba continua na sidebar, dormente, e recarrega
-  quando aberta (na frente, na hora); o estado da página e os formulários não voltam. Medido nos
+  quando aberta (na frente, na hora); o estado em JavaScript se perde. O que o usuário digitou num
+  `<textarea>` costuma voltar (o `pageState` do histórico de navegação guarda os campos: medido com
+  digitação real, o rascunho voltou ao reabrir a aba), mas isso depende de o `pageState` ter sido
+  sincronizado antes do descarte (não medido com o fechamento em menos de 1 s depois de digitar nem
+  com o pop-up de outra origem). A decisão de aceitar o limite é do Guilherme. Medido nos
   três casos de `e2e/hostile-pages.ts` (`window-close-opener-*`). Mexer em `window.opener` por
   script (um `Proxy` no pop-up) foi descartado: o `event.source` de uma mensagem do opener e
   `opener.opener` devolvem a janela real, então a proteção teria furos e mudaria o que os sites
@@ -117,6 +179,12 @@ só rótulo. Segurar a tecla só repete o zoom e o passo da busca (⌘G, ⇧⌘G
   janelas. Conferido no dev e no build empacotado (sem assinar, com `--use-mock-keychain`) com uma
   página web na frente: ⌘Q de verdade e SIGTERM, 5 de 5 saídas com 0 e nenhum relatório novo; os
   commits sem a correção saem com 133.
+- `app.exit()` (o modo `--captura`) não emite `before-quit`: `ctx.quitting` seguia `false`, e o
+  mesmo desmonte caía com SIGTRAP (o log terminava em "pedido ignorado ... not-script-opened", e o
+  `confere-build.sh` não via, porque ignorava o código de saída). Quem sai por `app.exit` passa por
+  `exitApp` (`functions/exit-app.ts`), que põe `ctx.quitting = true` antes. Conferido: dev
+  (`--captura` com duas abas locais) e build empacotado sem assinar (com `--use-mock-keychain`), 3
+  de 3 saídas com 0 em cada, e o `confere-build.sh --sem-assinatura` agora exige saída 0.
 
 ## Esquemas externos (H-16)
 
