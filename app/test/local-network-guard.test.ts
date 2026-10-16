@@ -5,6 +5,7 @@ import { getSpaceSession } from '../src/main/functions/get-space-session'
 import { filterFaviconCandidates } from '../src/main/functions/filter-favicon-candidates'
 import {
   createLocalNetworkGuard,
+  isDirectProxy,
   type GuardRequest
 } from '../src/main/functions/local-network-guard'
 
@@ -275,6 +276,7 @@ test('favicon: página pública não aponta o ícone para a rede local', () => {
 })
 
 test('toda sessão de espaço instala a guarda de rede local no webRequest', async () => {
+  let proxyFor = (): string => 'DIRECT'
   const registered: unknown[][] = []
   const responses: unknown[][] = []
   const ses = {
@@ -287,6 +289,7 @@ test('toda sessão de espaço instala a guarda de rede local no webRequest', asy
     resolveHost: async (host: string) => ({
       endpoints: host === 'rebind.example' ? [{ address: '127.0.0.1' }] : []
     }),
+    resolveProxy: async () => proxyFor(),
     webRequest: {
       onBeforeRequest: (...args: unknown[]) => void registered.push(args),
       onHeadersReceived: (...args: unknown[]) => void responses.push(args)
@@ -387,6 +390,38 @@ test('toda sessão de espaço instala a guarda de rede local no webRequest', asy
     resourceType: 'stylesheet'
   })
   assert.deepEqual(answered, [{}, {}])
+
+  // a resposta de um IP de rede local para um iniciador público é cancelada (conexão direta),
+  // inclusive de um nome que a nossa consulta de DNS viu como público
+  const reply = (details: Record<string, unknown>) =>
+    new Promise<object>(resolve =>
+      headersListener({ resourceType: 'xhr', ...details }, resolve)
+    )
+  const stolen = {
+    url: 'https://cdn.example.net/admin',
+    initiatorOrigin: 'https://evil.example',
+    ip: '127.0.0.1'
+  }
+  assert.deepEqual(await reply(stolen), { cancel: true })
+  assert.deepEqual(await reply({ ...stolen, ip: '::1' }), { cancel: true })
+  assert.deepEqual(await reply({ ...stolen, resourceType: 'subFrame' }), {
+    cancel: true
+  })
+  // IP público, resposta do cache, pedido do próprio navegador, página da rede local: segue
+  assert.deepEqual(await reply({ ...stolen, ip: '151.101.1.1' }), {})
+  assert.deepEqual(await reply({ ...stolen, ip: undefined }), {})
+  assert.deepEqual(await reply({ ...stolen, initiatorOrigin: undefined }), {})
+  assert.deepEqual(
+    await reply({ ...stolen, initiatorOrigin: 'http://localhost:3000' }),
+    {}
+  )
+  // atrás de um proxy o IP é o do proxy: não vale como prova
+  proxyFor = () => 'PROXY 10.0.0.1:3128; DIRECT'
+  assert.deepEqual(await reply(stolen), {})
+  proxyFor = () => {
+    throw new Error('sem resposta do resolvedor de proxy')
+  }
+  assert.deepEqual(await reply(stolen), {})
 })
 
 test('rebinding com iframe da própria origem: o atacante não vira "página da rede local"', async () => {
@@ -638,4 +673,91 @@ test('nome que não resolve não grava zona: a VPN que conecta depois dá a zona
   now += 10_000
   await load()
   assert.equal(await guard.shouldBlock(fromJira), false)
+})
+
+test('rebinding com respostas diferentes: o IP da conexão corta o que a consulta de DNS deixou passar', async () => {
+  // um servidor de DNS (TTL 0) que responde um endereço público à nossa consulta e o loopback à
+  // da conexão: o pedido passa por shouldBlock, e a resposta chega do 127.0.0.1
+  const answers = ['93.184.216.34', '127.0.0.1']
+  let asked = 0
+  const guard = createLocalNetworkGuard(async host => {
+    if (host !== 'evil.example') throw new Error('NXDOMAIN')
+    return [answers[Math.min(asked++, answers.length - 1)]]
+  })
+  await guard.shouldBlock({
+    url: 'https://evil.example/',
+    resourceType: 'mainFrame'
+  })
+  const fetchAdmin = request('https://evil.example/admin')
+  asked = 0
+  assert.equal(
+    await guard.shouldBlock(fetchAdmin),
+    false,
+    'a consulta viu o IP público'
+  )
+  assert.equal(
+    guard.shouldBlockResponse({ ...fetchAdmin, ip: '127.0.0.1' }),
+    true,
+    'a conexão foi para o loopback'
+  )
+})
+
+test('shouldBlockResponse só corta iniciador público com resposta de IP de rede local', () => {
+  const guard = createLocalNetworkGuard(async () => [])
+  const response = (extra: object) => ({
+    url: 'https://cdn.example.net/a',
+    resourceType: 'xhr',
+    initiatorOrigin: PUBLIC_PAGE,
+    ip: '127.0.0.1',
+    ...extra
+  })
+  for (const ip of [
+    '127.0.0.1',
+    '::1',
+    '[::1]',
+    '10.0.0.5',
+    '192.168.1.1',
+    '169.254.169.254',
+    '100.64.0.1',
+    '::ffff:127.0.0.1',
+    'fd00::1',
+    '0.0.0.0'
+  ])
+    assert.equal(guard.shouldBlockResponse(response({ ip })), true, ip)
+  for (const ip of ['93.184.216.34', '151.101.1.1', '2606:4700::1111'])
+    assert.equal(guard.shouldBlockResponse(response({ ip })), false, ip)
+  assert.equal(guard.shouldBlockResponse(response({ ip: undefined })), false)
+  assert.equal(
+    guard.shouldBlockResponse(response({ initiatorOrigin: undefined })),
+    false
+  )
+  // página da rede local e origem opaca sem página de topo (não dá para saber): segue
+  assert.equal(
+    guard.shouldBlockResponse(
+      response({ initiatorOrigin: 'http://localhost:3000' })
+    ),
+    false
+  )
+  assert.equal(
+    guard.shouldBlockResponse(response({ initiatorOrigin: 'null' })),
+    false
+  )
+  assert.equal(
+    guard.shouldBlockResponse(
+      response({ initiatorOrigin: 'null', topUrl: 'https://evil.example/p' })
+    ),
+    true
+  )
+  // esquema que não é de rede
+  assert.equal(
+    guard.shouldBlockResponse(response({ url: 'data:text/html,oi' })),
+    false
+  )
+})
+
+test('isDirectProxy: só "DIRECT" sozinho prova que não há proxy', () => {
+  assert.equal(isDirectProxy('DIRECT'), true)
+  assert.equal(isDirectProxy(' direct '), true)
+  for (const value of ['', 'PROXY a:1', 'PROXY a:1; DIRECT', 'SOCKS5 a:1'])
+    assert.equal(isDirectProxy(value), false, value)
 })

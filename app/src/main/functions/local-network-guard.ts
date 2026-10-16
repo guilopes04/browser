@@ -13,6 +13,12 @@
 //   grava zona nenhuma;
 // - o endereço IP que respondeu de verdade (onHeadersReceived) só pode rebaixar a origem a pública:
 //   se a DNS disse "privado" para a nossa consulta e o Chromium conectou num IP público, vale o IP;
+// - esse mesmo IP fecha a brecha entre a nossa consulta de DNS e a conexão do Chromium: um servidor
+//   de DNS que responde um endereço público à nossa consulta (TTL 0) e o loopback à da conexão
+//   passa pela checagem do pedido. Quando a resposta chega de um IP de rede local para um
+//   iniciador público, o pedido é cancelado ali, antes de a página ler qualquer coisa (o pedido
+//   já saiu; só a leitura da resposta é impedida). Atrás de um proxy o IP é o do proxy, então esse
+//   corte só vale em conexão direta;
 // - origem sem registro (a lista é limitada, ou o documento veio de fora) conta como pública quando
 //   é um nome de DNS: resolver o nome agora devolveria o que o atacante quiser.
 import type { Session } from 'electron'
@@ -40,12 +46,18 @@ export interface GuardResponse {
   resourceType: string
   // endereço IP que respondeu de verdade; ausente em respostas do cache
   ip?: string
+  // quem fez o pedido, como em GuardRequest
+  initiatorOrigin?: string
+  topUrl?: string
 }
 
 export interface LocalNetworkGuard {
   shouldBlock(request: GuardRequest): Promise<boolean>
   // o IP real da conexão de um documento: só rebaixa a origem a pública
   observeResponse(response: GuardResponse): void
+  // a resposta veio de um IP de rede local para um iniciador público (a conexão foi para onde a
+  // nossa consulta de DNS não viu). Quem chama só cancela se a conexão era direta (sem proxy)
+  shouldBlockResponse(response: GuardResponse): boolean
 }
 
 type Zone = 'private' | 'public'
@@ -166,6 +178,15 @@ export function createLocalNetworkGuard(
       return block
     },
 
+    shouldBlockResponse(response) {
+      const { url, ip, initiatorOrigin } = response
+      // sem IP (resposta do cache) ou sem iniciador (o próprio navegador): nada a cortar
+      if (!ip || initiatorOrigin === undefined || !isPrivateAddress(ip))
+        return false
+      if (!getNetworkHost(url)) return false
+      return initiatorZone(response) === 'public'
+    },
+
     observeResponse({ url, resourceType, ip }) {
       if (!ip || !isDocument(resourceType)) return
       const host = getNetworkHost(url)
@@ -205,23 +226,50 @@ export function installLocalNetworkGuard(ses: Session): void {
         )
     }
   )
-  // o IP que respondeu de verdade ao documento (a nossa consulta de DNS pode ter dado outra
-  // resposta que a do Chromium). Os cabeçalhos chegam antes de o documento executar qualquer
-  // coisa; onResponseStarted não dispara no Electron 44, e onCompleted vem tarde demais. O campo
-  // `ip` existe em tempo de execução mas não nos tipos. O pedido nunca é cancelado por aqui: atrás
-  // de um proxy o IP é o do proxy
+  // o IP que respondeu de verdade (a nossa consulta de DNS pode ter dado outra resposta que a do
+  // Chromium). Nos documentos ele só rebaixa a origem a pública; em qualquer pedido de iniciador
+  // público que foi parar numa rede local, o pedido é cancelado antes de a página ler a resposta.
+  // Os cabeçalhos chegam antes de o documento executar qualquer coisa; onResponseStarted não
+  // dispara no Electron 44, e onCompleted vem tarde demais. O campo `ip` existe em tempo de
+  // execução mas não nos tipos, e o handshake de WebSocket chega sem ele (por isso o filtro não
+  // inclui ws e wss: eles só têm a checagem do pedido). Atrás de um proxy o IP é o do proxy: só
+  // se corta conexão direta
   ses.webRequest.onHeadersReceived(
     { urls: ['http://*/*', 'https://*/*'] },
     (details, callback) => {
+      let block = false
       try {
-        guard.observeResponse({
+        let topUrl: string | undefined
+        try {
+          topUrl = details.webContents?.getURL()
+        } catch {
+          // a aba já foi destruída
+        }
+        const response = {
           url: details.url,
           resourceType: details.resourceType,
-          ip: (details as { ip?: string }).ip
-        })
-      } finally {
-        callback({})
+          ip: (details as { ip?: string }).ip,
+          initiatorOrigin: details.initiatorOrigin,
+          topUrl
+        }
+        guard.observeResponse(response)
+        block = guard.shouldBlockResponse(response)
+      } catch {
+        block = false
       }
+      if (!block) {
+        callback({})
+        return
+      }
+      ses.resolveProxy(details.url).then(
+        proxy => callback(isDirectProxy(proxy) ? { cancel: true } : {}),
+        () => callback({})
+      )
     }
   )
+}
+
+// "DIRECT" é a única resposta sem proxy no caminho; uma lista ("PROXY x; DIRECT") pode ou não usar o proxy
+export function isDirectProxy(proxy: string): boolean {
+  return proxy.trim().toUpperCase() === 'DIRECT'
 }
