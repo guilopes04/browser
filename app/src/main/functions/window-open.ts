@@ -10,6 +10,10 @@
 // origem; a página não o forja). Sem referrer (rel=noreferrer, Referrer-Policy: no-referrer) o
 // pedido só vale se nenhum quadro da aba ficou sem o gesto, ou se o usuário acabou de clicar num
 // link para exatamente aquela URL (o preload reporta o clique).
+//
+// A aba criada aqui tem as mesmas webPreferences de qualquer aba (tab-web-preferences.ts): o preload
+// da guarda em todos os quadros e os diálogos nativos desligados. O pop-up passa pelo mesmo
+// tratamento de diálogos (origem no texto, limite de 3 em 10 s, só na aba ativa).
 import type { WebContents } from 'electron'
 import type { SpaceId, TabId } from '@shared/types'
 import { openPopupAsTab } from '../actions/open-popup-as-tab'
@@ -19,6 +23,7 @@ import { decidePopup } from './decide-popup'
 import { originOfUrl } from './frame-activation'
 import { hasLinkClick } from './frame-gesture'
 import { judgeRequester } from './judge-requester'
+import { getPagePreferences } from './tab-web-preferences'
 import { getLastGesture } from './user-gesture'
 
 const ALLOWED_URL = /^(https?:|about:blank$|blob:)/i
@@ -54,6 +59,9 @@ export function installWindowOpenHandler(
       action: 'allow',
       // fechar a aba que abriu não leva junto os pop-ups (o Electron fecharia todos)
       outlivesOpener: true,
+      // as mesmas webPreferences das outras abas: o Electron só herda do opener as preferências
+      // seguras e deixava de fora o preload nos iframes e o desligamento do alert nativo
+      overrideBrowserWindowOptions: { webPreferences: getPagePreferences() },
       createWindow: options => {
         const adopted = (options as { webContents?: WebContents }).webContents
         return openPopupAsTab(ctx, {

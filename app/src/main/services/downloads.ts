@@ -17,7 +17,6 @@ import {
   type WebContents
 } from 'electron'
 import type { TabId } from '@shared/types'
-import { getHostname } from '@shared/url-parts'
 import type { MainContext } from '../context'
 import { askDownloadConsent } from '../functions/ask-download-consent'
 import {
@@ -213,7 +212,10 @@ export function watchDownloads(ctx: MainContext, ses: Session): void {
       consent = askDownloadConsent(ctx, {
         name: sanitizeFileName(item.getFilename()),
         bytes: item.getTotalBytes(),
-        site: getHostname(item.getURL())
+        // quem pediu (o quadro, dado do Chromium), a página da aba e o servidor do arquivo
+        initiator: item.getInitiatorOrigin(),
+        pageUrl: contents.getURL(),
+        fileUrl: item.getURL()
       })
         .catch(() => false)
         .then(allowed => {

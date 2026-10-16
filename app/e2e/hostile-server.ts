@@ -106,6 +106,49 @@ const routes: Record<string, Route> = {
       `<script>window.__out = {}; setTimeout(() => { const f = document.createElement('iframe'); document.body.appendChild(f); window.__out.blank = f.contentWindow.confirm('do iframe em branco'); document.title = 'blank:' + window.__out.blank; const x = document.createElement('iframe'); x.srcdoc = '<script>parent.__out.srcdoc = confirm("do srcdoc")<\\/script>'; document.body.appendChild(x) }, 400)</script>`
     ),
 
+  // ---- E10: diálogos e preload nas abas que a página abre (window.open, target=_blank) ----
+  // a página abre a aba filha de seis jeitos: window.open (#b, #b2 com noopener) e três links
+  // target=_blank (sem rel, noopener, noopener noreferrer)
+  '/p/e10-opener': () =>
+    page(
+      'abre abas filhas',
+      `<button id="b2" style="position:absolute;left:300px;top:100px;width:260px;height:80px;font-size:22px">noopener</button>` +
+        `<a id="l-plain" target="_blank" href="/p/e10-child?k=link-plain" style="position:absolute;left:24px;top:330px;font-size:26px">link</a>` +
+        `<a id="l-noopener" target="_blank" rel="noopener" href="/p/e10-child?k=link-noopener" style="position:absolute;left:24px;top:380px;font-size:26px">link noopener</a>` +
+        `<a id="l-noref" target="_blank" rel="noopener noreferrer" href="/p/e10-child?k=link-noreferrer" style="position:absolute;left:24px;top:430px;font-size:26px">link noreferrer</a>` +
+        `<script>window.__out = {}; document.getElementById('b').onclick = () => { window.open('/p/e10-child?k=open') }; document.getElementById('b2').onclick = () => { window.open('/p/e10-child?k=open-noopener', '_blank', 'noopener') }</script>`
+    ),
+  // a aba filha: um iframe de outra origem (anuncio.test) e um iframe about:blank criado pela
+  // página chamam alert. ?k= identifica o jeito de abrir; ?n= quantos alertas o about:blank faz
+  '/p/e10-child': q =>
+    page(
+      `filho ${q.get('k') ?? ''}`,
+      `<script>window.__out = { guarded: Object.getOwnPropertyDescriptor(window, 'alert').writable === false, opener: !!window.opener }
+      const k = ${JSON.stringify(q.get('k') ?? '')}
+      const cross = document.createElement('iframe')
+      cross.src = 'http://anuncio.test:9601/p/e10-alert-frame?k=' + k
+      document.body.appendChild(cross)
+      const blank = document.createElement('iframe')
+      document.body.appendChild(blank)
+      setTimeout(() => { for (let i = 0; i < ${Number(q.get('n') ?? 4)}; i++) blank.contentWindow.alert(k + ':blank-' + i); window.__out.blankDone = true; document.title = 'e10-fim:' + k }, 1500)
+      </script>`
+    ),
+  '/p/e10-alert-frame': q =>
+    `<!doctype html><html><head><meta charset="utf-8"><title>anuncio</title></head><body><p>anúncio</p>` +
+    `<script>window.__out = { guarded: Object.getOwnPropertyDescriptor(window, 'alert').writable === false }; setTimeout(() => { alert(${JSON.stringify(q.get('k') ?? '')} + ':cross-0'); alert(${JSON.stringify(q.get('k') ?? '')} + ':cross-1'); window.__out.done = true }, 600)</script></body></html>`,
+
+  // ---- window.print ----
+  '/p/print-auto': q =>
+    page(
+      'print sem gesto',
+      `<script>window.__out = { calls: 0 }; setTimeout(() => { window.__out.calls++; window.print(); document.title = 'print-voltou' }, ${q.get('delay') || 500})</script>`
+    ),
+  '/p/print-click': () =>
+    page(
+      'print com clique',
+      `<script>window.__out = { calls: 0 }; document.getElementById('b').onclick = () => { window.__out.calls++; window.print(); document.title = 'print-voltou' }</script>`
+    ),
+
   // ---- teclado ----
   '/p/keys': () =>
     page(

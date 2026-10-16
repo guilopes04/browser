@@ -1,6 +1,6 @@
 {
   "name": "browser",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "description": "Gilas Browser: navegador leve para macOS em Electron e TypeScript",
   "author": "Guilherme Lopes",

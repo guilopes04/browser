@@ -32,8 +32,20 @@ function parse(url: string): URL | null {
   }
 }
 
+// blob:http://host/uuid é uma página da origem que o criou (o host dela, a conexão dela); o que
+// vem depois de "blob:" é o endereço dessa origem. null quando não é blob ou a origem não é web
+function blobOrigin(parsed: URL): URL | null {
+  if (parsed.protocol !== 'blob:') return null
+  const inner = parse(parsed.pathname)
+  return inner && (inner.protocol === 'http:' || inner.protocol === 'https:')
+    ? inner
+    : null
+}
+
 export function isInsecureUrl(url: string): boolean {
-  return parse(url)?.protocol === 'http:'
+  const parsed = parse(url)
+  if (!parsed) return false
+  return (blobOrigin(parsed) ?? parsed).protocol === 'http:'
 }
 
 const EMPTY: AddressParts = {
@@ -59,17 +71,29 @@ export function describeAddress(url: string): AddressParts {
       host: 'arquivo local'
     }
 
-  const hostname = displayHostname(parsed.hostname.replace(/^www\./, ''))
+  // blob: sem origem web (blob:null/...): não há host para mostrar, só o esquema
+  if (parsed.protocol === 'blob:' && !blobOrigin(parsed))
+    return {
+      ...EMPTY,
+      domain: 'blob:',
+      path: displayUrl(parsed.pathname),
+      host: 'blob:'
+    }
+
+  // blob: tem o host e a conexão da origem que o criou; o esquema aparece antes do caminho
+  const origin = blobOrigin(parsed) ?? parsed
+  const scheme = origin === parsed ? '' : 'blob:'
+  const hostname = displayHostname(origin.hostname.replace(/^www\./, ''))
   const { subdomain, domain } = splitHost(hostname)
-  const port = parsed.port ? `:${parsed.port}` : ''
-  const rest = parsed.pathname + parsed.search + parsed.hash
+  const port = origin.port ? `:${origin.port}` : ''
+  const rest = origin.pathname + parsed.search + parsed.hash
   return {
     kind: 'web',
-    insecure: parsed.protocol === 'http:',
+    insecure: origin.protocol === 'http:',
     subdomain,
     domain: domain + port,
     // o caminho é para ler: acentos aparecem decodificados
-    path: rest === '/' ? '' : displayUrl(rest),
+    path: scheme + (rest === '/' ? '' : displayUrl(rest)),
     host: hostname + port
   }
 }

@@ -10,9 +10,8 @@ import { attachContextMenu } from './attach-context-menu'
 import { attachFullscreenEvents } from './attach-fullscreen-events'
 import { attachTabEvents } from './attach-tab-events'
 import { attachUnloadGuard } from './attach-unload-guard'
-import { getSpaceSession } from './get-space-session'
 import { guardTabNavigation } from './guard-tab-navigation'
-import { getTabPreloadPath } from './tab-preload-path'
+import { getPagePreferences, getTabWebPreferences } from './tab-web-preferences'
 import { installWindowOpenHandler } from './window-open'
 
 export function createTabView(
@@ -20,22 +19,16 @@ export function createTabView(
   tab: Tab,
   adopted?: WebContents
 ): WebContentsView {
-  const preload = getTabPreloadPath()
+  // o pop-up que o Chromium criou (adopted) leva as mesmas webPreferences: o WebContentsView as
+  // reaplica ao webContents que recebe e, sem elas, voltaria às padrão (alert nativo, sem preload
+  // nos iframes). A sessão é a do opener, já definida na criação
   const view = adopted
-    ? new WebContentsView({ webContents: adopted })
+    ? new WebContentsView({
+        webContents: adopted,
+        webPreferences: getPagePreferences()
+      })
     : new WebContentsView({
-        webPreferences: {
-          session: getSpaceSession(tab.spaceId),
-          sandbox: true,
-          contextIsolation: true,
-          nodeIntegration: false,
-          // alert/confirm/prompt passam pelo main (preload/tab-guard.ts, registrado na sessão: vale
-          // também para o pop-up que o Chromium cria); os diálogos nativos do Electron, que não
-          // mostram a origem nem se calam, ficam desligados
-          ...(preload
-            ? { nodeIntegrationInSubFrames: true, disableDialogs: true }
-            : {})
-        }
+        webPreferences: getTabWebPreferences(tab.spaceId)
       })
   view.setBackgroundColor(PAGE_CANVAS)
   view.setBorderRadius(PANEL_RADIUS)

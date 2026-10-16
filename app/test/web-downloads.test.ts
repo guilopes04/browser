@@ -317,7 +317,7 @@ test('sem gesto: pausa, pergunta com Cancelar como padrão e só segue se permit
     assert.equal(calls.length, 1)
     assert.equal(
       calls[0].message,
-      'Este site quer baixar relatorio.zip (2,5 MB). Permitir?'
+      'site.test quer baixar relatorio.zip (2,5 MB). Permitir?'
     )
     assert.deepEqual(calls[0].buttons, ['Cancelar', 'Baixar'])
     // o botão padrão e o de Esc são o Cancelar
