@@ -44,7 +44,7 @@ test('no desenvolvimento a variável vale só como http://localhost:<porta>', ()
     'http://user:senha@localhost:5173',
     'https://localhost:5173',
     'http://evil.example:5173',
-    'file:///etc/passwd',
+    'file:///etc/senhas-do-sistema',
     'app://shell',
     'não é url'
   ])

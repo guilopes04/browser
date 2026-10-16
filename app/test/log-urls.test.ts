@@ -15,8 +15,8 @@ test('redactUrls deixa só o host de cada endereço', () => {
     'falha em https://bank.example.com/… e mais'
   )
   assert.equal(
-    redactUrls('http://user:senha@host.example:8080/x?y=1'),
-    'http://host.example:8080/…'
+    redactUrls('http://usuario:senha@exemplo.invalid:8080/x?y=1'),
+    'http://exemplo.invalid:8080/…'
   )
   assert.equal(
     redactUrls('(wss://chat.example/socket?k=1) e HTTPS://A.com/p'),

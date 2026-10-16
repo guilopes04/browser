@@ -16,7 +16,7 @@ const BROWSER_SCHEMES = new Set([
   'view-source'
 ])
 
-// "mailto" em "mailto:a@b.com"; null quando não é um esquema (ou é do navegador)
+// "mailto" em "mailto:a@exemplo.invalid"; null quando não é um esquema (ou é do navegador)
 export function externalSchemeOf(url: string): string | null {
   const match = /^([a-z][a-z0-9+.-]*):/i.exec(url.trim())
   if (!match) return null

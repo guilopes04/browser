@@ -116,7 +116,7 @@ test('esquemas que não são web continuam negados, com ou sem gesto', () => {
   const env = setup()
   markGesture(env.ctx.guard, env.opener.id)
   for (const url of [
-    'file:///etc/passwd',
+    'file:///etc/senhas-do-sistema',
     'javascript:alert(1)',
     'data:text/html,x'
   ])

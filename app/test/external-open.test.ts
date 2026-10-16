@@ -10,7 +10,7 @@ import { markGesture } from '../src/main/functions/user-gesture'
 import { fakeContext } from './fake-main'
 
 test('esquema externo: o que o navegador abre por conta própria não conta', () => {
-  assert.equal(externalSchemeOf('mailto:a@b.com'), 'mailto')
+  assert.equal(externalSchemeOf('mailto:a@exemplo.invalid'), 'mailto')
   assert.equal(externalSchemeOf('TEL:+5511999999999'), 'tel')
   assert.equal(
     externalSchemeOf('x-apple.systempreferences:com.apple.Network'),
@@ -90,7 +90,7 @@ function setup(handlerName = 'Mail') {
 test('mailto: com gesto pergunta "Abrir mailto em outro app?", com Cancelar como padrão', async () => {
   const env = setup()
   markGesture(env.ctx.guard, env.tab.id)
-  const allowed = await env.request('mailto:teste@example.com')
+  const allowed = await env.request('mailto:teste@exemplo.invalid')
   assert.equal(allowed, false, 'Cancelar (padrão) não abre')
   assert.equal(env.asked.length, 1)
   assert.equal(env.asked[0].message, 'Abrir mailto em outro app?')
@@ -99,7 +99,7 @@ test('mailto: com gesto pergunta "Abrir mailto em outro app?", com Cancelar como
   assert.equal(env.asked[0].cancelId, 0)
   assert.ok(env.asked[0].detail?.includes('Mail'))
   assert.ok(env.asked[0].detail?.includes('pagina.test'))
-  assert.ok(env.asked[0].detail?.includes('mailto:teste@example.com'))
+  assert.ok(env.asked[0].detail?.includes('mailto:teste@exemplo.invalid'))
 })
 
 test('só abre se o usuário escolher Abrir', async () => {
@@ -112,7 +112,7 @@ test('só abre se o usuário escolher Abrir', async () => {
 test('sem gesto do usuário nunca abre, nem pergunta', async () => {
   const env = setup()
   env.answer(1)
-  assert.equal(await env.request('mailto:silencio@example.com'), false)
+  assert.equal(await env.request('mailto:silencio@exemplo.invalid'), false)
   assert.equal(env.asked.length, 0)
 })
 
@@ -137,8 +137,8 @@ test('uma pergunta por vez em cada aba', async () => {
     new Promise(done => {
       release = done
     })
-  const first = env.request('mailto:um@example.com')
-  assert.equal(await env.request('mailto:dois@example.com'), false)
+  const first = env.request('mailto:um@exemplo.invalid')
+  assert.equal(await env.request('mailto:dois@exemplo.invalid'), false)
   release({ response: 1, checkboxChecked: false })
   assert.equal(await first, true)
   assert.equal(env.ctx.guard.externalPending.has(env.tab.id), false)
@@ -151,7 +151,12 @@ test('endereço inválido, esquema do navegador ou contents que não é aba: rec
   assert.equal(await env.request('https://a.com'), false)
   assert.equal(
     await new Promise<boolean>(done =>
-      requestExternalOpen(env.ctx, {} as WebContents, 'mailto:a@b.com', done)
+      requestExternalOpen(
+        env.ctx,
+        {} as WebContents,
+        'mailto:a@exemplo.invalid',
+        done
+      )
     ),
     false
   )
@@ -163,7 +168,7 @@ test('janela escondida: não há como perguntar, não abre', async () => {
   markGesture(env.ctx.guard, env.tab.id)
   env.ctx.win.hide()
   env.answer(1)
-  assert.equal(await env.request('mailto:a@b.com'), false)
+  assert.equal(await env.request('mailto:a@exemplo.invalid'), false)
 })
 
 test('o clique na página não vale para o iframe de outra origem abrir um app', async () => {
@@ -190,13 +195,13 @@ test('o clique na página não vale para o iframe de outra origem abrir um app',
   env.answer(1)
   // pedido do anúncio (requestingUrl é do quadro dele): recusado sem perguntar
   assert.equal(
-    await env.request('mailto:ad@example.com', 'https://ads.test/banner'),
+    await env.request('mailto:ad@exemplo.invalid', 'https://ads.test/banner'),
     false
   )
   assert.equal(env.asked.length, 0)
   // a página, com o mesmo clique, pergunta
   assert.equal(
-    await env.request('mailto:pagina@example.com', 'https://pagina.test/x'),
+    await env.request('mailto:pagina@exemplo.invalid', 'https://pagina.test/x'),
     true
   )
   assert.equal(env.asked.length, 1)

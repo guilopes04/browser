@@ -28,7 +28,7 @@ import { fakeContext } from './fake-main'
 const SEARCH = 'https://www.google.com/search?q=%s'
 
 test('isLocalFileUrl: file:// em qualquer caixa e view-source:file://', () => {
-  assert.equal(isLocalFileUrl('file:///etc/passwd'), true)
+  assert.equal(isLocalFileUrl('file:///etc/senhas-do-sistema'), true)
   assert.equal(isLocalFileUrl('FILE:///Users/x/a.html'), true)
   assert.equal(isLocalFileUrl('file://localhost/etc/hosts'), true)
   assert.equal(isLocalFileUrl('view-source:file:///etc/hosts'), true)
@@ -40,7 +40,7 @@ test('isLocalFileUrl: file:// em qualquer caixa e view-source:file://', () => {
 
 test('resolve-input recusa file:// (nada é aberto nem pesquisado)', () => {
   for (const text of [
-    'file:///etc/passwd',
+    'file:///etc/senhas-do-sistema',
     '  FILE:///Users/gilas/a.html ',
     'file://localhost/etc/hosts',
     'view-source:file:///etc/hosts'
@@ -84,7 +84,7 @@ test('barra de endereço com file:// mostra o erro na aba e não carrega nada', 
     async url => void loaded.push(url)
   ctx.attached.tabId = tab.id
 
-  navigateTab(ctx, tab.id, 'file:///etc/passwd')
+  navigateTab(ctx, tab.id, 'file:///etc/senhas-do-sistema')
 
   assert.deepEqual(loaded, [])
   const after = store.getTab(tab.id)
@@ -124,7 +124,10 @@ test('Nova aba com file:// vira erro, sem url, e a próxima navegação limpa o 
 test('aba com file:// no session.json acorda como erro, sem loadURL', () => {
   const { ctx, store } = fakeContext(['https://a.com'])
   const [tab] = store.getTabsOfSpace('personal')
-  store.patchTab(tab.id, { url: 'file:///etc/passwd', dormant: true })
+  store.patchTab(tab.id, {
+    url: 'file:///etc/senhas-do-sistema',
+    dormant: true
+  })
 
   const view = wakeTab(ctx, tab.id)
 
@@ -139,8 +142,8 @@ test('sessão antiga: file:// volta como Nova aba e sai da pilha do ⇧⌘T', ()
   const tab = hydrateTab({
     id: 't',
     spaceId: 'personal',
-    url: 'file:///etc/passwd',
-    title: 'passwd',
+    url: 'file:///etc/senhas-do-sistema',
+    title: 'senhas-do-sistema',
     favicon: null,
     muted: false,
     lastActiveAt: 1
@@ -184,7 +187,7 @@ test('sessão antiga: file:// volta como Nova aba e sai da pilha do ⇧⌘T', ()
 })
 
 test('isBlockedNavigation: file:// e a interface do app', () => {
-  assert.equal(isBlockedNavigation('file:///etc/passwd'), true)
+  assert.equal(isBlockedNavigation('file:///etc/senhas-do-sistema'), true)
   assert.equal(isBlockedNavigation('app://shell/index.html'), true)
   assert.equal(isBlockedNavigation('APP://shell/'), true)
   assert.equal(isBlockedNavigation('https://example.com/'), false)
@@ -203,7 +206,7 @@ test('will-navigate, will-redirect e will-frame-navigate cancelam file:// e app:
     'will-frame-navigate'
   ]) {
     for (const [url, blocked] of [
-      ['file:///etc/passwd', true],
+      ['file:///etc/senhas-do-sistema', true],
       ['app://shell/index.html', true],
       ['view-source:file:///etc/hosts', true],
       ['https://example.com/', false],
@@ -240,7 +243,7 @@ test('window.open e target=_blank só abrem http, https, about:blank e blob', ()
       url,
       disposition: 'foreground-tab'
     }).action
-  assert.equal(decide('file:///etc/passwd'), 'deny')
+  assert.equal(decide('file:///etc/senhas-do-sistema'), 'deny')
   assert.equal(decide('app://shell/index.html'), 'deny')
   assert.equal(decide('javascript:alert(1)'), 'deny')
   assert.equal(decide('https://example.com/'), 'allow')
@@ -256,7 +259,7 @@ test('"Salvar imagem como" só vale para o que uma página carrega (nada de file
 
   const entries = describePageMenu({
     linkURL: '',
-    srcURL: 'file:///etc/passwd',
+    srcURL: 'file:///etc/senhas-do-sistema',
     mediaType: 'image',
     selectionText: '',
     isEditable: false,
@@ -289,7 +292,7 @@ test('"Salvar imagem como" só vale para o que uma página carrega (nada de file
       x: 0,
       y: 0,
       linkURL: '',
-      srcURL: 'file:///etc/passwd',
+      srcURL: 'file:///etc/senhas-do-sistema',
       selectionText: ''
     },
     'save-image'

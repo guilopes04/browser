@@ -216,12 +216,12 @@ const routes: Record<string, Route> = {
   '/p/external': () =>
     page(
       'esquemas externos',
-      `<script>window.__out = {}</script><div style="position:absolute;left:24px;top:200px;font-size:26px"><a id="mail" href="mailto:teste@example.com">mailto</a><br><a id="tel" href="tel:+5511999999999">tel</a><br><a id="unk" href="gilasnope:abc">gilasnope:abc</a></div>`
+      `<script>window.__out = {}</script><div style="position:absolute;left:24px;top:200px;font-size:26px"><a id="mail" href="mailto:teste@exemplo.invalid">mailto</a><br><a id="tel" href="tel:+5511999999999">tel</a><br><a id="unk" href="gilasnope:abc">gilasnope:abc</a></div>`
     ),
   '/p/external-auto': () =>
     page(
       'esquema externo sem gesto',
-      `<script>window.__out = {}; setTimeout(() => { location.href = 'mailto:silencio@example.com' }, 400)</script>`
+      `<script>window.__out = {}; setTimeout(() => { location.href = 'mailto:silencio@exemplo.invalid' }, 400)</script>`
     )
 }
 

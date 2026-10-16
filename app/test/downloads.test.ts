@@ -45,7 +45,10 @@ test('nome único na pasta Downloads, sem sobrescrever', () => {
 })
 
 test('nome vindo do servidor não escapa da pasta', () => {
-  assert.equal(sanitizeFileName('../../etc/passwd'), 'passwd')
+  assert.equal(
+    sanitizeFileName('../../etc/senhas-do-sistema'),
+    'senhas-do-sistema'
+  )
   assert.equal(sanitizeFileName('..\\x\\y.txt'), 'y.txt')
   assert.equal(sanitizeFileName('.bashrc'), 'bashrc')
   assert.equal(sanitizeFileName(''), 'download')
