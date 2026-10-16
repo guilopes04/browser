@@ -73,7 +73,7 @@ const logOf = (procs: L.Procs, text: string): boolean => {
 const address = () =>
   shellEval(`(() => {
     const q = s => document.querySelector(s)
-    const domain = q('.address-domain'), sub = q('.address-sub'), head = q('.address-domain-head'), btn = q('.address-btn')
+    const domain = q('.address-domain'), sub = q('.address-sub'), btn = q('.address-btn'), field = q('.address')
     const box = e => e ? e.getBoundingClientRect() : null
     const d = box(domain), b = box(btn)
     const clipped = e => !!e && e.scrollWidth > e.clientWidth + 0.5
@@ -85,9 +85,14 @@ const address = () =>
       weight: domain ? getComputedStyle(domain).fontWeight : null,
       subColor: sub ? getComputedStyle(sub).color : null,
       textColor: domain ? getComputedStyle(domain).color : null,
-      // o que não cabe sai pelo começo dos subdomínios (ou, sem espaço para o domínio, pelo miolo dele)
-      cut: clipped(sub) || clipped(head),
-      domainVisible: !!(d && b && d.left >= b.left - 1 && d.right <= b.right + 1)
+      // o que não cabe sai pelo começo dos subdomínios; o domínio nunca é cortado
+      cut: clipped(sub),
+      domainClipped: clipped(domain),
+      domainVisible: !!(d && b && d.left >= b.left - 1 && d.right <= b.right + 1),
+      // domínio comprido: ocupa o campo, quebra em linhas e o campo cresce
+      wraps: !!q('.address-host-wrap'),
+      domainLines: d ? Math.round(d.height / 17) : 0,
+      fieldHeight: field ? Math.round(box(field).height) : 0
     }
   })()`)
 
@@ -555,7 +560,8 @@ await scenario(
     'https://www.exemplo.com.br/receitas',
     'https://аpple.com/',
     'https://pão.com.br/',
-    'http://httponly.test/p/title?t=so-http'
+    'http://httponly.test/p/title?t=so-http',
+    'http://www.acesso.banco-do-brasil-seguranca-atendimento.com/login'
   ],
   async ({ pid, dir }) => {
     let s = await L.st()
@@ -620,6 +626,29 @@ await scenario(
     a = await address()
     record('queda para http mostra o indicador', a.insecure === 'Não seguro', a)
     L.shot(join(dir, 'queda-http.png'), pid)
+    // 6: domínio registrável comprido: inteiro, nunca cortado no miolo
+    await activate('banco-do-brasil')
+    a = await address()
+    record(
+      'domínio registrável comprido (41 caracteres): aparece inteiro, quebrado em linhas, sem "…"',
+      a.domain === 'banco-do-brasil-seguranca-atendimento.com' &&
+        a.wraps &&
+        a.domainLines >= 2 &&
+        !a.domainClipped &&
+        a.domainVisible &&
+        a.fieldHeight > 36 &&
+        !a.domain.includes('…'),
+      a
+    )
+    L.shot(join(dir, 'dominio-comprido.png'), pid)
+    // volta a uma aba curta: o campo recolhe
+    await activate('exemplo.com.br')
+    a = await address()
+    record(
+      'de volta a um domínio curto: uma linha só, campo de 36 px',
+      !a.wraps && a.fieldHeight === 36,
+      a
+    )
     // paleta: "Não seguro" nas linhas http
     await L.send('palette:open', { mode: 'search' })
     await sleep(700)
